@@ -908,7 +908,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </details>
             
             <div class="hero-actions">
-              <a href="${bestProd.retailers[0].url}" target="_blank" class="product-outlink-btn app-btn-primary" style="text-decoration: none; width: 100%; text-align: center; display: inline-block;" data-product-id="${bestProd.id}" data-price="${bestProd.price}" data-brand="${bestProd.brand}">
+              <a href="${bestProd.retailers[0].url}" target="_blank" class="product-outlink-btn app-btn-primary" style="text-decoration: none; width: 100%;" data-product-id="${bestProd.id}" data-price="${bestProd.price}" data-brand="${bestProd.brand}">
                 Check Availability (Sourced from ${bestProd.retailers[0].name})
               </a>
             </div>
