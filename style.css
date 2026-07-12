@@ -257,6 +257,38 @@ body {
   animation: pulse 2s infinite;
 }
 
+.reset-live-btn {
+  background: rgba(14, 165, 233, 0.1);
+  border: 1px solid rgba(14, 165, 233, 0.25);
+  color: var(--accent-blue);
+  font-family: inherit;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+  margin-left: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+}
+
+@media (hover: hover) {
+  .reset-live-btn:hover {
+    background: rgba(14, 165, 233, 0.2);
+    border-color: rgba(14, 165, 233, 0.4);
+    color: #fff;
+  }
+}
+
+.reset-live-btn:active {
+  transform: scale(0.95);
+}
+
 .indicator-text {
   font-size: 0.85rem;
   font-weight: 600;

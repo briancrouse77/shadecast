@@ -387,6 +387,13 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    const btnResetToLive = document.getElementById('btnResetToLive');
+    if (btnResetToLive) {
+      btnResetToLive.addEventListener('click', () => {
+        triggerGeolocation();
+      });
+    }
+
     // Try auto-detecting on startup. "If we can figure it out set it, if not let them."
     triggerGeolocation(true);
   }
@@ -396,6 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const indicatorDot = document.getElementById('locIndicatorDot');
     const brandSubtitle = document.getElementById('brandSubtitle');
     const tailoredBadge = document.getElementById('tailoredBadge');
+    const btnResetToLive = document.getElementById('btnResetToLive');
 
     if (statusText) statusText.textContent = text;
     
@@ -407,11 +415,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    const isSystemStatus = text.includes('Locating') || text.includes('Detecting') || text.includes('Loading') || text.includes('Denied') || text.includes('error') || text.includes('Offline') || text.includes('Search');
+    const isSimulated = text.includes('Simulated:');
+
+    // Toggle Sync Live button visibility
+    if (btnResetToLive) {
+      btnResetToLive.style.display = isSimulated ? 'inline-flex' : 'none';
+    }
+
     // Dynamic branding and tailored dashboard badge updates
     if (brandSubtitle && tailoredBadge) {
-      const isSystemStatus = text.includes('Locating') || text.includes('Detecting') || text.includes('Loading') || text.includes('Denied') || text.includes('error') || text.includes('Offline') || text.includes('Search');
-      const isSimulated = text.includes('Simulated:');
-
       if (isSystemStatus) {
         brandSubtitle.textContent = 'Sunglasses UV Advisor Built for Your Location';
         tailoredBadge.style.display = 'none';
