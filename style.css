@@ -2387,3 +2387,11 @@ h1#seo-heading {
   text-align: center;
   color: var(--text-primary);
 }
+
+.guide-link {
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+.guide-link:hover {
+  color: #60a5fa !important;
+  text-decoration: underline !important;
+}
