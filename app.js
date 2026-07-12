@@ -24,9 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
       recFinish: 'Silver Mirror Coating optional for extreme glare block.',
       glareIntensity: 0.7,
       tmzImg: 'assets/celebrity.jpg',
-      tmzBadge: 'SPOTTED IN BEVERLY HILLS',
-      tmzTitle: 'Hailey Bieber Rocks Oversized Acetate Shields',
-      tmzDesc: 'Matching the extreme 95°F California heatwave with Category 3 blacked-out lenses.'
+      tmzBadge: 'TODAY\'S HIGH-GLARE PICK',
+      tmzTitle: 'Why Polarized Grey Lenses Win for Driving',
+      tmzDesc: 'Grey base lenses maintain natural color balance, while polarization blocks blinding glare from road surfaces.'
     },
     glare: {
       uv: 11,
@@ -43,9 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
       recFinish: 'Solid Mirrored Finish (Gold or Blue) highly recommended.',
       glareIntensity: 1.0,
       tmzImg: 'assets/celebrity_snow.jpg',
-      tmzBadge: 'SPOTTED IN ASPEN',
-      tmzTitle: 'Gwyneth Paltrow Leads the Ski-Goggle Style Pack',
-      tmzDesc: 'Spotted on the slopes in neon-pink polarized mirrored shields to block heavy glacial reflection.'
+      tmzBadge: 'EXTREME BRIGHTNESS GUIDE',
+      tmzTitle: 'Snow Glare Requires Lower VLT Levels',
+      tmzDesc: 'Fresh snow surfaces reflect up to 85% of solar radiation. Outdoor skiing requires dark mirrored lenses with VLT under 10%.'
     },
     sunset: {
       uv: 2,
@@ -62,9 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
       recFinish: 'Gradient shading (darker at top, lighter at bottom) is ideal.',
       glareIntensity: 0.5,
       tmzImg: 'assets/celebrity_sunset.jpg',
-      tmzBadge: 'SPOTTED IN MALIBU',
-      tmzTitle: 'Jensen Ackles Caught in Retro Golden Tints',
-      tmzDesc: 'Strolling the Malibu boardwalk in custom tortoiseshell amber aviators to soften low sunset glare.'
+      tmzBadge: 'LOW SUN LIGHT INTELLIGENCE',
+      tmzTitle: 'Amber & Bronze Tints for Contrast Enhancement',
+      tmzDesc: 'Amber and bronze base layers block scattering blue light to sharpen depth perception under low sunset glare angles.'
     },
     overcast: {
       uv: 3,
@@ -81,9 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
       recFinish: 'Anti-reflective backing coating to prevent bounce-back reflections.',
       glareIntensity: 0.15,
       tmzImg: 'assets/celebrity_cloudy.jpg',
-      tmzBadge: 'SPOTTED IN LONDON',
-      tmzTitle: 'Lily Collins Shines in Amber Wire Frames',
-      tmzDesc: 'Brightening up a wet and cloudy London afternoon with light yellow-tinted transitional lenses.'
+      tmzBadge: 'FLAT LIGHT INTEL',
+      tmzTitle: 'Rose & Yellow Tints Boost Diffuse Contrast',
+      tmzDesc: 'Under heavy overcast skies, light yellow or rose category 1 lenses brighten details and help expand visual clarity.'
     }
   };
 
@@ -102,10 +102,10 @@ document.addEventListener('DOMContentLoaded', () => {
     recPolarization: 'Optional. Contrast filters are more effective at night than polarized.',
     recFinish: 'Anti-Reflective backing is highly recommended.',
     glareIntensity: 0.05,
-    tmzImg: 'assets/celebrity_cloudy.jpg', // Reuse cloudy photo as stylish city night paparazzi
-    tmzBadge: 'SPOTTED AT MIDNIGHT',
-    tmzTitle: 'Rihanna Rocks Clear Glasses at Afterparty',
-    tmzDesc: 'Styling a late night New York club appearance with clear yellow-tinted aviator glasses.'
+    tmzImg: 'assets/celebrity_cloudy.jpg', 
+    tmzBadge: 'NIGHT TIME INTELLIGENCE',
+    tmzTitle: 'Category 0 Clear & Yellow Lenses for Night Use',
+    tmzDesc: 'Maintain maximum visibility while reducing oncoming headlight glare with specialized non-polarized clear and yellow lenses.'
   };
 
   // Lens Tints settings
@@ -1633,34 +1633,34 @@ document.addEventListener('DOMContentLoaded', () => {
             dynamicPreset.recFinish = 'Anti-reflective backing essential.';
           }
 
-          // Map paparazzi TMZ gossip cards dynamically
+          // Map dynamic Gear Radar content based on environmental conditions
           const shortCity = locationName.split(',')[0].trim().replace(/\(Default\)/gi, '').trim();
           const isNight = !isDay;
           if (isNight) {
             dynamicPreset.tmzImg = 'assets/celebrity_cloudy.jpg';
-            dynamicPreset.tmzBadge = 'SPOTTED AT MIDNIGHT';
-            dynamicPreset.tmzTitle = 'Rihanna Rocks Clear Aviator Tints';
-            dynamicPreset.tmzDesc = `Seen wearing light Category 0 clear frames at a midnight afterparty, matching the night-time conditions in ${shortCity}.`;
+            dynamicPreset.tmzBadge = 'NIGHT TIME INTELLIGENCE';
+            dynamicPreset.tmzTitle = 'Category 0 Clear & Yellow Lenses for Night Use';
+            dynamicPreset.tmzDesc = `Maintain maximum visibility while reducing oncoming headlight glare with specialized non-polarized clear and yellow lenses in ${shortCity}.`;
           } else if (tempPreset === 'glare') {
             dynamicPreset.tmzImg = 'assets/celebrity_snow.jpg';
-            dynamicPreset.tmzBadge = 'SPOTTED IN ASPEN';
-            dynamicPreset.tmzTitle = 'Gwyneth Paltrow in Mirrored Shields';
-            dynamicPreset.tmzDesc = `Seen hitting the slopes in Aspen in polarized ski goggles, matching the extreme glare conditions in ${shortCity}.`;
+            dynamicPreset.tmzBadge = 'EXTREME BRIGHTNESS GUIDE';
+            dynamicPreset.tmzTitle = 'Snow Glare Requires Lower VLT Levels';
+            dynamicPreset.tmzDesc = `Fresh snow surfaces in ${shortCity} reflect up to 85% of solar radiation. Outdoor skiing requires dark mirrored lenses with VLT under 10%.`;
           } else if (tempPreset === 'sunset') {
             dynamicPreset.tmzImg = 'assets/celebrity_sunset.jpg';
-            dynamicPreset.tmzBadge = 'SPOTTED IN MALIBU';
-            dynamicPreset.tmzTitle = 'Jensen Ackles in Retro Amber Aviators';
-            dynamicPreset.tmzDesc = `Spotted walking the Malibu pier in custom tortoiseshell amber aviators, matching the low golden sunset angle in ${shortCity}.`;
+            dynamicPreset.tmzBadge = 'LOW SUN LIGHT INTELLIGENCE';
+            dynamicPreset.tmzTitle = 'Amber & Bronze Tints for Contrast Enhancement';
+            dynamicPreset.tmzDesc = `Amber and bronze base layers block scattering blue light to sharpen depth perception under low sunset glare angles in ${shortCity}.`;
           } else if (tempPreset === 'overcast') {
             dynamicPreset.tmzImg = 'assets/celebrity_cloudy.jpg';
-            dynamicPreset.tmzBadge = 'SPOTTED IN LONDON';
-            dynamicPreset.tmzTitle = 'Lily Collins in Transitional Tints';
-            dynamicPreset.tmzDesc = `Seen strolling London streets in overcast weather, matching the flat light cloud cover in ${shortCity}.`;
+            dynamicPreset.tmzBadge = 'FLAT LIGHT INTEL';
+            dynamicPreset.tmzTitle = 'Rose & Yellow Tints Boost Diffuse Contrast';
+            dynamicPreset.tmzDesc = `Under heavy overcast skies in ${shortCity}, light yellow or rose category 1 lenses brighten details and help expand visual clarity.`;
           } else {
             dynamicPreset.tmzImg = 'assets/celebrity.jpg';
-            dynamicPreset.tmzBadge = 'SPOTTED IN BEVERLY HILLS';
-            dynamicPreset.tmzTitle = 'Hailey Bieber Rocks Matte Acetate Shields';
-            dynamicPreset.tmzDesc = `Matching the sunny, ${temp}°F UV conditions in ${shortCity} with blacked-out wrap-around shields.`;
+            dynamicPreset.tmzBadge = 'TODAY\'S HIGH-GLARE PICK';
+            dynamicPreset.tmzTitle = 'Why Polarized Grey Lenses Win for Driving';
+            dynamicPreset.tmzDesc = `Grey base lenses maintain natural color balance under the sunny, ${temp}°F sky in ${shortCity}, while polarization blocks road glare.`;
           }
 
           // Log geocoded city to regional demand ledger
@@ -2153,146 +2153,77 @@ document.addEventListener('DOMContentLoaded', () => {
     logContainer.scrollTop = logContainer.scrollHeight;
   }
 
-  // Fetch live TMZ stories, but FILTER them so they are strictly "getting shaded" (sunglasses/sun/beach/eyewear) related!
+  // Populate the Gear Radar intelligence feed with practical buying guidance
   function fetchLiveTmzFeed() {
     const tmzFeedList = document.getElementById('tmzFeedList');
     if (!tmzFeedList) return;
 
-    // Curated high-fashion sunglasses fallback stories
-    const fallbackStories = [
+    const buyingGuides = [
       {
-        title: "Austin Butler's Vintage Golden Hour Aviators",
-        description: "Seen wearing warm amber tints in Malibu to soften the late afternoon solar glare.",
-        link: "https://www.tmz.com",
-        pubDate: new Date(),
-        emoji: '🍿'
+        title: "Best Lens for Road Reflection",
+        description: "Blinding glare bounces off asphalt. Polarized copper or amber lenses block horizontal light while boosting depth contrast.",
+        emoji: '🚗',
+        activityLabel: "Driving",
+        activityValue: "driving",
+        lensTint: "Polarized Copper/Amber"
       },
       {
-        title: "Trend Alert: Polarized Green is Dominating Aspen",
-        description: "Snow glare levels hitting peak factor. Celebs are choosing polarized sport wraps to combat whiteout light.",
-        link: "https://www.tmz.com",
-        pubDate: new Date(Date.now() - 3 * 3600000),
-        emoji: '📈'
+        title: "Fishing Requires Polarization",
+        description: "Polarized filters eliminate surface reflection, revealing underwater weed beds, structures, and fish targets.",
+        emoji: '🎣',
+        activityLabel: "Fishing",
+        activityValue: "fishing",
+        lensTint: "Polarized Bronze/Green Mirror"
       },
       {
-        title: "Zendaya's Custom Rose Tints Trend",
-        description: "Styled at the London premier. Rose lenses boost contrast and style points alike under overcast skies.",
-        link: "https://www.tmz.com",
-        pubDate: new Date(Date.now() - 24 * 3600000),
-        emoji: '🌟'
+        title: "Rose & Green Lenses for Disc Golf",
+        description: "Tonal rose and green tints filter foliage colors to make target baskets and disc flight lines stand out sharply.",
+        emoji: '🥏',
+        activityLabel: "Disc Golf",
+        activityValue: "disc golf",
+        lensTint: "High-Contrast Rose/Green"
       }
     ];
 
-    const rssUrl = 'https://www.tmz.com/rss.xml';
-    // Append a unique timestamp parameter to ensure we bypass browser and API proxy cache
-    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&_t=${Date.now()}`;
-
-    fetch(apiUrl)
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.status === 'ok' && data.items && data.items.length > 0) {
-          // Keywords that are STRICTLY about eyewear, sunglasses, or lenses
-          const keywords = [
-            'sunglass', 'sunglasses', 'shades', 'eyewear', 
-            'glasses', 'frames', 'specs', 'lens', 'lenses', 
-            'aviator', 'aviators', 'goggle', 'goggles'
-          ];
-
-          // Filter live stories where the description specifically contains eyewear keywords
-          const matchedStories = data.items.filter(item => {
-            const desc = (item.description || '').toLowerCase();
-            return keywords.some(kw => desc.includes(kw));
-          });
-
-          // Build final list (prefer matched live stories, pad with fallbacks if needed)
-          const finalStories = [];
-          
-          matchedStories.forEach(item => {
-            finalStories.push({
-              title: item.title,
-              description: item.description,
-              link: item.link,
-              pubDate: new Date(item.pubDate),
-              emoji: '📸' // indicator for live parsed news
-            });
-          });
-
-          // If we have less than 3 relevant live stories, pad with our highly curated sunglasses fallbacks
-          if (finalStories.length < 3) {
-            fallbackStories.forEach(fb => {
-              if (!finalStories.some(fs => fs.title.toLowerCase() === fb.title.toLowerCase())) {
-                finalStories.push(fb);
-              }
-            });
-          }
-
-          // Limit to top 3 strictly relevant stories
-          const displayStories = finalStories.slice(0, 3);
-          
-          tmzFeedList.innerHTML = '';
-          logAdminEvent('api', `Matched ${matchedStories.length} live eyewear stories (Rendered: ${displayStories.length})`);
-          displayStories.forEach(item => {
-            // Relative time calculation
-            let timeLabel = 'Recently';
-            try {
-              const diffMs = new Date() - item.pubDate;
-              const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
-              
-              if (diffHrs < 1) {
-                timeLabel = 'Just now';
-              } else if (diffHrs === 1) {
-                timeLabel = '1 hour ago';
-              } else if (diffHrs < 24) {
-                timeLabel = `${diffHrs} hours ago`;
-              } else {
-                timeLabel = 'Yesterday';
-              }
-            } catch (e) {
-              console.warn(e);
-            }
-
-            // Clean description text
-            let cleanDesc = item.description || '';
-            cleanDesc = cleanDesc.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
-            if (cleanDesc.length > 125) {
-              cleanDesc = cleanDesc.substring(0, 122) + '...';
-            }
-
-            const newsItem = document.createElement('div');
-            newsItem.className = 'tmz-news-item';
-            newsItem.innerHTML = `
-              <div class="tmz-news-thumb">${item.emoji}</div>
-              <div class="tmz-news-body">
-                <h4><a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a></h4>
-                <p>${cleanDesc}</p>
-                <span class="news-time">${timeLabel}</span>
-              </div>
-            `;
-            tmzFeedList.appendChild(newsItem);
-          });
-        }
-      })
-      .catch(err => {
-        console.warn('Could not retrieve live TMZ RSS feed, keeping static fallbacks:', err);
-        renderFallbackFeed();
-      });
-
-    function renderFallbackFeed() {
-      tmzFeedList.innerHTML = '';
-      fallbackStories.forEach(item => {
-        const newsItem = document.createElement('div');
-        newsItem.className = 'tmz-news-item';
-        newsItem.innerHTML = `
-          <div class="tmz-news-thumb">${item.emoji}</div>
-          <div class="tmz-news-body">
-            <h4><a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a></h4>
-            <p>${item.description}</p>
-            <span class="news-time">Yesterday</span>
+    tmzFeedList.innerHTML = '';
+    buyingGuides.forEach(item => {
+      const newsItem = document.createElement('div');
+      newsItem.className = 'tmz-news-item';
+      newsItem.innerHTML = `
+        <div class="tmz-news-thumb">${item.emoji}</div>
+        <div class="tmz-news-body">
+          <h4 style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; margin: 0 0 0.15rem 0; color: #fff;">${item.title}</h4>
+          <p style="font-size: 0.72rem; line-height: 1.4; color: var(--text-secondary); margin: 0 0 0.4rem 0;">${item.description}</p>
+          <div style="font-size: 0.65rem; color: rgba(255, 255, 255, 0.4); margin-bottom: 0.4rem;">
+            <strong>Activity:</strong> ${item.activityLabel} | <strong>Lens:</strong> ${item.lensTint}
           </div>
-        `;
-        tmzFeedList.appendChild(newsItem);
+          <button class="try-activity-btn" data-activity-value="${item.activityValue}" style="background: rgba(14, 165, 233, 0.15); border: 1px solid rgba(14, 165, 233, 0.25); color: #38bdf8; border-radius: 4px; padding: 0.25rem 0.5rem; font-size: 0.65rem; font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: 'Outfit', sans-serif;">
+            Try ${item.activityLabel}
+          </button>
+        </div>
+      `;
+      tmzFeedList.appendChild(newsItem);
+    });
+
+    // Add click event listeners to "Try Activity" buttons to switch selector
+    tmzFeedList.querySelectorAll('.try-activity-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        analytics.tmzClicks++;
+        updateTelemetryUI();
+        
+        const val = btn.getAttribute('data-activity-value');
+        const select = document.getElementById('activitySelect');
+        if (select) {
+          select.value = val;
+          select.dispatchEvent(new Event('change'));
+          // Smooth scroll to recommendation panel
+          const recCard = document.getElementById('productsRecCard');
+          if (recCard) {
+            recCard.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
       });
-    }
+    });
   }
 
   // ==========================================
@@ -2324,18 +2255,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Retrieve actual live TMZ gossip feed
     fetchLiveTmzFeed();
-
-    // 4. Bind dynamic click tracking for live TMZ links to track commercial referral value
-    const tmzFeedList = document.getElementById('tmzFeedList');
-    if (tmzFeedList) {
-      tmzFeedList.addEventListener('click', (e) => {
-        if (e.target.closest('a')) {
-          analytics.tmzClicks++;
-          updateTelemetryUI();
-          logAdminEvent('sys', 'Outbound celebrity gossip affiliate referral clicked');
-        }
-      });
-    }
 
     // 5. Initialize the SaaS Telemetry Dashboard panel values
     updateTelemetryUI();
