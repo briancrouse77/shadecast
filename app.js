@@ -338,11 +338,21 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Backdoor 1: Ctrl + Shift + A (or Cmd + Shift + A on Mac)
+    // Backdoor 1: Type 'shade' on the keyboard (no modifier keys needed)
+    let keyBuffer = '';
+    const secretWord = 'shade';
     window.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'a') {
-        e.preventDefault();
-        revealAdminTab();
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      if (e.key.length === 1 && /[a-z]/i.test(e.key)) {
+        keyBuffer += e.key.toLowerCase();
+        if (keyBuffer.length > secretWord.length) {
+          keyBuffer = keyBuffer.slice(-secretWord.length);
+        }
+        if (keyBuffer === secretWord) {
+          revealAdminTab();
+          keyBuffer = '';
+        }
       }
     });
 
