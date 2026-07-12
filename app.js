@@ -340,12 +340,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Backdoor 1: Type 'shade' on the keyboard (no modifier keys needed)
     let keyBuffer = '';
+    let bufferTimeout;
     const secretWord = 'shade';
     window.addEventListener('keydown', (e) => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
-      if (e.key.length === 1 && /[a-z]/i.test(e.key)) {
-        keyBuffer += e.key.toLowerCase();
+      const char = e.key.toLowerCase();
+      if (char.length === 1) {
+        clearTimeout(bufferTimeout);
+        keyBuffer += char;
+        
+        // Reset buffer if they stop typing for 1.5s
+        bufferTimeout = setTimeout(() => {
+          keyBuffer = '';
+        }, 1500);
+
         if (keyBuffer.length > secretWord.length) {
           keyBuffer = keyBuffer.slice(-secretWord.length);
         }
