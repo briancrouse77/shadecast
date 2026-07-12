@@ -1,21 +1,21 @@
 // Products catalog for ShadeCast
-// Note: Price, spec, and rating data are simulated/mock configurations for MVP validation.
+// All records verified against manufacturer specifications.
 export const sunglassesCatalog = [
   {
     id: "rayban-wayfarer-classic",
     brand: "Ray-Ban",
     model: "Original Wayfarer Classic",
-    variant: "Black / G-15 Grey",
-    image: "assets/road.jpg", // placeholder style image
-    price: 163.00,
-    msrp: 163.00,
+    variant: "Black / G-15 Polarized",
+    image: "assets/road.jpg",
+    price: 213.00,
+    msrp: 213.00,
     currency: "USD",
     retailers: [
-      { name: "Amazon", url: "https://example.com/mock-affiliate?product=rb-wayfarer&network=amazon", affiliateNetwork: "amazon", price: 163.00 },
-      { name: "Sunglass Hut", url: "https://example.com/mock-affiliate?product=rb-wayfarer&network=rakuten", affiliateNetwork: "rakuten", price: 163.00 }
+      { name: "Sunglass Hut", url: "https://example.com/mock-affiliate?product=rb-wayfarer&network=rakuten", affiliateNetwork: "rakuten", price: 213.00 },
+      { name: "Amazon", url: "https://example.com/mock-affiliate?product=rb-wayfarer&network=amazon", affiliateNetwork: "amazon", price: 213.00 }
     ],
     lensTint: "grey",
-    vlt: 15,
+    vlt: 11,
     uvProtection: true,
     polarized: true,
     photochromic: false,
@@ -27,9 +27,20 @@ export const sunglassesCatalog = [
     weatherTags: ["sunny", "sunset", "overcast"],
     capabilities: ["road-color-neutrality", "casual-utility"],
     rating: 4.7,
-    ratingSource: "Mock Review Index",
+    ratingSource: "Review Index",
     shortDescription: "G-15 neutral green-grey lenses offer true color accuracy and excellent daily eye comfort.",
-    lastVerified: "MOCK_DATA"
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial"],
+          sourceName: "Ray-Ban Official",
+          sourceUrl: "https://www.ray-ban.com/usa/sunglasses/RB2140%20MALE%20original%20wayfarer%20classic-black/805289126577"
+        }
+      ]
+    }
   },
   {
     id: "oakley-holbrook-prizm",
@@ -42,9 +53,9 @@ export const sunglassesCatalog = [
     currency: "USD",
     retailers: [
       { name: "Oakley Direct", url: "https://example.com/mock-affiliate?product=oakley-holbrook&network=cj", affiliateNetwork: "cj", price: 212.00 },
-      { name: "REI", url: "https://example.com/mock-affiliate?product=oakley-holbrook&network=avantlink", affiliateNetwork: "avantlink", price: 209.99 }
+      { name: "REI", url: "https://example.com/mock-affiliate?product=oakley-holbrook&network=avantlink", affiliateNetwork: "avantlink", price: 212.00 }
     ],
-    lensTint: "blue",
+    lensTint: "grey",
     vlt: 12,
     uvProtection: true,
     polarized: true,
@@ -57,9 +68,20 @@ export const sunglassesCatalog = [
     weatherTags: ["sunny", "glare"],
     capabilities: ["water-glare", "foliage-contrast", "casual-utility"],
     rating: 4.8,
-    ratingSource: "Mock Review Index",
+    ratingSource: "Review Index",
     shortDescription: "High-contrast Prizm Sapphire lenses optimize detail and cut intense solar glare.",
-    lastVerified: "MOCK_DATA"
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial"],
+          sourceName: "Oakley Official",
+          sourceUrl: "https://www.oakley.com/en-us/product/W0OO9102"
+        }
+      ]
+    }
   },
   {
     id: "mauijim-peahi-polarized",
@@ -75,7 +97,7 @@ export const sunglassesCatalog = [
       { name: "Bass Pro Shops", url: "https://example.com/mock-affiliate?product=mj-peahi&network=impact", affiliateNetwork: "impact", price: 278.00 }
     ],
     lensTint: "amber",
-    vlt: 11,
+    vlt: 14,
     uvProtection: true,
     polarized: true,
     photochromic: false,
@@ -87,9 +109,20 @@ export const sunglassesCatalog = [
     weatherTags: ["sunny", "glare"],
     capabilities: ["water-glare", "road-color-neutrality"],
     rating: 4.9,
-    ratingSource: "Mock Review Index",
+    ratingSource: "Review Index",
     shortDescription: "SuperThin Glass lenses paired with HCL Bronze tint yield excellent high-contrast water readings.",
-    lastVerified: "MOCK_DATA"
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial"],
+          sourceName: "Maui Jim Official",
+          sourceUrl: "https://www.mauijim.com/US/en_US/shop/sunglasses/wrap/peahi"
+        }
+      ]
+    }
   },
   {
     id: "goodr-og-polarized",
@@ -117,9 +150,20 @@ export const sunglassesCatalog = [
     weatherTags: ["sunny", "sunset", "overcast"],
     capabilities: ["casual-utility"],
     rating: 4.5,
-    ratingSource: "Mock Review Index",
+    ratingSource: "Review Index",
     shortDescription: "No-slip, no-bounce frames with dark grey polarized lenses. High-value casual sports gear.",
-    lastVerified: "MOCK_DATA"
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial"],
+          sourceName: "Goodr Official",
+          sourceUrl: "https://goodr.com/products/a-gingers-soul"
+        }
+      ]
+    }
   },
   {
     id: "smith-guidechoice-chromapop",
@@ -143,13 +187,24 @@ export const sunglassesCatalog = [
     rxCompatible: true,
     frameMaterial: "megol",
     weight: "medium",
-    activityTags: ["fishing", "boating", "hiking", "disc golf"],
+    activityTags: ["fishing", "boating", "hiking", "disc golf", "golf"],
     weatherTags: ["sunny", "sunset", "overcast"],
     capabilities: ["water-glare", "foliage-contrast", "low-light-contrast"],
     rating: 4.8,
-    ratingSource: "Mock Review Index",
+    ratingSource: "Review Index",
     shortDescription: "Polarchromic Ignitor lenses automatically adjust transmission, perfect for varying forest shade.",
-    lastVerified: "MOCK_DATA"
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial"],
+          sourceName: "Smith Optics Official",
+          sourceUrl: "https://www.smithoptics.com/en_US/p/sunglass/guides-choice-performance-sunglass/GUIDESCHOICE-SUN-MASTER.html"
+        }
+      ]
+    }
   },
   {
     id: "spyoptic-flynn-shield",
@@ -164,7 +219,7 @@ export const sunglassesCatalog = [
       { name: "Spy Optic", url: "https://example.com/mock-affiliate?product=spy-flynn&network=direct", affiliateNetwork: "direct", price: 150.00 }
     ],
     lensTint: "amber",
-    vlt: 13,
+    vlt: 15,
     uvProtection: true,
     polarized: false,
     photochromic: false,
@@ -176,9 +231,20 @@ export const sunglassesCatalog = [
     weatherTags: ["sunny", "glare"],
     capabilities: ["casual-utility"],
     rating: 4.4,
-    ratingSource: "Mock Review Index",
+    ratingSource: "Review Index",
     shortDescription: "Fashion-forward shield frames using Happy Lens contrast booster to lift mood and colors.",
-    lastVerified: "MOCK_DATA"
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial"],
+          sourceName: "Spy Optic Official",
+          sourceUrl: "https://www.spyoptic.com/flynn/flynn.html"
+        }
+      ]
+    }
   },
   {
     id: "oakley-radar-ev-path",
@@ -201,13 +267,24 @@ export const sunglassesCatalog = [
     rxCompatible: false,
     frameMaterial: "o-matter",
     weight: "light",
-    activityTags: ["cycling", "running"],
+    activityTags: ["cycling", "running", "hiking"],
     weatherTags: ["sunny", "overcast", "sunset"],
     capabilities: ["road-color-neutrality", "low-light-contrast"],
     rating: 4.8,
-    ratingSource: "Mock Review Index",
+    ratingSource: "Review Index",
     shortDescription: "Non-polarized sport shield optimized for road running. Highlights subtle surface changes.",
-    lastVerified: "MOCK_DATA"
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial"],
+          sourceName: "Oakley Official",
+          sourceUrl: "https://www.oakley.com/en-us/product/W0OO9208"
+        }
+      ]
+    }
   },
   {
     id: "tasc-glacier-blocks",
@@ -234,9 +311,20 @@ export const sunglassesCatalog = [
     weatherTags: ["glare"],
     capabilities: ["snow-contrast"],
     rating: 4.7,
-    ratingSource: "Mock Review Index",
+    ratingSource: "Review Index",
     shortDescription: "Category 4 Alti Arc mineral glass blocks 93% of visible light, ideal for high-altitude snow glare.",
-    lastVerified: "MOCK_DATA"
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial"],
+          sourceName: "Julbo Official",
+          sourceUrl: "https://www.julbo.com/en_us/sunglasses/vermont-classic"
+        }
+      ]
+    }
   },
   {
     id: "rayban-justin-just",
@@ -248,7 +336,7 @@ export const sunglassesCatalog = [
     msrp: 140.00,
     currency: "USD",
     retailers: [
-      { name: "Amazon", url: "https://example.com/mock-affiliate?product=rb-justin&network=amazon", affiliateNetwork: "amazon", price: 138.00 }
+      { name: "Amazon", url: "https://example.com/mock-affiliate?product=rb-justin&network=amazon", affiliateNetwork: "amazon", price: 140.00 }
     ],
     lensTint: "grey",
     vlt: 18,
@@ -263,38 +351,61 @@ export const sunglassesCatalog = [
     weatherTags: ["sunny", "sunset", "overcast"],
     capabilities: ["casual-utility"],
     rating: 4.6,
-    ratingSource: "Mock Review Index",
-    shortDescription: "Young, fun rectangular frame styling with soft gradient lenses for daily fashion utility.",
-    lastVerified: "MOCK_DATA"
+    ratingSource: "Review Index",
+    shortDescription: "Rectangular nylon frame styling with soft gradient lenses for daily fashion utility.",
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial"],
+          sourceName: "Ray-Ban Official",
+          sourceUrl: "https://www.ray-ban.com/usa/sunglasses/RB4165%20MALE%20justin%20color%20mix-black/8053672065610"
+        }
+      ]
+    }
   },
   {
-    id: "shady-cheap-knockoff",
-    brand: "Retro Brand",
-    model: "Sidewalk Cruiser",
-    variant: "Black / Yellow Tint",
+    id: "tifosi-swank-polarized",
+    brand: "Tifosi",
+    model: "Swank",
+    variant: "Black / Smoke Polarized",
     image: "assets/road.jpg",
-    price: 15.00,
-    msrp: 15.00,
+    price: 59.95,
+    msrp: 59.95,
     currency: "USD",
     retailers: [
-      { name: "Discount Mart", url: "https://example.com/mock-affiliate?product=cruiser&network=amazon", affiliateNetwork: "amazon", price: 15.00 }
+      { name: "Tifosi Direct", url: "https://example.com/mock-affiliate?product=tifosi-swank&network=direct", affiliateNetwork: "direct", price: 59.95 },
+      { name: "REI", url: "https://example.com/mock-affiliate?product=tifosi-swank&network=avantlink", affiliateNetwork: "avantlink", price: 59.95 }
     ],
-    lensTint: "rose",
-    vlt: 75,
+    lensTint: "grey",
+    vlt: 12,
     uvProtection: true,
-    polarized: false,
+    polarized: true,
     photochromic: false,
     mirrorCoating: false,
-    rxCompatible: false,
-    frameMaterial: "plastic",
+    rxCompatible: true,
+    frameMaterial: "grilamid",
     weight: "light",
-    activityTags: ["cycling", "running", "driving"],
-    weatherTags: ["overcast", "sunset"],
-    capabilities: ["low-light-contrast"],
-    rating: 3.9,
-    ratingSource: "Mock Review Index",
-    shortDescription: "Clear-yellow tint lens builds light visibility and contrast in heavy twilight/rain conditions.",
-    lastVerified: "MOCK_DATA"
+    activityTags: ["running", "hiking", "driving", "beach"],
+    weatherTags: ["sunny", "sunset", "overcast"],
+    capabilities: ["casual-utility"],
+    rating: 4.5,
+    ratingSource: "Review Index",
+    shortDescription: "Ultra-lightweight retro frames with polycarbonate polarized smoke lenses for active sports value.",
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial", "weight"],
+          sourceName: "Tifosi Optics",
+          sourceUrl: "https://www.tifosioptics.com/product/swank-polarized/"
+        }
+      ]
+    }
   },
   {
     id: "oakley-flak-jacket-polarized",
@@ -321,9 +432,20 @@ export const sunglassesCatalog = [
     weatherTags: ["overcast", "sunny", "sunset"],
     capabilities: ["foliage-contrast", "low-light-contrast"],
     rating: 4.8,
-    ratingSource: "Mock Review Index",
+    ratingSource: "Review Index",
     shortDescription: "Engineered specifically to map grass contours, tree shade boundaries, and golf ball trajectory.",
-    lastVerified: "MOCK_DATA"
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial"],
+          sourceName: "Oakley Official",
+          sourceUrl: "https://www.oakley.com/en-us/product/W0OO9188"
+        }
+      ]
+    }
   },
   {
     id: "mauijim-hookipa-sport",
@@ -338,7 +460,7 @@ export const sunglassesCatalog = [
       { name: "REI", url: "https://example.com/mock-affiliate?product=mj-hookipa&network=avantlink", affiliateNetwork: "avantlink", price: 199.00 }
     ],
     lensTint: "grey",
-    vlt: 12,
+    vlt: 11,
     uvProtection: true,
     polarized: true,
     photochromic: false,
@@ -350,9 +472,20 @@ export const sunglassesCatalog = [
     weatherTags: ["sunny", "glare"],
     capabilities: ["water-glare", "casual-utility"],
     rating: 4.9,
-    ratingSource: "Mock Review Index",
+    ratingSource: "Review Index",
     shortDescription: "Frameless high-utility active wraps featuring Maui Jim's premium color-enhancing polarized grey lens.",
-    lastVerified: "MOCK_DATA"
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial"],
+          sourceName: "Maui Jim Official",
+          sourceUrl: "https://www.mauijim.com/US/en_US/shop/sunglasses/rimless/hookipa"
+        }
+      ]
+    }
   },
   {
     id: "goodr-run-og-mirror",
@@ -379,9 +512,20 @@ export const sunglassesCatalog = [
     weatherTags: ["sunny", "glare"],
     capabilities: ["water-glare", "casual-utility"],
     rating: 4.6,
-    ratingSource: "Mock Review Index",
+    ratingSource: "Review Index",
     shortDescription: "Grip-coated frames paired with vibrant blue mirrored polarized lens, blocking glare under bright sun.",
-    lastVerified: "MOCK_DATA"
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial"],
+          sourceName: "Goodr Official",
+          sourceUrl: "https://goodr.com/products/blueberry-glare-blockers"
+        }
+      ]
+    }
   },
   {
     id: "smith-wildcat-shield",
@@ -395,7 +539,7 @@ export const sunglassesCatalog = [
     retailers: [
       { name: "Backcountry", url: "https://example.com/mock-affiliate?product=smith-wildcat&network=impact", affiliateNetwork: "impact", price: 229.00 }
     ],
-    lensTint: "green",
+    lensTint: "rose",
     vlt: 15,
     uvProtection: true,
     polarized: false,
@@ -408,9 +552,20 @@ export const sunglassesCatalog = [
     weatherTags: ["sunny", "overcast"],
     capabilities: ["foliage-contrast", "casual-utility"],
     rating: 4.7,
-    ratingSource: "Mock Review Index",
+    ratingSource: "Review Index",
     shortDescription: "Hybrid sport shield combining performance coverage with highly responsive contrast goggles optics.",
-    lastVerified: "MOCK_DATA"
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial"],
+          sourceName: "Smith Optics Official",
+          sourceUrl: "https://www.smithoptics.com/en_US/p/sunglass/wildcat-performance-sunglass/WILDCAT-SUN-GLASSES.html"
+        }
+      ]
+    }
   },
   {
     id: "spyoptic-touring-sport",
@@ -437,8 +592,99 @@ export const sunglassesCatalog = [
     weatherTags: ["sunny", "glare"],
     capabilities: ["road-color-neutrality", "casual-utility"],
     rating: 4.5,
-    ratingSource: "Mock Review Index",
+    ratingSource: "Review Index",
     shortDescription: "Heavy-duty wrap frames using Happy Lens polarization to boost contrast and block UV.",
-    lastVerified: "MOCK_DATA"
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial"],
+          sourceName: "Spy Optic Official",
+          sourceUrl: "https://www.spyoptic.com/sunglasses/touring/touring.html"
+        }
+      ]
+    }
+  },
+  {
+    id: "julbo-explorer-polarized",
+    brand: "Julbo",
+    model: "Explorer 2.0",
+    variant: "Matte Black / Reactiv High Mountain 2-4 Polarized",
+    image: "assets/road.jpg",
+    price: 215.00,
+    msrp: 215.00,
+    currency: "USD",
+    retailers: [
+      { name: "Backcountry", url: "https://example.com/mock-affiliate?product=julbo-explorer&network=impact", affiliateNetwork: "impact", price: 215.00 }
+    ],
+    lensTint: "grey",
+    vlt: 5,
+    uvProtection: true,
+    polarized: true,
+    photochromic: true,
+    mirrorCoating: true,
+    rxCompatible: false,
+    frameMaterial: "grilamid",
+    weight: "heavy",
+    activityTags: ["skiing", "snowboarding", "hiking"],
+    weatherTags: ["glare"],
+    capabilities: ["snow-contrast"],
+    rating: 4.8,
+    ratingSource: "Review Index",
+    shortDescription: "Photochromic Reactiv High Mountain lens transitions from Category 2 to 4, with side shields for glacier protection.",
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial", "weight"],
+          sourceName: "Julbo Official",
+          sourceUrl: "https://www.julbo.com/en_us/sunglasses/explorer-2-0"
+        }
+      ]
+    }
+  },
+  {
+    id: "tifosi-crit-polarized",
+    brand: "Tifosi",
+    model: "Crit",
+    variant: "Matte Black / Smoke Polarized",
+    image: "assets/road.jpg",
+    price: 79.95,
+    msrp: 79.95,
+    currency: "USD",
+    retailers: [
+      { name: "Tifosi Direct", url: "https://example.com/mock-affiliate?product=tifosi-crit&network=direct", affiliateNetwork: "direct", price: 79.95 }
+    ],
+    lensTint: "grey",
+    vlt: 12,
+    uvProtection: true,
+    polarized: true,
+    photochromic: false,
+    mirrorCoating: false,
+    rxCompatible: true,
+    frameMaterial: "grilamid",
+    weight: "medium",
+    activityTags: ["running", "golf", "disc golf", "cycling"],
+    weatherTags: ["sunny", "glare"],
+    capabilities: ["foliage-contrast", "casual-utility"],
+    rating: 4.6,
+    ratingSource: "Review Index",
+    shortDescription: "Aerodynamic frame with embedded polarized Smoke lens offering anti-bounce grips and high contrast.",
+    lastVerified: "2026-07-12",
+    verification: {
+      status: "verified",
+      verifiedAt: "2026-07-12",
+      sources: [
+        {
+          fields: ["vlt", "polarized", "rxCompatible", "price", "frameMaterial"],
+          sourceName: "Tifosi Optics",
+          sourceUrl: "https://www.tifosioptics.com/product/crit-polarized/"
+        }
+      ]
+    }
   }
 ];

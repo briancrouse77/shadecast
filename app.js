@@ -450,6 +450,9 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (activity === 'driving') {
       vltTolerance = 8;
       targetTints = ['grey', 'amber'];
+    } else if (activity === 'golf' || activity === 'disc-golf' || activity === 'disc golf') {
+      vltTolerance = 8;
+      targetTints = ['rose', 'amber', 'green'];
     }
 
     // Stage 1: Optical Suitability Sub-scores (Normalized [0, 1])
