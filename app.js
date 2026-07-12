@@ -338,9 +338,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Backdoor 1: Ctrl + Shift + A shortcut key
+    // Backdoor 1: Ctrl + Shift + A (or Cmd + Shift + A on Mac)
     window.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'a') {
         e.preventDefault();
         revealAdminTab();
       }
