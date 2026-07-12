@@ -501,81 +501,7 @@
         </div>
       </div>
 
-      <!-- 3. Gear Radar Card -->
-      <div class="glass-card tmz-wire-card" id="gearRadarCard">
-        <div class="tmz-feed-header">
-          <span class="tmz-wire-title">Gear & Lens Radar</span>
-          <div class="tmz-live-indicator">
-            <span class="live-pulse-dot"></span>
-            <span class="tmz-live-text">Active Radar Feed</span>
-          </div>
-        </div>
-        <div class="tmz-feed-list" id="tmzFeedList">
-          <!-- dynamic buying guides will be loaded here by app.js -->
-        </div>
-      </div>
-
-      <!-- 4. Popular Activity Guides Card -->
-      <div class="glass-card nav-guides-card">
-        <h2 class="card-title">Popular Activity Guides</h2>
-        <div class="nav-guides-list" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem;">
-          <a href="https://briancrouse77.github.io/shadecast/best-driving-sunglasses/" class="guide-link">🚗 Driving Guide</a>
-          <a href="https://briancrouse77.github.io/shadecast/best-fishing-sunglasses/" class="guide-link">🎣 Fishing Guide</a>
-          <a href="https://briancrouse77.github.io/shadecast/best-disc-golf-sunglasses/" class="guide-link">🥏 Disc Golf Guide</a>
-          <a href="https://briancrouse77.github.io/shadecast/best-running-sunglasses/" class="guide-link">🏃 Running Guide</a>
-          <a href="https://briancrouse77.github.io/shadecast/best-skiing-sunglasses/" class="guide-link">🎿 Skiing Guide</a>
-        </div>
-      </div>
-
-      <!-- 5. Recommended Sunglasses Card -->
-      <div class="glass-card products-recommendation-card" id="productsRecCard">
-        <h2 class="card-title glow-text">Recommended Sunglasses</h2>
-        <p class="card-desc">Top-suited frames based on environment and preferences</p>
-        <div class="products-grid-container" id="productsGridContainer">
-          <!-- Dynamic Affiliate cards injected here -->
-        </div>
-      </div>
-
-      <!-- 6. Weather Stats & Gauge Card -->
-      <div class="glass-card stats-card">
-        <h2 class="card-title" id="statsCardTitle">Atmospheric Conditions</h2>
-        <div class="tailored-badge" id="tailoredBadge" style="display: none;">📍 Tailored for Your Location</div>
-        
-        <div class="uv-gauge-container">
-          <div class="uv-gauge">
-            <svg viewBox="0 0 100 100" class="gauge-svg">
-              <circle cx="50" cy="50" r="40" class="gauge-bg" />
-              <circle cx="50" cy="50" r="40" class="gauge-fill" id="uvGaugeFill" />
-            </svg>
-            <div class="uv-value-box">
-              <span class="uv-num" id="uvNumber">8</span>
-              <span class="uv-label">UV Index</span>
-            </div>
-          </div>
-          <div class="uv-rating" id="uvRatingText">Very High</div>
-        </div>
-
-        <div class="metrics-grid">
-          <div class="metric-item">
-            <span class="metric-label">Solar Output</span>
-            <span class="metric-val" id="metricSolar">920 W/m²</span>
-          </div>
-          <div class="metric-item">
-            <span class="metric-label">Glare Factor</span>
-            <span class="metric-val text-warning" id="metricGlare">High</span>
-          </div>
-          <div class="metric-item">
-            <span class="metric-label">Temperature</span>
-            <span class="metric-val" id="metricTemp">87°F</span>
-          </div>
-          <div class="metric-item">
-            <span class="metric-label">Condition</span>
-            <span class="metric-val" id="metricCondition">Clear Sky</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 7. Expert Lens Match Card -->
+      <!-- 3. Expert Lens Match Card -->
       <div class="glass-card recommendation-card">
         <h2 class="card-title glow-text">Expert Lens Match</h2>
         <div class="recommendation-badge" id="recCategory">Category 3: Dark Tint</div>
@@ -616,7 +542,55 @@
         </div>
       </div>
 
-      <!-- 8. Weather Presets (Quick Simulator Control) -->
+      <!-- 4. Recommended Sunglasses Card -->
+      <div class="glass-card products-recommendation-card" id="productsRecCard">
+        <h2 class="card-title glow-text">Recommended Sunglasses</h2>
+        <p class="card-desc">Top-suited frames based on environment and preferences</p>
+        <div class="products-grid-container" id="productsGridContainer">
+          <!-- Dynamic Affiliate cards injected here -->
+        </div>
+      </div>
+
+      <!-- 5. Weather Stats & Gauge Card -->
+      <div class="glass-card stats-card">
+        <h2 class="card-title" id="statsCardTitle">Atmospheric Conditions</h2>
+        <div class="tailored-badge" id="tailoredBadge" style="display: none;">📍 Tailored for Your Location</div>
+        
+        <div class="uv-gauge-container">
+          <div class="uv-gauge">
+            <svg viewBox="0 0 100 100" class="gauge-svg">
+              <circle cx="50" cy="50" r="40" class="gauge-bg" />
+              <circle cx="50" cy="50" r="40" class="gauge-fill" id="uvGaugeFill" />
+            </svg>
+            <div class="uv-value-box">
+              <span class="uv-num" id="uvNumber">8</span>
+              <span class="uv-label">UV Index</span>
+            </div>
+          </div>
+          <div class="uv-rating" id="uvRatingText">Very High</div>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <span class="metric-label">Solar Output</span>
+            <span class="metric-val" id="metricSolar">920 W/m²</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Glare Factor</span>
+            <span class="metric-val text-warning" id="metricGlare">High</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Temperature</span>
+            <span class="metric-val" id="metricTemp">87°F</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Condition</span>
+            <span class="metric-val" id="metricCondition">Clear Sky</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Weather Presets (Quick Simulator Control) -->
       <div class="glass-card presets-card">
         <h2 class="card-title">Weather Presets</h2>
         <p class="card-desc">Simulate different solar intensities</p>
@@ -636,7 +610,7 @@
         </div>
       </div>
 
-      <!-- 9. Interactive Lens Simulator Card -->
+      <!-- 7. Interactive Lens Simulator Card -->
       <div class="glass-card simulator-card collapsed" id="simCard">
         <div class="card-header-flex" id="simCardHeader" style="cursor: pointer;">
           <div>
@@ -731,7 +705,21 @@
         </div>
       </div>
 
-      <!-- 10. Tabbed Quiz & Telemetry Card -->
+      <!-- 8. Gear Radar Card -->
+      <div class="glass-card tmz-wire-card" id="gearRadarCard">
+        <div class="tmz-feed-header">
+          <span class="tmz-wire-title">Gear & Lens Radar</span>
+          <div class="tmz-live-indicator">
+            <span class="live-pulse-dot"></span>
+            <span class="tmz-live-text">Active Radar Feed</span>
+          </div>
+        </div>
+        <div class="tmz-feed-list" id="tmzFeedList">
+          <!-- dynamic buying guides will be loaded here by app.js -->
+        </div>
+      </div>
+
+      <!-- 9. Tabbed Quiz & Telemetry Card -->
       <div class="glass-card side-tab-card collapsed" id="quizTelemetryCard">
         <div class="card-header-flex" id="quizCardHeader" style="cursor: pointer;">
           <div>

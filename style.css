@@ -1534,16 +1534,6 @@ select:focus-visible {
     flex-direction: column;
     gap: 1.25rem;
   }
-  .activity-card { order: 1; }
-  #prefCard { order: 2; }
-  #productsRecCard { order: 3; }
-  .stats-card { order: 4; }
-  .recommendation-card { order: 5; }
-  .presets-card { order: 6; }
-  .simulator-card { order: 7; }
-  #gearRadarCard { order: 8; }
-  #quizTelemetryCard { order: 9; }
-  .nav-guides-card { order: 10; }
   
   .slider-row {
     flex-direction: column;
@@ -1580,18 +1570,6 @@ select:focus-visible {
     flex-direction: column;
     gap: 1.75rem;
   }
-
-  /* Priority Stacking Order */
-  .activity-card { order: 1; }
-  #prefCard { order: 2; }
-  .recommendation-card { order: 3; }       /* Expert Lens Match */
-  #productsRecCard { order: 4; }           /* Recommended Sunglasses / Best Match */
-  .stats-card { order: 5; }                /* Conditions stats */
-  .presets-card { order: 6; }              /* Weather Presets */
-  .simulator-card { order: 7; }            /* Simulator */
-  #gearRadarCard { order: 8; }             /* Gear Radar */
-  #quizTelemetryCard { order: 9; }         /* Tabbed Quiz & Telemetry */
-  .nav-guides-card { order: 10; }          /* Popular activity guides */
   
   .slider-row {
     flex-direction: row;
