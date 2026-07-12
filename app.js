@@ -399,21 +399,26 @@ document.addEventListener('DOMContentLoaded', () => {
     let polarizationCritical = false;
     let vltTolerance = 10;
     
+    // Check if weather data is incomplete
+    const weatherIncomplete = (weather.uv === undefined || weather.uv === null || weather.isDay === undefined || weather.isDay === null);
+    
+    // If weather data is incomplete, use a standard moderate-bright baseline for scoring calculations
+    const activeUV = weatherIncomplete ? 8 : weather.uv;
+    const activeIsDay = weatherIncomplete ? true : weather.isDay;
+    const activeGlare = weatherIncomplete ? 'High' : weather.glareLevel;
+    const activeCondition = weatherIncomplete ? 'Clear Sky' : weather.condition;
+
     // UV-based target setting
-    const uvVal = weather.uv;
-    if (uvVal === undefined || uvVal === null) {
-      targetVlt = 15;
-      targetTints = ['grey'];
-    } else if (!weather.isDay) {
+    if (!activeIsDay) {
       targetVlt = 85;
       targetTints = ['rose', 'grey'];
-    } else if (uvVal >= 10) {
+    } else if (activeUV >= 10) {
       targetVlt = 10;
       targetTints = ['grey', 'green'];
-    } else if (uvVal >= 6) {
+    } else if (activeUV >= 6) {
       targetVlt = 13;
       targetTints = ['grey', 'green', 'blue'];
-    } else if (uvVal >= 3) {
+    } else if (activeUV >= 3) {
       targetVlt = 16;
       targetTints = ['amber', 'green'];
     } else {
@@ -430,8 +435,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Polarization requirement (glare-heavy activities or UV index >= 7)
     const glareActivities = ['fishing', 'boating', 'driving', 'skiing', 'snowboarding', 'beach'];
-    const hasGlareWeather = weather.glareLevel === 'High' || (weather.condition && (weather.condition.toLowerCase().includes('glare') || weather.condition.toLowerCase().includes('snow')));
-    if (glareActivities.includes(activity) || hasGlareWeather || (uvVal !== null && uvVal >= 7)) {
+    const hasGlareWeather = activeGlare === 'High' || (activeCondition && (activeCondition.toLowerCase().includes('glare') || activeCondition.toLowerCase().includes('snow')));
+    if (glareActivities.includes(activity) || hasGlareWeather || (activeUV !== null && activeUV >= 7)) {
       polarizationCritical = true;
     }
 
@@ -517,6 +522,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // GATING RULES AND RIGOROUS FILTERS
     
+    // Fix 1: Activity Minimum Suitability Gates
+    const ACTIVITY_MINIMUMS = {
+      driving: 0.5,
+      fishing: 0.5,
+      boating: 0.5,
+      skiing: 0.5,
+      snowboarding: 0.5,
+      golf: 0.5,
+      'disc golf': 0.5,
+      'disc-golf': 0.5,
+      cycling: 0.4,
+      running: 0.4,
+      hiking: 0.4,
+      beach: 0.4
+    };
+    
+    const minAct = ACTIVITY_MINIMUMS[activity] || 0.4;
+    if (s_activity < minAct) {
+      s_rx = 0.0;
+      rxReason = `Activity suitability ${s_activity.toFixed(2)} is below minimum ${minAct.toFixed(2)} threshold for ${activity}`;
+    }
+    
     // Fix 2: Snow recommendations compatibility checks
     if (['skiing', 'snowboarding'].includes(activity)) {
       const hasSnowContrast = product.capabilities && product.capabilities.includes('snow-contrast');
@@ -540,20 +567,20 @@ document.addEventListener('DOMContentLoaded', () => {
       opticalScore = Math.min(opticalScore, 0.49); // prevent Strong/Excellent match
     }
     
-    const isExtremeGlare = (uvVal !== null && uvVal >= 10) || (['skiing', 'snowboarding'].includes(activity) && hasGlareWeather);
+    const isExtremeGlare = (activeUV !== null && activeUV >= 10) || (['skiing', 'snowboarding'].includes(activity) && hasGlareWeather);
     if (isExtremeGlare && s_vlt < 0.50) {
       s_rx = 0.0;
       rxReason = `VLT subscore ${s_vlt.toFixed(2)} is below minimum 0.50 threshold for extreme glare`;
     }
     
-    const isNormalBright = (uvVal !== null && uvVal >= 6);
+    const isNormalBright = (activeUV !== null && activeUV >= 6);
     if (isNormalBright && s_vlt < 0.35 && !isExtremeGlare) {
       s_rx = 0.0;
       rxReason = `VLT subscore ${s_vlt.toFixed(2)} is below minimum 0.35 threshold for normal bright conditions`;
     }
 
-    const isLowLight = (!weather.isDay || (uvVal !== null && uvVal < 3));
-    if (isLowLight && product.vlt < 20 && uvVal !== null) {
+    const isLowLight = (!activeIsDay || (activeUV !== null && activeUV < 3));
+    if (isLowLight && product.vlt < 20 && activeUV !== null) {
       s_rx = 0.0;
       rxReason = `VLT ${product.vlt}% is too dark for low-light conditions`;
     }
@@ -569,18 +596,16 @@ document.addEventListener('DOMContentLoaded', () => {
       rxReason = `Tint subscore ${s_tint.toFixed(2)} is below minimum 0.50 threshold for contrast-critical activity`;
     }
 
-    // Fix 7: Incomplete weather data penalty
-    let weatherIncomplete = false;
-    if (weather.uv === undefined || weather.uv === null) {
-      weatherIncomplete = true;
-      opticalScore = opticalScore * 0.80; // 20% match confidence penalty
+    // Fix 2: Weather completeness factor calculation
+    const baseOpticalMatch = Math.round(opticalScore * 100);
+    let displayScore = baseOpticalMatch;
+    
+    if (weatherIncomplete) {
+      displayScore = Math.min(100, Math.round(baseOpticalMatch * 0.80)); // 20% match confidence penalty
     }
 
-    const displayScore = Math.min(100, Math.round(opticalScore * 100));
-    
-    // Sort ordering utilizes Stage 2 modifier (rx, budget, brand)
     const p_mod = s_rx * s_brand * s_budget;
-    const personalizedRank = opticalScore * p_mod;
+    const personalizedRank = (displayScore / 100) * p_mod;
 
     const isExcluded = (s_rx === 0.0 || s_budget === 0.0);
     const rejectionReasons = [];
@@ -589,9 +614,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return {
       product,
-      finalScore: displayScore, // Card match percentage represents optical match confidence
+      finalScore: displayScore, // Display score is adjusted confidence
       displayScore,
       personalizedRank,
+      baseOpticalMatch,
+      weatherIncomplete,
       opticalScore: Math.round(opticalScore * 100) / 100,
       subScores: {
         vlt: Math.round(s_vlt * 100) / 100,
@@ -605,8 +632,7 @@ document.addEventListener('DOMContentLoaded', () => {
         budget: s_budget
       },
       isExcluded,
-      rejectionReasons,
-      weatherIncomplete
+      rejectionReasons
     };
   }
 
@@ -1024,6 +1050,9 @@ document.addEventListener('DOMContentLoaded', () => {
       
       if (best) {
         logOutput.push(` - Best Match: ${best.product.brand} ${best.product.model} (Score: ${best.finalScore}%)`);
+        if (best.weatherIncomplete) {
+          logOutput.push(`   ├─ Base Optical Match: ${best.baseOpticalMatch}% | Weather Completeness Factor: 0.80 | Displayed Confidence: ${best.finalScore}%`);
+        }
         logOutput.push(`   └─ Subscores: VLT=${best.subScores.vlt} | Polar=${best.subScores.polar} | Tint=${best.subScores.tint} | Act=${best.subScores.activity}`);
       } else {
         logOutput.push(` - Best Match: NONE (All products excluded or below threshold)`);
