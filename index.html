@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShadeCast | Ultimate Sunglasses Weather & TMZ Style Advisor</title>
+  <meta name="description" content="Decide what sunglasses to wear today. Real-time UV, light levels, dynamic lens tint simulator, and celebrity sunglasses style trends.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background decorative glows -->
+  <div class="glow-bg glow-1"></div>
+  <div class="glow-bg glow-2"></div>
+
+  <!-- Header Section -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24" class="logo-icon">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+        </div>
+        <div>
+          <h1>ShadeCast</h1>
+          <p class="brand-subtitle">The Sunglasses TMZ &amp; Weather Engine</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <!-- Live Geolocation and Search Input -->
+        <!-- Live Geolocation and Search Input -->
+        <div class="location-control-wrapper" id="locationControlWrapper">
+          
+          <!-- Auto-detect GPS button -->
+          <button class="gps-btn" id="btnGeolocate" title="Auto-detect location using GPS">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>
+            </svg>
+            <span class="sr-only">Detect GPS</span>
+          </button>
+          
+          <!-- Input block for manual search -->
+          <div class="search-input-box" id="searchInputBox">
+            <label for="citySearchInput" class="sr-only">Search Location</label>
+            <input type="text" id="citySearchInput" placeholder="Enter City (e.g. Paris)">
+            <button id="btnCitySearch" class="search-submit-btn" title="Search weather for location">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+              </svg>
+            </button>
+          </div>
+          
+          <!-- Location source indicator -->
+          <div class="location-indicator" id="locationIndicator">
+            <span class="location-dot" id="locIndicatorDot"></span>
+            <span class="indicator-text" id="locationStatusText">Detecting Location...</span>
+            <button class="loc-change-btn" id="btnChangeLocation" title="Change Location">Change</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <main class="app-layout">
+    <div class="layout-grid">
+
+      <!-- Column 1: Weather Dashboard & Recommendation -->
+      <section class="dashboard-col" aria-label="Weather Dashboard">
+        
+        <!-- Weather Presets (Quick Simulator Control) -->
+        <div class="glass-card presets-card">
+          <h2 class="card-title">Weather Presets</h2>
+          <p class="card-desc">Simulate different solar intensities</p>
+          <div class="presets-grid">
+            <button class="preset-btn active" data-preset="sunny" id="btnPresetSunny">
+              <span class="icon">☀️</span> Sunny Day
+            </button>
+            <button class="preset-btn" data-preset="glare" id="btnPresetGlare">
+              <span class="icon">❄️</span> Glare / Snow
+            </button>
+            <button class="preset-btn" data-preset="sunset" id="btnPresetSunset">
+              <span class="icon">🌅</span> Golden Hour
+            </button>
+            <button class="preset-btn" data-preset="overcast" id="btnPresetOvercast">
+              <span class="icon">☁️</span> Overcast
+            </button>
+          </div>
+        </div>
+
+        <!-- Weather Stats & Gauge -->
+        <div class="glass-card stats-card">
+          <h2 class="card-title">Atmospheric Conditions</h2>
+          
+          <div class="uv-gauge-container">
+            <div class="uv-gauge">
+              <svg viewBox="0 0 100 100" class="gauge-svg">
+                <circle cx="50" cy="50" r="40" class="gauge-bg" />
+                <circle cx="50" cy="50" r="40" class="gauge-fill" id="uvGaugeFill" />
+              </svg>
+              <div class="uv-value-box">
+                <span class="uv-num" id="uvNumber">8</span>
+                <span class="uv-label">UV Index</span>
+              </div>
+            </div>
+            <div class="uv-rating" id="uvRatingText">Very High</div>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric-item">
+              <span class="metric-label">Solar Output</span>
+              <span class="metric-val" id="metricSolar">920 W/m²</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">Glare Factor</span>
+              <span class="metric-val text-warning" id="metricGlare">High</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">Temperature</span>
+              <span class="metric-val" id="metricTemp">87°F</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">Condition</span>
+              <span class="metric-val" id="metricCondition">Clear Sky</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lens Expert Recommendation -->
+        <div class="glass-card recommendation-card">
+          <h2 class="card-title glow-text">Expert Lens Match</h2>
+          <div class="recommendation-badge" id="recCategory">Category 3: Dark Tint</div>
+          
+          <div class="rec-details">
+            <div class="rec-item">
+              <div class="rec-icon">🕶️</div>
+              <div>
+                <h3>Recommended Tint</h3>
+                <p id="recTint">Dark Grey or Green to maintain natural color perception.</p>
+              </div>
+            </div>
+            
+            <div class="rec-item">
+              <div class="rec-icon">⚡</div>
+              <div>
+                <h3>Polarization Needed</h3>
+                <p id="recPolarization">Essential. Intense road and water reflections expected.</p>
+              </div>
+            </div>
+
+            <div class="rec-item">
+              <div class="rec-icon">✨</div>
+              <div>
+                <h3>Lens Finish</h3>
+                <p id="recFinish">Silver Mirror Coating optional for extreme reflection block.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Column 2: Lens Simulator (Center Stage) -->
+      <section class="simulator-col" aria-label="Lens Simulator">
+        <div class="glass-card simulator-card">
+          <div class="card-header-flex">
+            <div>
+              <h2 class="card-title">Interactive Lens Simulator</h2>
+              <p class="card-desc">Slide to compare naked eye view vs. sunglasses lens technology</p>
+            </div>
+            <div class="sim-badge" id="simVibeBadge">Polarized Active</div>
+          </div>
+
+          <!-- Simulator Workspace -->
+          <div class="simulator-container" id="simContainer">
+            
+            <!-- Base Image (Road Glare) -->
+            <img src="assets/road.jpg" alt="Sunny road reflection" class="sim-img-base" id="simImageBase">
+
+            <!-- Glare Overlay (Representing raw UV/Reflection glare before glasses) -->
+            <div class="glare-overlay" id="glareOverlay"></div>
+
+            <!-- Sunglasses View Area (Draggable split pane) -->
+            <div class="sunglasses-pane" id="sunglassesPane">
+              <!-- Re-render road under sunglasses filter -->
+              <img src="assets/road.jpg" alt="Sunny road reflection polarized" class="sim-img-filtered" id="simImageFilter">
+              
+              <!-- Tint Overlay (Applies colors, opacity, blend-modes dynamically) -->
+              <div class="tint-overlay" id="tintOverlay"></div>
+
+              <!-- Refined Polarized Overlay (subtle highlight filter to simulate polarized clarity) -->
+              <div class="polarized-overlay" id="polarizedOverlay"></div>
+            </div>
+
+            <!-- Slider Handle -->
+            <div class="slider-handle" id="sliderHandle">
+              <div class="handle-line"></div>
+              <div class="handle-button">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M14.59 7.41L18.17 11H6v2h12.17l-3.59 3.59L16 18l6-6-6-6-1.41 1.41z"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Label tags -->
+            <span class="sim-label label-left">Naked Eye (Raw Glare)</span>
+            <span class="sim-label label-right">Through Lens Filter</span>
+          </div>
+
+          <!-- Control Console -->
+          <div class="simulator-controls">
+            
+            <!-- Tint Picker -->
+            <div class="control-group">
+              <span class="control-label">Select Lens Vibe</span>
+              <div class="tint-selectors">
+                <button class="tint-dot active" data-tint="grey" style="--tint-color: #2b2b2b;" title="Grey: True Color & Daily Use" id="btnTintGrey">
+                  <span class="dot-inner"></span>
+                </button>
+                <button class="tint-dot" data-tint="amber" style="--tint-color: #b05c1d;" title="Amber/Brown: Contrast & Detail" id="btnTintAmber">
+                  <span class="dot-inner"></span>
+                </button>
+                <button class="tint-dot" data-tint="green" style="--tint-color: #173d2a;" title="Green: All-Weather Balance" id="btnTintGreen">
+                  <span class="dot-inner"></span>
+                </button>
+                <button class="tint-dot" data-tint="blue" style="--tint-color: #0b6fb8;" title="Blue Mirrored: Water Glare Block" id="btnTintBlue">
+                  <span class="dot-inner"></span>
+                </button>
+                <button class="tint-dot" data-tint="rose" style="--tint-color: #9c27b0;" title="Rose: High Contrast sports" id="btnTintRose">
+                  <span class="dot-inner"></span>
+                </button>
+              </div>
+              <div class="active-tint-description" id="tintDesc">Grey Lens: maintains true color perception and offers the best daily comfort.</div>
+            </div>
+
+            <div class="slider-row">
+              <!-- Darkness Slider -->
+              <div class="control-group flex-1">
+                <div class="slider-label-row">
+                  <span class="control-label">Darkness Intensity (VLT)</span>
+                  <span class="slider-val" id="darknessVal">85%</span>
+                </div>
+                <input type="range" min="10" max="95" value="85" class="app-range" id="darknessSlider" aria-label="Tint Darkness Intensity">
+              </div>
+
+              <!-- Polarization Switch -->
+              <div class="control-group toggle-group">
+                <span class="control-label">Polarized Filter</span>
+                <label class="switch">
+                  <input type="checkbox" id="polarizationToggle" checked>
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Column 3: TMZ Feed & Custom Match Quiz -->
+      <section class="side-col" aria-label="Trends and Quiz">
+        
+        <!-- Tab System Header -->
+        <div class="tab-header">
+          <button class="tab-btn active" id="tabBtnTmz" data-tab="tabTmz">🔥 Shade TMZ</button>
+          <button class="tab-btn" id="tabBtnQuiz" data-tab="tabQuiz">🎯 Tint Quiz</button>
+        </div>
+
+        <!-- Tab 1 Content: Shade TMZ Style Feed -->
+        <div class="tab-pane active" id="tabTmz">
+          <div class="glass-card tmz-card">
+            
+            <div class="tmz-hero">
+              <img src="assets/celebrity.jpg" alt="Celebrity Style Spotting" class="tmz-hero-img" id="tmzHeroImg">
+              <div class="tmz-hero-overlay">
+                <span class="badge-hot" id="tmzHeroBadge">SPOTTED IN BEVERLY HILLS</span>
+                <h3 id="tmzHeroTitle">Hailey Bieber Rocks Oversized Acetate Shields</h3>
+                <p id="tmzHeroDesc">Matching the extreme 95°F California heatwave with Category 3 blacked-out lenses.</p>
+              </div>
+            </div>
+
+            <div class="tmz-feed-list">
+              
+              <div class="tmz-news-item">
+                <div class="tmz-news-thumb">🍿</div>
+                <div class="tmz-news-body">
+                  <h4>Austin Butler's Vintage Golden Hour Aviators</h4>
+                  <p>Seen wearing warm amber tints in Malibu to soften the late afternoon solar glare.</p>
+                  <span class="news-time">2 hours ago</span>
+                </div>
+              </div>
+
+              <div class="tmz-news-item">
+                <div class="tmz-news-thumb">📈</div>
+                <div class="tmz-news-body">
+                  <h4>Trend Alert: Polarized Green is Dominating Aspen</h4>
+                  <p>Snow glare levels hitting peak factor. Celebs are choosing polarized sport wraps.</p>
+                  <span class="news-time">5 hours ago</span>
+                </div>
+              </div>
+
+              <div class="tmz-news-item">
+                <div class="tmz-news-thumb">🌟</div>
+                <div class="tmz-news-body">
+                  <h4>Zendaya's Custom Rose Tints Trend</h4>
+                  <p>Styled at the London premier. Rose lenses boost contrast and style points alike.</p>
+                  <span class="news-time">Yesterday</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2 Content: Shade Matcher Quiz -->
+        <div class="tab-pane" id="tabQuiz">
+          <div class="glass-card quiz-card">
+            <h2 class="card-title">Find Your Perfect Shade</h2>
+            <p class="card-desc">Answer 3 simple questions to calculate your custom profile</p>
+
+            <div id="quizForm">
+              <!-- Quiz Step 1 -->
+              <div class="quiz-step active" data-step="1" id="quizStep1">
+                <h3 class="quiz-q">What is your primary outdoor activity?</h3>
+                <div class="quiz-options">
+                  <button class="quiz-opt" data-ans="driving">🚗 Commuting &amp; Driving</button>
+                  <button class="quiz-opt" data-ans="sports">🏂 Action Sports &amp; Hiking</button>
+                  <button class="quiz-opt" data-ans="beach">🏖️ Beach &amp; Water Activities</button>
+                  <button class="quiz-opt" data-ans="fashion">☕ Urban Cafes &amp; Style</button>
+                </div>
+              </div>
+
+              <!-- Quiz Step 2 -->
+              <div class="quiz-step" data-step="2" id="quizStep2">
+                <h3 class="quiz-q">How sensitive are your eyes to sunlight?</h3>
+                <div class="quiz-options">
+                  <button class="quiz-opt" data-ans="high">☀️ Very Sensitive (Squint easily)</button>
+                  <button class="quiz-opt" data-ans="moderate">⛅ Normal Sensitivity</button>
+                  <button class="quiz-opt" data-ans="low">🌙 Barely Sensitive (Comfortable)</button>
+                </div>
+              </div>
+
+              <!-- Quiz Step 3 -->
+              <div class="quiz-step" data-step="3" id="quizStep3">
+                <h3 class="quiz-q">What's your aesthetic preference?</h3>
+                <div class="quiz-options">
+                  <button class="quiz-opt" data-ans="classic">🕶️ Timeless &amp; Classic (Retro)</button>
+                  <button class="quiz-opt" data-ans="bold">🛸 Bold &amp; Futuristic (Shields)</button>
+                  <button class="quiz-opt" data-ans="minimal">📐 Sleek &amp; Minimalist (Metal frames)</button>
+                </div>
+              </div>
+
+              <!-- Quiz Results -->
+              <div class="quiz-step" data-step="result" id="quizStepResult">
+                <div class="result-header">
+                  <span class="result-celebration">🎉</span>
+                  <h3>Your Shade Match Found!</h3>
+                </div>
+                
+                <div class="result-details-card">
+                  <div class="result-name" id="resultName">The Retro Navigator</div>
+                  <p class="result-desc" id="resultDesc">Timeless tortoiseshell frames paired with highly contrast-enhancing polarized amber lenses.</p>
+                  
+                  <div class="result-stats">
+                    <div class="r-stat">
+                      <span class="r-val" id="resultTint">Amber Tints</span>
+                      <span class="r-lbl">Best Lens Color</span>
+                    </div>
+                    <div class="r-stat">
+                      <span class="r-val" id="resultPolar">Yes (Required)</span>
+                      <span class="r-lbl">Polarized?</span>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="app-btn-outline" id="btnRestartQuiz">Retake Quiz</button>
+              </div>
+            </div>
+
+            <!-- Quiz progress footer -->
+            <div class="quiz-footer" id="quizFooter">
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="quizProgress" style="width: 33%;"></div>
+              </div>
+              <span class="progress-text" id="quizStepText">Question 1 of 3</span>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <p>&copy; 2026 ShadeCast - Built with 🔥 for Sunglasses Aficionados. All trends monitored.</p>
+  </footer>
+
+  <!-- Javascript -->
+  <script src="app.js"></script>
+</body>
+</html>
