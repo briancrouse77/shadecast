@@ -31,6 +31,12 @@
 body {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(217, 70, 239, 0.06) 0px, transparent 50%),
+    linear-gradient(rgba(255,255,255,0.007) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.007) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 25px 25px, 25px 25px;
   color: var(--text-primary);
   min-height: 100vh;
   display: flex;
@@ -325,6 +331,19 @@ body {
   border-radius: 16px;
   padding: 1.25rem;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(14, 165, 233, 0.4) 0%, rgba(217, 70, 239, 0.3) 100%);
+  pointer-events: none;
 }
 
 .card-title {
@@ -497,18 +516,41 @@ body {
 }
 
 .metric-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 0.65rem;
   display: flex;
   flex-direction: column;
+  gap: 0.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-item::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 25%;
+  width: 2px;
+  height: 50%;
+  background-color: var(--accent-blue);
+  border-radius: 2px;
 }
 
 .metric-label {
-  font-size: 0.7rem;
+  font-size: 0.55rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: var(--text-secondary);
 }
 
 .metric-val {
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-family: monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
   margin-top: 0.1rem;
 }
 
@@ -595,6 +637,32 @@ body {
   user-select: none;
   background-color: #020617;
   margin-bottom: 1rem;
+}
+
+.simulator-container::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 12px;
+  height: 12px;
+  border-top: 2px solid rgba(14, 165, 233, 0.6);
+  border-left: 2px solid rgba(14, 165, 233, 0.6);
+  pointer-events: none;
+  z-index: 12;
+}
+
+.simulator-container::after {
+  content: '';
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 12px;
+  height: 12px;
+  border-bottom: 2px solid rgba(14, 165, 233, 0.6);
+  border-right: 2px solid rgba(14, 165, 233, 0.6);
+  pointer-events: none;
+  z-index: 12;
 }
 
 .sim-img-base {
@@ -936,10 +1004,10 @@ input:checked + .slider:before {
 }
 
 .tab-btn.active {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  color: var(--text-primary);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  background: rgba(14, 165, 233, 0.08);
+  border: 1px solid rgba(14, 165, 233, 0.25);
+  color: #fff;
+  box-shadow: inset 0 0 10px rgba(14, 165, 233, 0.15);
 }
 
 .tab-pane {
