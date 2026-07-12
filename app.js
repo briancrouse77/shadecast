@@ -401,7 +401,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // UV-based target setting
     const uvVal = weather.uv;
-    if (!weather.isDay) {
+    if (uvVal === undefined || uvVal === null) {
+      targetVlt = 15;
+      targetTints = ['grey'];
+    } else if (!weather.isDay) {
       targetVlt = 85;
       targetTints = ['rose', 'grey'];
     } else if (uvVal >= 10) {
@@ -427,8 +430,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Polarization requirement (glare-heavy activities or UV index >= 7)
     const glareActivities = ['fishing', 'boating', 'driving', 'skiing', 'snowboarding', 'beach'];
-    const hasGlareWeather = weather.glareLevel === 'High' || weather.condition.toLowerCase().includes('glare') || weather.condition.toLowerCase().includes('snow');
-    if (glareActivities.includes(activity) || hasGlareWeather || uvVal >= 7) {
+    const hasGlareWeather = weather.glareLevel === 'High' || (weather.condition && (weather.condition.toLowerCase().includes('glare') || weather.condition.toLowerCase().includes('snow')));
+    if (glareActivities.includes(activity) || hasGlareWeather || (uvVal !== null && uvVal >= 7)) {
       polarizationCritical = true;
     }
 
@@ -481,7 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const W_tint = 0.20;
     const W_polar = 0.25;
     const W_activity = 0.20;
-    const opticalScore = (W_vlt * s_vlt + W_tint * s_tint + W_polar * s_polar + W_activity * s_activity) / 0.85;
+    let opticalScore = (W_vlt * s_vlt + W_tint * s_tint + W_polar * s_polar + W_activity * s_activity) / 0.85;
 
     // Stage 2: Personalization & Commerce Modifiers
     let s_rx = 1.0;
@@ -512,8 +515,72 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // GATING RULES AND RIGOROUS FILTERS
+    
+    // Fix 2: Snow recommendations compatibility checks
+    if (['skiing', 'snowboarding'].includes(activity)) {
+      const hasSnowContrast = product.capabilities && product.capabilities.includes('snow-contrast');
+      const hasSkiTag = product.activityTags && (product.activityTags.includes('skiing') || product.activityTags.includes('snowboarding'));
+      if (!hasSnowContrast && !hasSkiTag) {
+        s_rx = 0.0;
+        rxReason = 'Lacks skiing/snowboarding tags or snow-contrast capability';
+      }
+      if (s_activity < 0.5) {
+        s_rx = 0.0;
+        rxReason = `Activity score ${s_activity.toFixed(2)} is below minimum 0.50 threshold for snow environments`;
+      }
+      if (hasGlareWeather && !product.polarized) {
+        s_rx = 0.0;
+        rxReason = 'Polarization required for active snow glare';
+      }
+    }
+
+    // Fix 3: VLT gates
+    if (s_vlt === 0.0) {
+      opticalScore = Math.min(opticalScore, 0.49); // prevent Strong/Excellent match
+    }
+    
+    const isExtremeGlare = (uvVal !== null && uvVal >= 10) || (['skiing', 'snowboarding'].includes(activity) && hasGlareWeather);
+    if (isExtremeGlare && s_vlt < 0.50) {
+      s_rx = 0.0;
+      rxReason = `VLT subscore ${s_vlt.toFixed(2)} is below minimum 0.50 threshold for extreme glare`;
+    }
+    
+    const isNormalBright = (uvVal !== null && uvVal >= 6);
+    if (isNormalBright && s_vlt < 0.35 && !isExtremeGlare) {
+      s_rx = 0.0;
+      rxReason = `VLT subscore ${s_vlt.toFixed(2)} is below minimum 0.35 threshold for normal bright conditions`;
+    }
+
+    const isLowLight = (!weather.isDay || (uvVal !== null && uvVal < 3));
+    if (isLowLight && product.vlt < 20 && uvVal !== null) {
+      s_rx = 0.0;
+      rxReason = `VLT ${product.vlt}% is too dark for low-light conditions`;
+    }
+
+    // Fix 4: Tint gates
+    if (s_tint <= 0.1) {
+      opticalScore = Math.min(opticalScore, 0.49); // prevent Strong/Excellent match
+    }
+
+    const isContrastActivity = ['golf', 'disc golf', 'skiing', 'snowboarding', 'fishing', 'boating', 'hiking'].includes(activity);
+    if (isContrastActivity && s_tint < 0.5) {
+      s_rx = 0.0;
+      rxReason = `Tint subscore ${s_tint.toFixed(2)} is below minimum 0.50 threshold for contrast-critical activity`;
+    }
+
+    // Fix 7: Incomplete weather data penalty
+    let weatherIncomplete = false;
+    if (weather.uv === undefined || weather.uv === null) {
+      weatherIncomplete = true;
+      opticalScore = opticalScore * 0.80; // 20% match confidence penalty
+    }
+
+    const displayScore = Math.min(100, Math.round(opticalScore * 100));
+    
+    // Sort ordering utilizes Stage 2 modifier (rx, budget, brand)
     const p_mod = s_rx * s_brand * s_budget;
-    const finalScore = Math.min(100, Math.round(opticalScore * p_mod * 100));
+    const personalizedRank = opticalScore * p_mod;
 
     const isExcluded = (s_rx === 0.0 || s_budget === 0.0);
     const rejectionReasons = [];
@@ -522,7 +589,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return {
       product,
-      finalScore,
+      finalScore: displayScore, // Card match percentage represents optical match confidence
+      displayScore,
+      personalizedRank,
       opticalScore: Math.round(opticalScore * 100) / 100,
       subScores: {
         vlt: Math.round(s_vlt * 100) / 100,
@@ -536,7 +605,8 @@ document.addEventListener('DOMContentLoaded', () => {
         budget: s_budget
       },
       isExcluded,
-      rejectionReasons
+      rejectionReasons,
+      weatherIncomplete
     };
   }
 
@@ -567,20 +637,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoredProducts = sunglassesCatalog.map(p => scoreProduct(p, weather, preferences, selectedActivity));
     const eligibleProducts = scoredProducts.filter(p => !p.isExcluded);
     
-    eligibleProducts.sort((a, b) => b.finalScore - a.finalScore);
+    // Sort ordering utilizes Stage 2 modifiers (personalizedRank)
+    eligibleProducts.sort((a, b) => b.personalizedRank - a.personalizedRank);
 
     const PRICE_TIERS = {
       budgetMax: 75,
       premiumMin: 180
     };
 
-    const bestMatch = eligibleProducts[0] || null;
+    const MATCH_THRESHOLDS = {
+      bestMatch: 0.60,
+      budgetPick: 0.50,
+      premiumPick: 0.55
+    };
+
+    let bestMatch = eligibleProducts[0] || null;
+    if (bestMatch && (bestMatch.displayScore / 100) < MATCH_THRESHOLDS.bestMatch) {
+      bestMatch = null;
+    }
 
     const budgetCandidates = eligibleProducts.filter(p => p.product.price <= PRICE_TIERS.budgetMax && (!bestMatch || p.product.id !== bestMatch.product.id));
-    const budgetPick = budgetCandidates[0] || null;
+    let budgetPick = budgetCandidates[0] || null;
+    if (budgetPick && (budgetPick.displayScore / 100) < MATCH_THRESHOLDS.budgetPick) {
+      budgetPick = null;
+    }
 
     const premiumCandidates = eligibleProducts.filter(p => p.product.price >= PRICE_TIERS.premiumMin && (!bestMatch || p.product.id !== bestMatch.product.id) && (!budgetPick || p.product.id !== budgetPick.product.id));
-    const premiumPick = premiumCandidates[0] || null;
+    let premiumPick = premiumCandidates[0] || null;
+    if (premiumPick && (premiumPick.displayScore / 100) < MATCH_THRESHOLDS.premiumPick) {
+      premiumPick = null;
+    }
 
     renderProductCards(bestMatch, budgetPick, premiumPick, preferences);
     renderExplainerBullets(bestMatch, weather, selectedActivity);
@@ -590,8 +676,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const trustExplainerList = document.getElementById('trustExplainerList');
     if (!trustExplainerList) return;
 
+    const weatherIncomplete = (weather.uv === undefined || weather.uv === null);
+
     if (!bestMatch) {
-      trustExplainerList.innerHTML = '<div class="explainer-point"><span class="explainer-bullet">⚠️</span> No matching products satisfy your active budget/prescription limits.</div>';
+      let warningHtml = '';
+      if (weatherIncomplete) {
+        warningHtml = `
+          <div style="background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2); border-radius: 6px; padding: 0.5rem; margin-bottom: 0.75rem; font-size: 0.7rem; color: #ef4444; display: flex; align-items: center; gap: 0.4rem;">
+            <span>⚠️ Weather data is incomplete. Recommendation confidence has been reduced.</span>
+          </div>
+        `;
+      }
+      trustExplainerList.innerHTML = `
+        ${warningHtml}
+        <div class="explainer-point"><span class="explainer-bullet">⚠️</span> No confident match found for these settings. Try changing the budget, activity, or prescription requirements.</div>
+      `;
       return;
     }
 
@@ -602,17 +701,23 @@ document.addEventListener('DOMContentLoaded', () => {
     else if (bestMatch.finalScore >= 65) matchLevel = 'Good Match';
 
     const bullets = [];
-    if (weather.uv >= 8) {
-      bullets.push(`High UV Index (${weather.uv}) requires Category 3 light reduction.`);
-    } else if (weather.uv >= 3) {
-      bullets.push(`Moderate UV Index (${weather.uv}) favors Category 2 contrast lenses.`);
+    
+    if (weatherIncomplete) {
+      bullets.push("Weather data is incomplete. Recommendation confidence has been reduced.");
+    }
+
+    const uvVal = weather.uv !== null ? weather.uv : 5;
+    if (uvVal >= 8) {
+      bullets.push(`High UV Index (${uvVal}) requires Category 3 light reduction.`);
+    } else if (uvVal >= 3) {
+      bullets.push(`Moderate UV Index (${uvVal}) favors Category 2 contrast lenses.`);
     } else {
-      bullets.push(`Low UV Index (${weather.uv}) matches clear or light Category 1 filter layers.`);
+      bullets.push(`Low UV Index (${uvVal}) matches clear or light Category 1 filter layers.`);
     }
 
     const polarizationCritical = bestMatch.subScores.polar === 1.0;
     if (polarizationCritical) {
-      bullets.push(`Intense surface reflection risk — Polarized filters required to Suppress pavement/water glare.`);
+      bullets.push(`Intense surface reflection risk — Polarized filters required to suppress pavement/water glare.`);
     } else {
       bullets.push(`Low ambient glare reflections — Polarization optional for flat light.`);
     }
@@ -624,17 +729,23 @@ document.addEventListener('DOMContentLoaded', () => {
       bullets.push(`${actUpper} selected — Sport-specific frame and lens tagging alignment.`);
     }
 
-    if (bestMatch.modifiers.brand > 1.0) {
-      bullets.push(`Preferred brand match applied (+6% ranking weight).`);
+    let html = '';
+    if (weatherIncomplete) {
+      html += `
+        <div style="background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2); border-radius: 6px; padding: 0.5rem; margin-bottom: 0.75rem; font-size: 0.7rem; color: #ef4444; display: flex; align-items: center; gap: 0.4rem;">
+          <span>⚠️ Weather data is incomplete. Recommendation confidence has been reduced.</span>
+        </div>
+      `;
     }
 
-    let html = `
+    html += `
       <div class="explainer-point" style="font-weight: 700; margin-bottom: 0.25rem;">
         <span class="explainer-bullet" id="explainerMatchPct">${bestMatch.finalScore}% Match</span>
         <span id="explainerMatchLevel">${matchLevel}</span>
       </div>
     `;
     bullets.forEach(b => {
+      if (b.includes("incomplete") && weatherIncomplete) return;
       html += `
         <div class="explainer-point">
           <span class="explainer-bullet">•</span>
@@ -649,6 +760,18 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderProductCards(bestMatch, budgetPick, premiumPick, preferences) {
     const container = document.getElementById('productsGridContainer');
     if (!container) return;
+
+    if (!bestMatch) {
+      container.innerHTML = `
+        <div class="product-glass-card" style="border-left: 2px solid #ef4444; padding: 1.25rem; text-align: center;">
+          <div style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; color: #ef4444;">⚠️ No confident match found</div>
+          <p style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.45; max-width: 280px; margin: 0 auto;">
+            No sunglasses in our catalog confidently match these settings. Try changing the budget, activity, or prescription requirements.
+          </p>
+        </div>
+      `;
+      return;
+    }
 
     let html = '';
     const cards = [
@@ -671,7 +794,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const savings = prod.msrp - prod.price;
       const savingsHtml = savings > 0 ? `<span class="product-msrp-saving">Save $${savings.toFixed(2)}</span>` : '';
-      const mockIndicator = prod.lastVerified === 'MOCK_DATA' ? '<span class="mock-badge">Mock Data</span>' : '';
+      const mockIndicator = '<span class="mock-badge">Mock Record</span>';
 
       html += `
         <div class="product-glass-card ${card.highlight ? 'best-match-highlight' : ''}" data-product-id="${prod.id}">
@@ -712,7 +835,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           <div class="product-actions">
             <a href="${prod.retailers[0].url}" target="_blank" class="product-outlink-btn" data-product-id="${prod.id}" data-price="${prod.price}" data-brand="${prod.brand}">
-              View Product on ${prod.retailers[0].name}
+              Demo Link: Sourced from ${prod.retailers[0].name}
             </a>
           </div>
         </div>
@@ -723,7 +846,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btns = container.querySelectorAll('.product-outlink-btn');
     btns.forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
         const id = btn.getAttribute('data-product-id');
         const price = parseFloat(btn.getAttribute('data-price')) || 0;
         const brand = btn.getAttribute('data-brand');
@@ -876,28 +1000,33 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     testCases.forEach((tc, idx) => {
-      const cleanWeather = {
-        uv: tc.weather.uv !== null ? tc.weather.uv : 5,
-        isDay: tc.weather.isDay !== null ? tc.weather.isDay : true,
-        glareLevel: tc.weather.glareLevel !== null ? tc.weather.glareLevel : "Moderate",
-        condition: tc.weather.condition !== null ? tc.weather.condition : "Clear Sky",
-        cloudCover: tc.weather.cloudCover !== null ? tc.weather.cloudCover : 20
+      const results = sunglassesCatalog.map(p => scoreProduct(p, tc.weather, tc.prefs, tc.activity));
+      const eligible = results.filter(r => !r.isExcluded);
+      
+      // Sort ordering utilizes Stage 2 modifiers (personalizedRank)
+      eligible.sort((a, b) => b.personalizedRank - a.personalizedRank);
+
+      const MATCH_THRESHOLDS = {
+        bestMatch: 0.60,
+        budgetPick: 0.50,
+        premiumPick: 0.55
       };
 
-      const results = sunglassesCatalog.map(p => scoreProduct(p, cleanWeather, tc.prefs, tc.activity));
-      const eligible = results.filter(r => !r.isExcluded);
-      eligible.sort((a, b) => b.finalScore - a.finalScore);
+      let best = eligible[0] || null;
+      if (best && (best.displayScore / 100) < MATCH_THRESHOLDS.bestMatch) {
+        best = null;
+      }
 
       const rejected = results.filter(r => r.isExcluded);
 
       logOutput.push(`Test Scenario ${idx + 1}: ${tc.name.toUpperCase()}`);
       logOutput.push(` - Inputs: Activity=${tc.activity} | UV=${tc.weather.uv} | Budget=$${tc.prefs.maxBudget || 'None'} | Rx=${tc.prefs.prescription}`);
       
-      if (eligible.length > 0) {
-        logOutput.push(` - Best Match: ${eligible[0].product.brand} ${eligible[0].product.model} (Score: ${eligible[0].finalScore}%)`);
-        logOutput.push(`   └─ Subscores: VLT=${eligible[0].subScores.vlt} | Polar=${eligible[0].subScores.polar} | Tint=${eligible[0].subScores.tint} | Act=${eligible[0].subScores.activity}`);
+      if (best) {
+        logOutput.push(` - Best Match: ${best.product.brand} ${best.product.model} (Score: ${best.finalScore}%)`);
+        logOutput.push(`   └─ Subscores: VLT=${best.subScores.vlt} | Polar=${best.subScores.polar} | Tint=${best.subScores.tint} | Act=${best.subScores.activity}`);
       } else {
-        logOutput.push(` - Best Match: NONE (All products excluded)`);
+        logOutput.push(` - Best Match: NONE (All products excluded or below threshold)`);
       }
 
       if (rejected.length > 0) {
