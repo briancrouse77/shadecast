@@ -1,4 +1,5 @@
 import { sunglassesCatalog } from './products.js';
+import { trackEvent } from './analytics.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -699,6 +700,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderProductCards(bestMatch, budgetPick, premiumPick, preferences);
     renderExplainerBullets(bestMatch, weather, selectedActivity);
+
+    const hasAnyMatch = (bestMatch !== null || budgetPick !== null || premiumPick !== null);
+    if (!hasAnyMatch) {
+      trackEvent('no_confident_match', {
+        activity: selectedActivity,
+        weather: weather,
+        preferences: preferences
+      });
+    } else {
+      trackEvent('recommendation_generated', {
+        activity: selectedActivity,
+        bestMatchId: bestMatch ? bestMatch.product.id : null,
+        bestMatchScore: bestMatch ? bestMatch.displayScore : null,
+        budgetPickId: budgetPick ? budgetPick.product.id : null,
+        premiumPickId: premiumPick ? premiumPick.product.id : null,
+        weather: weather,
+        preferences: preferences
+      });
+    }
   }
 
   function renderExplainerBullets(bestMatch, weather, activity) {
@@ -814,6 +834,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!match) return;
 
       const prod = match.product;
+      
+      trackEvent('product_card_viewed', {
+        productId: prod.id,
+        tier: card.tier,
+        score: match.finalScore,
+        price: prod.price
+      });
       const isOverBudget = preferences.maxBudget > 0 && prod.price > preferences.maxBudget;
 
       let badgeLabel = card.tier;
@@ -886,6 +913,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateTelemetryUI();
         logAdminEvent('sys', `Outbound affiliate redirect: ${brand} clicked. Projected commission: +$0.50`);
+        trackEvent('demo_link_clicked', {
+          productId: id,
+          price: price,
+          brand: brand
+        });
       });
     });
   }
@@ -933,12 +965,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         el.addEventListener('change', () => {
+          let val;
           if (el.type === 'checkbox') {
-            localStorage.setItem(item.key, el.checked);
+            val = el.checked;
+            localStorage.setItem(item.key, val);
           } else {
-            localStorage.setItem(item.key, el.value);
+            val = el.value;
+            localStorage.setItem(item.key, val);
           }
           logAdminEvent('sys', `User preferences updated: ${item.key.replace('pref_', '')}`);
+          trackEvent('preferences_updated', {
+            preference: item.id,
+            value: val
+          });
           recalculateRecommendations();
         });
       }
@@ -954,6 +993,7 @@ document.addEventListener('DOMContentLoaded', () => {
       activitySelect.addEventListener('change', () => {
         localStorage.setItem('pref_activity', activitySelect.value);
         logAdminEvent('sys', `User activity switched to: ${activitySelect.value}`);
+        trackEvent('activity_selected', { activity: activitySelect.value });
         recalculateRecommendations();
       });
     }
@@ -1272,6 +1312,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function triggerGeolocation(isStartup = false) {
     updateLocationStatus('Locating...', true);
     logAdminEvent('geo', 'Initiated geolocation lookup query...');
+    trackEvent('geolocation_used', { isStartup });
 
     // 1. Try IP Geolocation first (fully automatic, no permission popups, supports localhost)
     fetch('https://ipapi.co/json/')
@@ -1353,6 +1394,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Geocoding query for text input
   function searchCityLocation(cityName) {
     updateLocationStatus(`Searching '${cityName}'...`, false);
+    trackEvent('location_searched', { query: cityName });
     
     fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1&language=en&format=json`)
       .then(res => res.json())
