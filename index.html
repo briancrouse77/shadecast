@@ -330,8 +330,9 @@
         
         <!-- Tab System Header -->
         <div class="tab-header">
-          <button class="tab-btn active" id="tabBtnTmz" data-tab="tabTmz">🔥 Shade TMZ</button>
-          <button class="tab-btn" id="tabBtnQuiz" data-tab="tabQuiz">🎯 Tint Quiz</button>
+          <button class="tab-btn active" id="tabBtnTmz" data-tab="tabTmz">🔥 TMZ</button>
+          <button class="tab-btn" id="tabBtnQuiz" data-tab="tabQuiz">🎯 Quiz</button>
+          <button class="tab-btn" id="tabBtnAdmin" data-tab="tabAdmin">📊 Telemetry</button>
         </div>
 
         <!-- Tab 1 Content: Shade TMZ Style Feed -->
@@ -490,6 +491,68 @@
               <span class="progress-text" id="quizStepText">Question 1 of 3</span>
             </div>
 
+          </div>
+        </div>
+
+        <!-- Tab 3 Content: Admin Analytics Telemetry -->
+        <div class="tab-pane" id="tabAdmin">
+          <div class="glass-card admin-card">
+            <h2 class="card-title">Commercial Telemetry</h2>
+            <p class="card-desc">Real-time monetization metrics and retail demand analytics</p>
+
+            <!-- Financial Summary Readout -->
+            <div class="admin-financials">
+              <div class="financial-box">
+                <span class="fin-label">Est. Lead Value (USD)</span>
+                <span class="fin-val text-success" id="adminLeadValue">$0.00</span>
+                <span class="fin-sub">High-Intent Referrals</span>
+              </div>
+              <div class="financial-box">
+                <span class="fin-label">Projected API Cost</span>
+                <span class="fin-val text-warning" id="adminApiCost">$0.00</span>
+                <span class="fin-sub">Open-Meteo Queries</span>
+              </div>
+            </div>
+
+            <!-- Lens Popularity Chart Panel -->
+            <div class="admin-section">
+              <h3>Retail Tint Demand Index</h3>
+              <div class="demand-chart">
+                <div class="chart-row">
+                  <span class="chart-label">Grey Lenses</span>
+                  <div class="chart-bar-container"><div class="chart-bar-fill" id="barGrey" style="width: 20%;"></div></div>
+                  <span class="chart-count" id="countGrey">0</span>
+                </div>
+                <div class="chart-row">
+                  <span class="chart-label">Amber Lenses</span>
+                  <div class="chart-bar-container"><div class="chart-bar-fill" id="barAmber" style="width: 20%;"></div></div>
+                  <span class="chart-count" id="countAmber">0</span>
+                </div>
+                <div class="chart-row">
+                  <span class="chart-label">Green Lenses</span>
+                  <div class="chart-bar-container"><div class="chart-bar-fill" id="barGreen" style="width: 20%;"></div></div>
+                  <span class="chart-count" id="countGreen">0</span>
+                </div>
+                <div class="chart-row">
+                  <span class="chart-label">Blue Mirrored</span>
+                  <div class="chart-bar-container"><div class="chart-bar-fill" id="barBlue" style="width: 20%;"></div></div>
+                  <span class="chart-count" id="countBlue">0</span>
+                </div>
+                <div class="chart-row">
+                  <span class="chart-label">Rose Gradient</span>
+                  <div class="chart-bar-container"><div class="chart-bar-fill" id="barRose" style="width: 20%;"></div></div>
+                  <span class="chart-count" id="countRose">0</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Regional Lead Ledger -->
+            <div class="admin-section">
+              <h3>Regional Demand Log</h3>
+              <div class="regional-ledger" id="regionalLedger">
+                <div class="ledger-empty">Waiting for active GPS or search geocodes...</div>
+              </div>
+            </div>
           </div>
         </div>
 

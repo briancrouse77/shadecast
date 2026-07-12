@@ -218,6 +218,16 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const resultName = document.getElementById('resultName');
   const resultDesc = document.getElementById('resultDesc');
+
+  // Telemetry state tracker
+  const analytics = {
+    apiCalls: 0,
+    geoPings: 0,
+    lensClicks: { grey: 0, amber: 0, green: 0, blue: 0, rose: 0 },
+    applyIntent: 0,
+    tmzClicks: 0,
+    searchedCities: []
+  };
   const resultTint = document.getElementById('resultTint');
   const resultPolar = document.getElementById('resultPolar');
   const btnRestartQuiz = document.getElementById('btnRestartQuiz');
@@ -228,21 +238,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Tab Switching
   function setupTabs() {
-    [tabBtnTmz, tabBtnQuiz].forEach(btn => {
-      btn.addEventListener('click', (e) => {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
         const targetTabId = btn.getAttribute('data-tab');
         
-        tabBtnTmz.classList.remove('active');
-        tabBtnQuiz.classList.remove('active');
-        btn.classList.add('active');
+        tabButtons.forEach(b => b.classList.remove('active'));
+        tabPanes.forEach(p => p.classList.remove('active'));
 
-        tabTmz.classList.remove('active');
-        tabQuiz.classList.remove('active');
-        
-        if (targetTabId === 'tabTmz') {
-          tabTmz.classList.add('active');
-        } else {
-          tabQuiz.classList.add('active');
+        btn.classList.add('active');
+        const targetPane = document.getElementById(targetTabId);
+        if (targetPane) {
+          targetPane.classList.add('active');
         }
       });
     });
@@ -548,6 +557,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Real weather fetch using Open-Meteo API
   function fetchWeatherForCoordinates(lat, lon, locationName, isGps = false) {
+    analytics.apiCalls++;
+    analytics.geoPings++;
+    updateTelemetryUI();
+
     updateLocationStatus('Loading weather...', isGps);
     
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,uv_index,is_day&temperature_unit=fahrenheit&wind_speed_unit=mph`;
@@ -664,6 +677,18 @@ document.addEventListener('DOMContentLoaded', () => {
             dynamicPreset.tmzDesc = `Matching the sunny, ${temp}°F UV conditions in ${shortCity} with blacked-out wrap-around shields.`;
           }
 
+          // Log geocoded city to regional demand ledger
+          const cityLabel = shortCity || 'Detected City';
+          const matchedTintDesc = dynamicPreset.recCategory.split(':')[0].trim();
+          const cityEntry = {
+            city: `${cityLabel} (${tempPreset.toUpperCase()})`,
+            specs: `${temp}°F | ${matchedTintDesc}`
+          };
+          if (!analytics.searchedCities.some(entry => entry.city === cityEntry.city)) {
+            analytics.searchedCities.unshift(cityEntry);
+          }
+          updateTelemetryUI();
+
           // Update UI
           isNightActive = isNight;
           currentUvIntensity = dynamicPreset.glareIntensity;
@@ -768,6 +793,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function applyTint(tintName) {
     const tint = lensTints[tintName];
     if (!tint) return;
+
+    if (analytics.lensClicks[tintName] !== undefined) {
+      analytics.lensClicks[tintName]++;
+      updateTelemetryUI();
+    }
 
     currentTint = tintName;
     tintDesc.textContent = tint.description;
@@ -886,6 +916,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnApplyQuizResult = document.getElementById('btnApplyQuizResult');
     if (btnApplyQuizResult) {
       btnApplyQuizResult.addEventListener('click', () => {
+        analytics.applyIntent++;
+        updateTelemetryUI();
+
         const resolvedTintStr = (resultTint.textContent || '').toLowerCase();
         let tintKey = 'grey';
         
@@ -1020,6 +1053,58 @@ document.addEventListener('DOMContentLoaded', () => {
     if (resultTimestamp) {
       const now = new Date();
       resultTimestamp.textContent = `DATE: ${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+    }
+  }
+
+  // Update Commercial Telemetry Admin panel in real-time
+  function updateTelemetryUI() {
+    const adminLeadValue = document.getElementById('adminLeadValue');
+    const adminApiCost = document.getElementById('adminApiCost');
+    const regionalLedger = document.getElementById('regionalLedger');
+
+    // 1. Financial calculation:
+    // $2.50 per high-intent prescription simulator apply click
+    // $0.50 per live TMZ outbound link referral click
+    // $0.15 per active simulator lens custom comparison click
+    const lensCompareCount = Object.values(analytics.lensClicks).reduce((a, b) => a + b, 0);
+    const estRevenue = (analytics.applyIntent * 2.50) + (analytics.tmzClicks * 0.50) + (lensCompareCount * 0.15);
+    const apiCost = analytics.apiCalls * 0.0025; // Open-Meteo API rates estimated
+
+    if (adminLeadValue) adminLeadValue.textContent = `$${estRevenue.toFixed(2)}`;
+    if (adminApiCost) adminApiCost.textContent = `$${apiCost.toFixed(4)}`;
+
+    // 2. Update Lens Demand progress bars:
+    const totalLensClicks = lensCompareCount || 1;
+    const tints = ['grey', 'amber', 'green', 'blue', 'rose'];
+    tints.forEach(tint => {
+      const tintKeyCapitalized = tint.charAt(0).toUpperCase() + tint.slice(1);
+      const barFill = document.getElementById(`bar${tintKeyCapitalized}`);
+      const countLabel = document.getElementById(`count${tintKeyCapitalized}`);
+
+      if (barFill && countLabel) {
+        const count = analytics.lensClicks[tint] || 0;
+        const pct = Math.max(5, Math.round((count / totalLensClicks) * 100));
+        barFill.style.width = `${pct}%`;
+        countLabel.textContent = count;
+      }
+    });
+
+    // 3. Update Regional Demand log:
+    if (regionalLedger) {
+      if (analytics.searchedCities.length === 0) {
+        regionalLedger.innerHTML = '<div class="ledger-empty">Waiting for active GPS or search geocodes...</div>';
+      } else {
+        regionalLedger.innerHTML = '';
+        analytics.searchedCities.forEach(entry => {
+          const row = document.createElement('div');
+          row.className = 'ledger-row';
+          row.innerHTML = `
+            <span class="ledger-city">📍 ${entry.city}</span>
+            <span class="ledger-spec">${entry.specs}</span>
+          `;
+          regionalLedger.appendChild(row);
+        });
+      }
     }
   }
 
@@ -1186,6 +1271,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Retrieve actual live TMZ gossip feed
     fetchLiveTmzFeed();
+
+    // 4. Bind dynamic click tracking for live TMZ links to track commercial referral value
+    const tmzFeedList = document.getElementById('tmzFeedList');
+    if (tmzFeedList) {
+      tmzFeedList.addEventListener('click', (e) => {
+        if (e.target.closest('a')) {
+          analytics.tmzClicks++;
+          updateTelemetryUI();
+        }
+      });
+    }
+
+    // 5. Initialize the SaaS Telemetry Dashboard panel values
+    updateTelemetryUI();
   }
 
   init();
