@@ -1054,11 +1054,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'aviator', 'aviators', 'goggle', 'goggles'
           ];
 
-          // Filter live stories matching the keywords
+          // Filter live stories where the description specifically contains eyewear keywords
           const matchedStories = data.items.filter(item => {
-            const title = (item.title || '').toLowerCase();
             const desc = (item.description || '').toLowerCase();
-            return keywords.some(kw => title.includes(kw) || desc.includes(kw));
+            return keywords.some(kw => desc.includes(kw));
           });
 
           // Build final list (prefer matched live stories, pad with fallbacks if needed)
