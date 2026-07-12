@@ -929,6 +929,72 @@ document.addEventListener('DOMContentLoaded', () => {
     resultPolar.textContent = polar;
   }
 
+  // Fetch actual live TMZ celebrity news via RSS-to-JSON
+  function fetchLiveTmzFeed() {
+    const tmzFeedList = document.getElementById('tmzFeedList');
+    if (!tmzFeedList) return;
+
+    const rssUrl = 'https://www.tmz.com/rss.xml';
+    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
+    fetch(apiUrl)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.status === 'ok' && data.items && data.items.length > 0) {
+          tmzFeedList.innerHTML = ''; // clear initial fallback stories
+          
+          // Map first 4 stories
+          const stories = data.items.slice(0, 4);
+          stories.forEach((item, index) => {
+            const emojis = ['🍿', '🔥', '📸', '🌟'];
+            const emoji = emojis[index % emojis.length];
+
+            // Calculate human-friendly relative time
+            let timeLabel = 'Recently';
+            try {
+              const pubDate = new Date(item.pubDate);
+              const diffMs = new Date() - pubDate;
+              const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
+              
+              if (diffHrs < 1) {
+                timeLabel = 'Just now';
+              } else if (diffHrs === 1) {
+                timeLabel = '1 hour ago';
+              } else if (diffHrs < 24) {
+                timeLabel = `${diffHrs} hours ago`;
+              } else {
+                timeLabel = 'Yesterday';
+              }
+            } catch (e) {
+              console.warn(e);
+            }
+
+            // Clean description formatting
+            let cleanDesc = item.description || '';
+            cleanDesc = cleanDesc.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+            if (cleanDesc.length > 125) {
+              cleanDesc = cleanDesc.substring(0, 122) + '...';
+            }
+
+            const newsItem = document.createElement('div');
+            newsItem.className = 'tmz-news-item';
+            newsItem.innerHTML = `
+              <div class="tmz-news-thumb">${emoji}</div>
+              <div class="tmz-news-body">
+                <h4><a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a></h4>
+                <p>${cleanDesc}</p>
+                <span class="news-time">${timeLabel}</span>
+              </div>
+            `;
+            tmzFeedList.appendChild(newsItem);
+          });
+        }
+      })
+      .catch(err => {
+        console.warn('Could not retrieve live TMZ RSS feed, keeping static fallbacks:', err);
+      });
+  }
+
   // ==========================================
   // 5. INITIALIZATION
   // ==========================================
@@ -948,6 +1014,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Asynchronously request GPS/Weather to update dynamically in the background
     initGeolocation();
+
+    // 3. Retrieve actual live TMZ gossip feed
+    fetchLiveTmzFeed();
   }
 
   init();
