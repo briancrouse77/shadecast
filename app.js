@@ -1047,11 +1047,11 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(res => res.json())
       .then(data => {
         if (data && data.status === 'ok' && data.items && data.items.length > 0) {
-          // Keywords that indicate "getting shaded" / sunglasses / sun / beach / eyewear
+          // Keywords that are STRICTLY about eyewear, sunglasses, or lenses
           const keywords = [
-            'sunglass', 'shades', 'glasses', 'eyewear', 'frames', 
-            'specs', 'lens', 'polarized', 'tint', 'beach', 
-            'summer', 'sun', 'bikini', 'pool', 'shade', 'glare'
+            'sunglass', 'sunglasses', 'shades', 'eyewear', 
+            'glasses', 'frames', 'specs', 'lens', 'lenses', 
+            'aviator', 'aviators', 'goggle', 'goggles'
           ];
 
           // Filter live stories matching the keywords
