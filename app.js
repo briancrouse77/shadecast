@@ -265,15 +265,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnAdminAuthenticate = document.getElementById('btnAdminAuthenticate');
     const authErrorMsg = document.getElementById('authErrorMsg');
     const btnLockAdmin = document.getElementById('btnLockAdmin');
+    const tabBtnAdmin = document.getElementById('tabBtnAdmin');
 
     function checkAdminSession() {
       const isAuthenticated = sessionStorage.getItem('isAdminAuthenticated') === 'true';
       if (isAuthenticated) {
         if (adminAuthCard) adminAuthCard.style.display = 'none';
         if (adminDashboardCard) adminDashboardCard.style.display = 'block';
+        revealAdminTab(false);
       } else {
         if (adminAuthCard) adminAuthCard.style.display = 'flex';
         if (adminDashboardCard) adminDashboardCard.style.display = 'none';
+      }
+    }
+
+    function revealAdminTab(switchToIt = true) {
+      if (tabBtnAdmin) {
+        tabBtnAdmin.style.display = 'inline-flex';
+        if (switchToIt) {
+          tabBtnAdmin.click();
+          logAdminEvent('sys', 'ADMIN CONSOLE REVEALED VIA BACKDOOR KEY');
+          if (adminPasswordInput) adminPasswordInput.focus();
+        }
       }
     }
 
@@ -315,7 +328,34 @@ document.addEventListener('DOMContentLoaded', () => {
       btnLockAdmin.addEventListener('click', () => {
         sessionStorage.removeItem('isAdminAuthenticated');
         checkAdminSession();
-        logAdminEvent('sys', 'ADMIN CONSOLE SECURELY LOCKED');
+        
+        if (tabBtnAdmin) tabBtnAdmin.style.display = 'none';
+        
+        const tabBtnTmz = document.getElementById('tabBtnTmz');
+        if (tabBtnTmz) tabBtnTmz.click();
+
+        logAdminEvent('sys', 'ADMIN CONSOLE SECURELY LOCKED AND CONCEALED');
+      });
+    }
+
+    // Backdoor 1: Ctrl + Shift + A shortcut key
+    window.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault();
+        revealAdminTab();
+      }
+    });
+
+    // Backdoor 2: Tap ShadeCast logo / title 5 times
+    const brandElement = document.querySelector('.brand');
+    if (brandElement) {
+      let clickCount = 0;
+      brandElement.addEventListener('click', () => {
+        clickCount++;
+        if (clickCount >= 5) {
+          revealAdminTab();
+          clickCount = 0;
+        }
       });
     }
   }
