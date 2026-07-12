@@ -234,88 +234,92 @@
             <div class="sim-badge" id="simVibeBadge">Polarized Active</div>
           </div>
 
-          <!-- Simulator Workspace -->
-          <div class="simulator-container" id="simContainer">
+          <!-- Simulator Workspace Grid -->
+          <div class="simulator-workspace-grid">
             
-            <!-- Base Image (Road Glare) -->
-            <img src="assets/road.jpg" alt="High road glare reflection view before applying polarized sunglasses filter" class="sim-img-base" id="simImageBase">
-
-            <!-- Glare Overlay (Representing raw UV/Reflection glare before glasses) -->
-            <div class="glare-overlay" id="glareOverlay"></div>
-
-            <!-- Sunglasses View Area (Draggable split pane) -->
-            <div class="sunglasses-pane" id="sunglassesPane">
-              <!-- Re-render road under sunglasses filter -->
-              <img src="assets/road.jpg" alt="Sunny road reflection filtered through polarized sunglasses lens simulator showing anti-glare polarization" class="sim-img-filtered" id="simImageFilter">
+            <!-- Simulator Viewport -->
+            <div class="simulator-container" id="simContainer">
               
-              <!-- Tint Overlay (Applies colors, opacity, blend-modes dynamically) -->
-              <div class="tint-overlay" id="tintOverlay"></div>
-
-              <!-- Refined Polarized Overlay (subtle highlight filter to simulate polarized clarity) -->
-              <div class="polarized-overlay" id="polarizedOverlay"></div>
-            </div>
-
-            <!-- Slider Handle -->
-            <div class="slider-handle" id="sliderHandle">
-              <div class="handle-line"></div>
-              <div class="handle-button">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                  <path d="M14.59 7.41L18.17 11H6v2h12.17l-3.59 3.59L16 18l6-6-6-6-1.41 1.41z"/>
-                </svg>
+              <!-- Base Image (Road Glare) -->
+              <img src="assets/road.jpg" alt="High road glare reflection view before applying polarized sunglasses filter" class="sim-img-base" id="simImageBase">
+  
+              <!-- Glare Overlay (Representing raw UV/Reflection glare before glasses) -->
+              <div class="glare-overlay" id="glareOverlay"></div>
+  
+              <!-- Sunglasses View Area (Draggable split pane) -->
+              <div class="sunglasses-pane" id="sunglassesPane">
+                <!-- Re-render road under sunglasses filter -->
+                <img src="assets/road.jpg" alt="Sunny road reflection filtered through polarized sunglasses lens simulator showing anti-glare polarization" class="sim-img-filtered" id="simImageFilter">
+                
+                <!-- Tint Overlay (Applies colors, opacity, blend-modes dynamically) -->
+                <div class="tint-overlay" id="tintOverlay"></div>
+  
+                <!-- Refined Polarized Overlay (subtle highlight filter to simulate polarized clarity) -->
+                <div class="polarized-overlay" id="polarizedOverlay"></div>
               </div>
-            </div>
-
-            <!-- Label tags -->
-            <span class="sim-label label-left">Naked Eye (Raw Glare)</span>
-            <span class="sim-label label-right">Through Lens Filter</span>
-          </div>
-
-          <!-- Control Console -->
-          <div class="simulator-controls">
-            
-            <!-- Tint Picker -->
-            <div class="control-group">
-              <span class="control-label">Select Lens Vibe</span>
-              <div class="tint-selectors">
-                <button class="tint-dot active" data-tint="grey" style="--tint-color: #2b2b2b;" title="Grey: True Color & Daily Use" id="btnTintGrey">
-                  <span class="dot-inner"></span>
-                </button>
-                <button class="tint-dot" data-tint="amber" style="--tint-color: #b05c1d;" title="Amber/Brown: Contrast & Detail" id="btnTintAmber">
-                  <span class="dot-inner"></span>
-                </button>
-                <button class="tint-dot" data-tint="green" style="--tint-color: #173d2a;" title="Green: All-Weather Balance" id="btnTintGreen">
-                  <span class="dot-inner"></span>
-                </button>
-                <button class="tint-dot" data-tint="blue" style="--tint-color: #0b6fb8;" title="Blue Mirrored: Water Glare Block" id="btnTintBlue">
-                  <span class="dot-inner"></span>
-                </button>
-                <button class="tint-dot" data-tint="rose" style="--tint-color: #9c27b0;" title="Rose: High Contrast sports" id="btnTintRose">
-                  <span class="dot-inner"></span>
-                </button>
-              </div>
-              <div class="active-tint-description" id="tintDesc">Grey Lens: maintains true color perception and offers the best daily comfort.</div>
-            </div>
-
-            <div class="slider-row">
-              <!-- Darkness Slider -->
-              <div class="control-group flex-1">
-                <div class="slider-label-row">
-                  <span class="control-label">Darkness Intensity (VLT)</span>
-                  <span class="slider-val" id="darknessVal">85%</span>
+  
+              <!-- Slider Handle -->
+              <div class="slider-handle" id="sliderHandle">
+                <div class="handle-line"></div>
+                <div class="handle-button">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <path d="M14.59 7.41L18.17 11H6v2h12.17l-3.59 3.59L16 18l6-6-6-6-1.41 1.41z"/>
+                  </svg>
                 </div>
-                <input type="range" min="10" max="95" value="85" class="app-range" id="darknessSlider" aria-label="Tint Darkness Intensity">
               </div>
-
-              <!-- Polarization Switch -->
-              <div class="control-group toggle-group">
-                <span class="control-label">Polarized Filter</span>
-                <label class="switch">
-                  <input type="checkbox" id="polarizationToggle" checked>
-                  <span class="slider round"></span>
-                </label>
-              </div>
+  
+              <!-- Label tags -->
+              <span class="sim-label label-left">Naked Eye (Raw Glare)</span>
+              <span class="sim-label label-right">Through Lens Filter</span>
             </div>
-
+  
+            <!-- Control Console -->
+            <div class="simulator-controls">
+              
+              <!-- Tint Picker -->
+              <div class="control-group">
+                <span class="control-label">Select Lens Vibe</span>
+                <div class="tint-selectors">
+                  <button class="tint-dot active" data-tint="grey" style="--tint-color: #2b2b2b;" title="Grey: True Color & Daily Use" id="btnTintGrey">
+                    <span class="dot-inner"></span>
+                  </button>
+                  <button class="tint-dot" data-tint="amber" style="--tint-color: #b05c1d;" title="Amber/Brown: Contrast & Detail" id="btnTintAmber">
+                    <span class="dot-inner"></span>
+                  </button>
+                  <button class="tint-dot" data-tint="green" style="--tint-color: #173d2a;" title="Green: All-Weather Balance" id="btnTintGreen">
+                    <span class="dot-inner"></span>
+                  </button>
+                  <button class="tint-dot" data-tint="blue" style="--tint-color: #0b6fb8;" title="Blue Mirrored: Water Glare Block" id="btnTintBlue">
+                    <span class="dot-inner"></span>
+                  </button>
+                  <button class="tint-dot" data-tint="rose" style="--tint-color: #9c27b0;" title="Rose: High Contrast sports" id="btnTintRose">
+                    <span class="dot-inner"></span>
+                  </button>
+                </div>
+                <div class="active-tint-description" id="tintDesc">Grey Lens: maintains true color perception and offers the best daily comfort.</div>
+              </div>
+  
+              <div class="slider-row">
+                <!-- Darkness Slider -->
+                <div class="control-group flex-1">
+                  <div class="slider-label-row">
+                    <span class="control-label">Darkness Intensity (VLT)</span>
+                    <span class="slider-val" id="darknessVal">85%</span>
+                  </div>
+                  <input type="range" min="10" max="95" value="85" class="app-range" id="darknessSlider" aria-label="Tint Darkness Intensity">
+                </div>
+  
+                <!-- Polarization Switch -->
+                <div class="control-group toggle-group">
+                  <span class="control-label">Polarized Filter</span>
+                  <label class="switch">
+                    <input type="checkbox" id="polarizationToggle" checked>
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+  
+            </div>
           </div>
         </div>
       </section>
