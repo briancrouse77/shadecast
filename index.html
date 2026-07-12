@@ -3,9 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ShadeCast | Ultimate Sunglasses Weather & TMZ Style Advisor</title>
-  <meta name="description" content="Decide what sunglasses to wear today. Real-time UV, light levels, dynamic lens tint simulator, and celebrity sunglasses style trends.">
   
+  <!-- Primary SEO Metadata -->
+  <title>ShadeCast | Sunglasses Weather Advisor & Polarized Lens Simulator</title>
+  <meta name="description" content="Instantly check live local UV index levels, simulate polarized lens tints (Grey, Amber, Green, Blue, Rose), review celebrity sunglasses style gossip, and match your custom frames.">
+  <meta name="keywords" content="sunglasses, UV index, polarized lens simulator, weather advisor, sunglasses style, lens tint simulator, celebrity sunglasses, UV protection, polarized glasses, sunglasses tracker">
+  <meta name="author" content="Brian Crouse">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://briancrouse77.github.io/shadecast/">
+
+  <!-- Favicon & Web App PWA Manifest -->
+  <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
+  <link rel="apple-touch-icon" href="assets/logo.jpg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#080c14">
+
+  <!-- Open Graph / Facebook Social Protocol -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://briancrouse77.github.io/shadecast/">
+  <meta property="og:title" content="ShadeCast | Sunglasses Weather Advisor & Polarized Lens Simulator">
+  <meta property="og:description" content="Decide what sunglasses to wear today. Get real-time weather coordinates, test dynamic polarized lenses (Grey, Amber, Green, Blue, Rose), and find your custom frame match.">
+  <meta property="og:image" content="https://briancrouse77.github.io/shadecast/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="675">
+  <meta property="og:site_name" content="ShadeCast">
+
+  <!-- Twitter Card Card Data -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://briancrouse77.github.io/shadecast/">
+  <meta name="twitter:title" content="ShadeCast | Sunglasses Weather Advisor & Lens Simulator">
+  <meta name="twitter:description" content="Check live weather UV levels, simulate polarized lens tints, and find your custom sunglasses style matches.">
+  <meta name="twitter:image" content="https://briancrouse77.github.io/shadecast/assets/og-image.jpg">
+
+  <!-- JSON-LD Structured Data Schema (Google Search Rich Snippet) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ShadeCast",
+    "url": "https://briancrouse77.github.io/shadecast/",
+    "image": "https://briancrouse77.github.io/shadecast/assets/og-image.jpg",
+    "description": "A responsive weather application recommending optimal sunglasses and lens tints based on live UV index, glare level, and solar output metrics.",
+    "applicationCategory": "WeatherApplication, LifestyleApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript. Requires Geolocation.",
+    "creator": {
+      "@type": "Person",
+      "name": "Brian Crouse"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -184,7 +237,7 @@
           <div class="simulator-container" id="simContainer">
             
             <!-- Base Image (Road Glare) -->
-            <img src="assets/road.jpg" alt="Sunny road reflection" class="sim-img-base" id="simImageBase">
+            <img src="assets/road.jpg" alt="High road glare reflection view before applying polarized sunglasses filter" class="sim-img-base" id="simImageBase">
 
             <!-- Glare Overlay (Representing raw UV/Reflection glare before glasses) -->
             <div class="glare-overlay" id="glareOverlay"></div>
@@ -192,7 +245,7 @@
             <!-- Sunglasses View Area (Draggable split pane) -->
             <div class="sunglasses-pane" id="sunglassesPane">
               <!-- Re-render road under sunglasses filter -->
-              <img src="assets/road.jpg" alt="Sunny road reflection polarized" class="sim-img-filtered" id="simImageFilter">
+              <img src="assets/road.jpg" alt="Sunny road reflection filtered through polarized sunglasses lens simulator showing anti-glare polarization" class="sim-img-filtered" id="simImageFilter">
               
               <!-- Tint Overlay (Applies colors, opacity, blend-modes dynamically) -->
               <div class="tint-overlay" id="tintOverlay"></div>
@@ -280,7 +333,7 @@
           <div class="glass-card tmz-card">
             
             <div class="tmz-hero">
-              <img src="assets/celebrity.jpg" alt="Celebrity Style Spotting" class="tmz-hero-img" id="tmzHeroImg">
+              <img src="assets/celebrity.jpg" alt="Celebrity spotted wearing premium designer sunglasses style trends matching UV advisor ratings" class="tmz-hero-img" id="tmzHeroImg">
               <div class="tmz-hero-overlay">
                 <span class="badge-hot" id="tmzHeroBadge">SPOTTED IN BEVERLY HILLS</span>
                 <h3 id="tmzHeroTitle">Hailey Bieber Rocks Oversized Acetate Shields</h3>
@@ -400,6 +453,22 @@
       </section>
 
     </div>
+
+    <!-- SEO Informational & Content Guide -->
+    <section class="seo-info-section glass-card" style="margin-top: 1.5rem; width: 100%;">
+      <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; margin-bottom: 0.5rem; color: #fff;">Sunglasses UV Index &amp; Polarized Lens Advisor Guide</h2>
+      <div style="display: grid; grid-template-columns: 1fr; gap: 1rem; font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5;">
+        <div>
+          <p style="margin-bottom: 0.5rem;">
+            Deciding which sunglasses to wear depends on your local <strong>UV index rating</strong> and atmospheric conditions. Ultraviolet (UV) radiation ranges from low (0-2) to extreme (11+). While cloud cover diffuses visible light, up to 80% of UV rays still penetrate, meaning daily eye protection is critical. 
+          </p>
+          <p>
+            ShadeCast maps local coordinate telemetry dynamically to recommend correct lens categories. Category 0-1 tints (clear, yellow, rose) are optimized for night or overcast flatness, while Category 3-4 (charcoal, dark brown, mirrored finishes) protect eyes from harsh glacial snow reflection or high-altitude sun.
+          </p>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer class="app-footer">

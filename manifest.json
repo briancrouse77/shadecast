@@ -1,0 +1,16 @@
+{
+  "short_name": "ShadeCast",
+  "name": "ShadeCast: Sunglasses UV Advisor & Weather",
+  "icons": [
+    {
+      "src": "assets/logo.jpg",
+      "type": "image/jpeg",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "background_color": "#080c14",
+  "theme_color": "#080c14",
+  "display": "standalone",
+  "orientation": "portrait"
+}

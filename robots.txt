@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://briancrouse77.github.io/shadecast/sitemap.xml
