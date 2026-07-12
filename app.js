@@ -453,6 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Geolocation API call (tries IP lookup first, then falls back to browser GPS)
   function triggerGeolocation(isStartup = false) {
     updateLocationStatus('Locating...', true);
+    logAdminEvent('geo', 'Initiated geolocation lookup query...');
 
     // 1. Try IP Geolocation first (fully automatic, no permission popups, supports localhost)
     fetch('https://ipapi.co/json/')
@@ -463,8 +464,10 @@ document.addEventListener('DOMContentLoaded', () => {
           const region = data.region_code || '';
           const displayName = region ? `${city}, ${region}` : city;
           
+          logAdminEvent('geo', `Resolved IP city: ${displayName} [Lat: ${data.latitude.toFixed(2)}, Lon: ${data.longitude.toFixed(2)}]`);
           fetchWeatherForCoordinates(data.latitude, data.longitude, displayName, true);
         } else {
+          logAdminEvent('geo', 'IP lookup empty. Falling back to Browser GPS...');
           triggerBrowserGps(isStartup);
         }
       })
@@ -562,6 +565,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateTelemetryUI();
 
     updateLocationStatus('Loading weather...', isGps);
+    logAdminEvent('api', `Fetch current satellite weather for coordinates [${lat.toFixed(2)}, ${lon.toFixed(2)}]`);
     
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,uv_index,is_day&temperature_unit=fahrenheit&wind_speed_unit=mph`;
     
@@ -572,6 +576,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const temp = Math.round(data.current.temperature_2m);
           const rawUv = data.current.uv_index || 0;
           const uvVal = Math.round(rawUv);
+          logAdminEvent('api', `Loaded climate data: ${temp}°F | UV Index: ${uvVal}`);
           const isDay = data.current.is_day === 1;
           const code = data.current.weather_code;
 
@@ -711,6 +716,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function applyWeatherPresetToUI(preset, presetName, isNight = false) {
+    logAdminEvent('sys', `Applying climate preset variables: ${presetName.toUpperCase()}`);
     // Gauge calculation
     const uvMax = 12;
     const uvVal = Math.min(preset.uv, uvMax);
@@ -797,6 +803,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (analytics.lensClicks[tintName] !== undefined) {
       analytics.lensClicks[tintName]++;
       updateTelemetryUI();
+      logAdminEvent('lens', `Simulated lens tint: ${tintName.toUpperCase()}`);
     }
 
     currentTint = tintName;
@@ -832,6 +839,7 @@ document.addEventListener('DOMContentLoaded', () => {
     polarizationToggle.addEventListener('change', (e) => {
       isPolarized = e.target.checked;
       updatePolarizationSimulator();
+      logAdminEvent('lens', `Polarized Filter toggled: ${isPolarized ? 'ACTIVE' : 'INACTIVE'}`);
     });
   }
 
@@ -891,12 +899,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (currentQuizStep === 1) {
           quizAnswers.activity = optionVal;
+          logAdminEvent('quiz', `User answered Q1: Activity = ${optionVal.toUpperCase()}`);
           currentQuizStep = 2;
         } else if (currentQuizStep === 2) {
           quizAnswers.sensitivity = optionVal;
+          logAdminEvent('quiz', `User answered Q2: Sensitivity = ${optionVal.toUpperCase()}`);
           currentQuizStep = 3;
         } else if (currentQuizStep === 3) {
           quizAnswers.aesthetic = optionVal;
+          logAdminEvent('quiz', `User answered Q3: Vibe = ${optionVal.toUpperCase()}`);
           currentQuizStep = 'result';
         }
         
@@ -910,6 +921,7 @@ document.addEventListener('DOMContentLoaded', () => {
       quizAnswers.sensitivity = '';
       quizAnswers.aesthetic = '';
       updateQuizStepUI();
+      logAdminEvent('quiz', 'Diagnostic evaluation restarted by user');
     });
 
     // Apply Diagnostic Prescription result back to Simulator view
@@ -1054,6 +1066,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const now = new Date();
       resultTimestamp.textContent = `DATE: ${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
     }
+    logAdminEvent('quiz', `Prescription compiled: ${name} (Matched: ${tint})`);
   }
 
   // Update Commercial Telemetry Admin panel in real-time
@@ -1106,6 +1119,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
     }
+  }
+
+  // Append active administrative events to the live terminal log
+  function logAdminEvent(category, message) {
+    const logContainer = document.getElementById('systemEventLog');
+    if (!logContainer) return;
+
+    const now = new Date();
+    const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+    const entry = document.createElement('div');
+    entry.className = `log-entry ${category.toLowerCase()}`;
+    entry.innerHTML = `[${timeStr}] <strong>${category.toUpperCase()}</strong>: ${message}`;
+
+    logContainer.appendChild(entry);
+    
+    while (logContainer.children.length > 30) {
+      logContainer.removeChild(logContainer.firstChild);
+    }
+
+    logContainer.scrollTop = logContainer.scrollHeight;
   }
 
   // Fetch live TMZ stories, but FILTER them so they are strictly "getting shaded" (sunglasses/sun/beach/eyewear) related!
@@ -1185,6 +1219,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const displayStories = finalStories.slice(0, 3);
           
           tmzFeedList.innerHTML = '';
+          logAdminEvent('api', `Matched ${matchedStories.length} live eyewear stories (Rendered: ${displayStories.length})`);
           displayStories.forEach(item => {
             // Relative time calculation
             let timeLabel = 'Recently';
@@ -1261,6 +1296,10 @@ document.addEventListener('DOMContentLoaded', () => {
     setupQuiz();
 
     // 1. Immediately load the static 'sunny' preset for Miami so the UI is fully populated & functional instantly
+    logAdminEvent('sys', 'Initialized ShadeCast core UI controllers');
+    logAdminEvent('sys', 'Active startup geolocation geode resolution...');
+
+    // 1. Immediately load the static 'sunny' preset for Miami so the UI is fully populated & functional instantly
     updateWeatherUI('sunny');
     applyTint('grey');
     updatePolarizationSimulator();
@@ -1279,6 +1318,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.closest('a')) {
           analytics.tmzClicks++;
           updateTelemetryUI();
+          logAdminEvent('sys', 'Outbound celebrity gossip affiliate referral clicked');
         }
       });
     }

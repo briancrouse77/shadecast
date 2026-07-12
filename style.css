@@ -1897,3 +1897,54 @@ select:focus-visible {
   font-style: italic;
   padding: 1rem 0;
 }
+
+/* System Event Log Terminal */
+.system-event-log {
+  background: #070a13;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  padding: 0.65rem;
+  font-family: monospace;
+  font-size: 0.6rem;
+  color: #a3a3a3;
+  max-height: 140px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+}
+
+.log-entry {
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-left: 2px solid transparent;
+  padding-left: 0.4rem;
+}
+
+.log-entry.sys {
+  color: var(--accent-purple);
+  border-left-color: var(--accent-purple);
+}
+
+.log-entry.geo {
+  color: #10b981; /* Green */
+  border-left-color: #10b981;
+}
+
+.log-entry.api {
+  color: var(--accent-blue);
+  border-left-color: var(--accent-blue);
+}
+
+.log-entry.lens {
+  color: #eab308; /* Yellow */
+  border-left-color: #eab308;
+}
+
+.log-entry.quiz {
+  color: #f43f5e; /* Pink/Rose */
+  border-left-color: #f43f5e;
+}
