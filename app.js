@@ -1041,7 +1041,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const rssUrl = 'https://www.tmz.com/rss.xml';
-    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+    // Append a unique timestamp parameter to ensure we bypass browser and API proxy cache
+    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&_t=${Date.now()}`;
 
     fetch(apiUrl)
       .then(res => res.json())
