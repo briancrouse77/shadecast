@@ -151,6 +151,69 @@
           </div>
         </div>
 
+        <!-- Activity Selector Card -->
+        <div class="glass-card activity-card">
+          <h2 class="card-title">Activity Select</h2>
+          <p class="card-desc">Influences lens match prioritization</p>
+          <select id="activitySelect">
+            <option value="driving">🚗 Driving</option>
+            <option value="fishing">🎣 Fishing</option>
+            <option value="disc golf">🥏 Disc Golf</option>
+            <option value="golf">⛳ Golf</option>
+            <option value="running">🏃 Running</option>
+            <option value="cycling">🚴 Cycling</option>
+            <option value="hiking">🥾 Hiking</option>
+            <option value="beach">🏖️ Beach Use</option>
+            <option value="boating">⛵ Boating</option>
+            <option value="skiing">🎿 Skiing / Snowboarding</option>
+          </select>
+        </div>
+
+        <!-- Compact User Preferences Card -->
+        <div class="glass-card preferences-card" id="prefCard">
+          <div class="card-header-flex" id="prefCardHeader" style="cursor: pointer;">
+            <div>
+              <h2 class="card-title">Personal Preferences</h2>
+              <p class="card-desc">Bias scoring & filter frames</p>
+            </div>
+            <button class="toggle-btn" id="btnTogglePrefs">▼</button>
+          </div>
+          <div class="collapsible-content" id="prefCardContent" style="display: none;">
+            <div class="pref-form-grid">
+              <div class="pref-field">
+                <label for="prefMaxBudget">Max Budget (USD)</label>
+                <input type="number" id="prefMaxBudget" placeholder="No Limit" min="0">
+              </div>
+              <div class="pref-field">
+                <label for="prefBrand">Preferred Brand</label>
+                <select id="prefBrand">
+                  <option value="">Any Brand</option>
+                  <option value="Ray-Ban">Ray-Ban</option>
+                  <option value="Oakley">Oakley</option>
+                  <option value="Maui Jim">Maui Jim</option>
+                  <option value="Smith">Smith</option>
+                  <option value="Goodr">Goodr</option>
+                  <option value="Spy Optic">Spy Optic</option>
+                  <option value="Julbo">Julbo</option>
+                </select>
+              </div>
+              <div class="pref-field">
+                <label for="prefSensitivity">Light Sensitivity</label>
+                <select id="prefSensitivity">
+                  <option value="moderate">Moderate</option>
+                  <option value="high">🔥 High Sensitivity</option>
+                  <option value="low">❄️ Low Sensitivity</option>
+                </select>
+              </div>
+              <div class="pref-field checkbox-field">
+                <label for="prefRx">
+                  <input type="checkbox" id="prefRx"> Rx Lenses Required
+                 </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Weather Stats & Gauge -->
         <div class="glass-card stats-card">
           <h2 class="card-title" id="statsCardTitle">Atmospheric Conditions</h2>
@@ -219,6 +282,24 @@
                 <p id="recFinish">Silver Mirror Coating optional for extreme reflection block.</p>
               </div>
             </div>
+          </div>
+          
+          <!-- Trust Explainer Breakdown -->
+          <div class="trust-explainer-list" id="trustExplainerList">
+            <div class="explainer-point" style="font-weight: 700;">
+              <span class="explainer-bullet" id="explainerMatchPct">95% Match</span>
+              <span id="explainerMatchLevel">Excellent Match</span>
+            </div>
+            <!-- Dynamic explainer bullets injected here -->
+          </div>
+        </div>
+
+        <!-- Recommended Sunglasses Affiliate Card Panel -->
+        <div class="glass-card products-recommendation-card" id="productsRecCard">
+          <h2 class="card-title glow-text">Recommended Sunglasses</h2>
+          <p class="card-desc">Top-suited frames based on environment and preferences</p>
+          <div class="products-grid-container" id="productsGridContainer">
+            <!-- Dynamic Affiliate cards injected here -->
           </div>
         </div>
 
@@ -621,6 +702,6 @@
   </footer>
 
   <!-- Javascript -->
-  <script src="app.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>

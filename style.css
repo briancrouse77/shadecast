@@ -2043,3 +2043,340 @@ select:focus-visible {
 .auth-lock-btn:active {
   transform: scale(0.97);
 }
+
+/* ==========================================================================
+   PHASE 1: ACTIVITY-BASED RECOMMENDATIONS & DYNAMIC PRODUCT RECS STYLES
+   ========================================================================== */
+.activity-card select {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.activity-card select:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.15);
+}
+
+.preferences-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+.preferences-card .toggle-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: transform 0.3s;
+  padding: 0.25rem;
+}
+.preferences-card.expanded .toggle-btn {
+  transform: rotate(180deg);
+}
+.pref-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--card-border);
+}
+@media (min-width: 600px) {
+  .pref-form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.pref-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.pref-field label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+.pref-field input[type="number"], .pref-field select {
+  padding: 0.55rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.8rem;
+  outline: none;
+}
+.pref-field input[type="number"]:focus, .pref-field select:focus {
+  border-color: var(--accent-blue);
+}
+.checkbox-field {
+  grid-column: 1 / -1;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.5rem !important;
+  cursor: pointer;
+  margin-top: 0.25rem;
+}
+.checkbox-field label {
+  cursor: pointer;
+  text-transform: none;
+  font-size: 0.75rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.checkbox-field input {
+  cursor: pointer;
+}
+
+/* Product Recommendations Container */
+.products-recommendation-card {
+  margin-top: 1rem;
+}
+.products-grid-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.product-glass-card {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+@media (hover: hover) {
+  .product-glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 0.025);
+  }
+}
+/* Best Match highlighted card styling */
+.product-glass-card.best-match-highlight {
+  border: 1px solid rgba(14, 165, 233, 0.25);
+  background: rgba(14, 165, 233, 0.01);
+}
+.product-glass-card.best-match-highlight::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+}
+
+.product-tier-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+}
+.product-glass-card.best-match-highlight .product-tier-badge {
+  background: rgba(14, 165, 233, 0.15);
+  border-color: rgba(14, 165, 233, 0.3);
+  color: var(--accent-blue);
+}
+
+.product-main-info {
+  display: flex;
+  gap: 1rem;
+}
+.product-image-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+}
+.product-text-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.15rem;
+}
+.product-brand {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--accent-blue);
+  letter-spacing: 0.05em;
+}
+.product-model {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+}
+.product-variant {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.product-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 0.5rem 0;
+}
+.product-price-box {
+  display: flex;
+  flex-direction: column;
+}
+.product-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
+.product-msrp-saving {
+  font-size: 0.65rem;
+  color: #10b981; /* Green saving tag */
+}
+.product-match-box {
+  text-align: right;
+}
+.product-match-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+.product-match-pct {
+  font-family: monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent-purple);
+}
+
+.product-confidence-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.confidence-bar-bg {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.confidence-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+  border-radius: 3px;
+  width: 0%;
+  transition: width 0.6s ease;
+}
+
+.product-justification {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+  border-left: 2px solid var(--accent-blue);
+}
+
+.product-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+.product-outlink-btn {
+  background: linear-gradient(135deg, var(--accent-blue), #0369a1);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.65rem;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+}
+@media (hover: hover) {
+  .product-outlink-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(14, 165, 233, 0.25);
+    filter: brightness(1.1);
+  }
+}
+.product-outlink-btn:active {
+  transform: translateY(0);
+}
+.mock-badge {
+  font-size: 0.55rem;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  align-self: center;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+/* Match Reasons Explainer List inside Recommendation Card */
+.trust-explainer-list {
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.explainer-point {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+.explainer-bullet {
+  color: var(--accent-blue);
+  font-weight: bold;
+}
