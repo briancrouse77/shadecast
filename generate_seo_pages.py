@@ -43,22 +43,22 @@ for route in routes:
     
     content = index_html
     
-    # Modify stylesheet and script sources to point to parent
-    content = content.replace('href="style.css"', 'href="../style.css"')
-    content = content.replace('src="app.js"', 'src="../app.js"')
-    content = content.replace('href="manifest.json"', 'href="../manifest.json"')
-    content = content.replace('href="assets/logo.jpg"', 'href="../assets/logo.jpg"')
-    
-    # Strip main page default SEO metadata to prevent conflicts
+    # 1. Strip main page default SEO metadata first (before inserting templates to avoid conflict)
     content = re.sub(r'<title>.*?</title>', '', content, flags=re.IGNORECASE)
     content = re.sub(r'<meta name="description" content=".*?">', '', content, flags=re.IGNORECASE)
     content = re.sub(r'<link rel="canonical" href=".*?">', '', content, flags=re.IGNORECASE)
     content = re.sub(r'<meta property="og:.*?" content=".*?">', '', content, flags=re.IGNORECASE)
     content = re.sub(r'<meta name="twitter:.*?" content=".*?">', '', content, flags=re.IGNORECASE)
-    content = re.sub(r'<script type="application/ld+json">.*?</script>', '', content, flags=re.DOTALL | re.IGNORECASE)
+    content = re.sub(r'<script type="application/ld\+json">.*?</script>', '', content, flags=re.DOTALL | re.IGNORECASE)
     
-    # Insert route-specific SEO templates into head
+    # 2. Insert route-specific SEO templates into head
     content = content.replace('<!-- Primary SEO Metadata -->', '<!-- Primary SEO Metadata -->\n  ' + template_content)
+    
+    # 3. Modify stylesheet and script sources to point to parent
+    content = content.replace('href="style.css"', 'href="../style.css"')
+    content = content.replace('src="app.js"', 'src="../app.js"')
+    content = content.replace('href="manifest.json"', 'href="../manifest.json"')
+    content = content.replace('href="assets/logo.jpg"', 'href="../assets/logo.jpg"')
     
     # Write output file
     out_path = os.path.join(route["dir"], 'index.html')
