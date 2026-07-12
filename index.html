@@ -436,357 +436,318 @@
   <main class="app-layout">
     <div class="layout-grid">
 
-      <!-- Column 1: Weather Dashboard & Recommendation -->
-      <section class="dashboard-col" aria-label="Weather Dashboard">
+      <!-- 1. Activity Selector Card -->
+      <div class="glass-card activity-card">
+        <h2 class="card-title">Activity Select</h2>
+        <p class="card-desc">Influences lens match prioritization</p>
+        <label for="activitySelect" class="sr-only">Choose Activity</label>
+        <select id="activitySelect">
+          <option value="driving">🚗 Driving</option>
+          <option value="fishing">🎣 Fishing</option>
+          <option value="disc golf">🥏 Disc Golf</option>
+          <option value="golf">⛳ Golf</option>
+          <option value="running">🏃 Running</option>
+          <option value="cycling">🚴 Cycling</option>
+          <option value="hiking">🥾 Hiking</option>
+          <option value="beach">🏖️ Beach Use</option>
+          <option value="boating">⛵ Boating</option>
+          <option value="skiing">🎿 Skiing / Snowboarding</option>
+        </select>
+      </div>
+
+      <!-- 2. Compact User Preferences Card -->
+      <div class="glass-card preferences-card" id="prefCard">
+        <div class="card-header-flex" id="prefCardHeader" style="cursor: pointer;">
+          <div>
+            <h2 class="card-title">Personal Preferences</h2>
+            <p class="card-desc">Bias scoring & filter frames</p>
+          </div>
+          <button class="toggle-btn" id="btnTogglePrefs">▼</button>
+        </div>
+        <div class="collapsible-content" id="prefCardContent" style="display: none;">
+          <div class="pref-drawer-inner">
+            <div class="pref-field">
+              <label for="prefMaxBudget">Maximum Budget ($)</label>
+              <input type="number" id="prefMaxBudget" placeholder="e.g. 150" min="0">
+            </div>
+            <div class="pref-field">
+              <label for="prefBrand">Preferred Brand</label>
+              <select id="prefBrand">
+                <option value="">Any Brand</option>
+                <option value="Ray-Ban">Ray-Ban</option>
+                <option value="Oakley">Oakley</option>
+                <option value="Maui Jim">Maui Jim</option>
+                <option value="Smith">Smith</option>
+                <option value="Goodr">Goodr</option>
+                <option value="Spy Optic">Spy Optic</option>
+                <option value="Julbo">Julbo</option>
+              </select>
+            </div>
+            <div class="pref-field">
+              <label for="prefSensitivity">Light Sensitivity</label>
+              <select id="prefSensitivity">
+                <option value="normal">Normal</option>
+                <option value="moderate">Moderate</option>
+                <option value="high">🔥 High Sensitivity</option>
+                <option value="low">❄️ Low Sensitivity</option>
+              </select>
+            </div>
+            <div class="pref-field checkbox-field">
+              <label for="prefRx">
+                <input type="checkbox" id="prefRx"> Rx Lenses Required
+               </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Gear Radar Card -->
+      <div class="glass-card tmz-wire-card" id="gearRadarCard">
+        <div class="tmz-feed-header">
+          <span class="tmz-wire-title">Gear & Lens Radar</span>
+          <div class="tmz-live-indicator">
+            <span class="live-pulse-dot"></span>
+            <span class="tmz-live-text">Active Radar Feed</span>
+          </div>
+        </div>
+        <div class="tmz-feed-list" id="tmzFeedList">
+          <!-- dynamic buying guides will be loaded here by app.js -->
+        </div>
+      </div>
+
+      <!-- 4. Popular Activity Guides Card -->
+      <div class="glass-card nav-guides-card">
+        <h2 class="card-title">Popular Activity Guides</h2>
+        <div class="nav-guides-list" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem;">
+          <a href="https://briancrouse77.github.io/shadecast/best-driving-sunglasses/" class="guide-link">🚗 Driving Guide</a>
+          <a href="https://briancrouse77.github.io/shadecast/best-fishing-sunglasses/" class="guide-link">🎣 Fishing Guide</a>
+          <a href="https://briancrouse77.github.io/shadecast/best-disc-golf-sunglasses/" class="guide-link">🥏 Disc Golf Guide</a>
+          <a href="https://briancrouse77.github.io/shadecast/best-running-sunglasses/" class="guide-link">🏃 Running Guide</a>
+          <a href="https://briancrouse77.github.io/shadecast/best-skiing-sunglasses/" class="guide-link">🎿 Skiing Guide</a>
+        </div>
+      </div>
+
+      <!-- 5. Recommended Sunglasses Card -->
+      <div class="glass-card products-recommendation-card" id="productsRecCard">
+        <h2 class="card-title glow-text">Recommended Sunglasses</h2>
+        <p class="card-desc">Top-suited frames based on environment and preferences</p>
+        <div class="products-grid-container" id="productsGridContainer">
+          <!-- Dynamic Affiliate cards injected here -->
+        </div>
+      </div>
+
+      <!-- 6. Weather Stats & Gauge Card -->
+      <div class="glass-card stats-card">
+        <h2 class="card-title" id="statsCardTitle">Atmospheric Conditions</h2>
+        <div class="tailored-badge" id="tailoredBadge" style="display: none;">📍 Tailored for Your Location</div>
         
-        <!-- Weather Presets (Quick Simulator Control) -->
-        <div class="glass-card presets-card">
-          <h2 class="card-title">Weather Presets</h2>
-          <p class="card-desc">Simulate different solar intensities</p>
-          <div class="presets-grid">
-            <button class="preset-btn active" data-preset="sunny" id="btnPresetSunny">
-              <span class="icon">☀️</span> Sunny Day
-            </button>
-            <button class="preset-btn" data-preset="glare" id="btnPresetGlare">
-              <span class="icon">❄️</span> Glare / Snow
-            </button>
-            <button class="preset-btn" data-preset="sunset" id="btnPresetSunset">
-              <span class="icon">🌅</span> Golden Hour
-            </button>
-            <button class="preset-btn" data-preset="overcast" id="btnPresetOvercast">
-              <span class="icon">☁️</span> Overcast
-            </button>
+        <div class="uv-gauge-container">
+          <div class="uv-gauge">
+            <svg viewBox="0 0 100 100" class="gauge-svg">
+              <circle cx="50" cy="50" r="40" class="gauge-bg" />
+              <circle cx="50" cy="50" r="40" class="gauge-fill" id="uvGaugeFill" />
+            </svg>
+            <div class="uv-value-box">
+              <span class="uv-num" id="uvNumber">8</span>
+              <span class="uv-label">UV Index</span>
+            </div>
           </div>
+          <div class="uv-rating" id="uvRatingText">Very High</div>
         </div>
 
-        <!-- Activity Selector Card -->
-        <div class="glass-card activity-card">
-          <h2 class="card-title">Activity Select</h2>
-          <p class="card-desc">Influences lens match prioritization</p>
-          <label for="activitySelect" class="sr-only">Choose Activity</label>
-          <select id="activitySelect">
-            <option value="driving">🚗 Driving</option>
-            <option value="fishing">🎣 Fishing</option>
-            <option value="disc golf">🥏 Disc Golf</option>
-            <option value="golf">⛳ Golf</option>
-            <option value="running">🏃 Running</option>
-            <option value="cycling">🚴 Cycling</option>
-            <option value="hiking">🥾 Hiking</option>
-            <option value="beach">🏖️ Beach Use</option>
-            <option value="boating">⛵ Boating</option>
-            <option value="skiing">🎿 Skiing / Snowboarding</option>
-          </select>
-        </div>
-
-        <!-- Compact User Preferences Card -->
-        <div class="glass-card preferences-card" id="prefCard">
-          <div class="card-header-flex" id="prefCardHeader" style="cursor: pointer;">
-            <div>
-              <h2 class="card-title">Personal Preferences</h2>
-              <p class="card-desc">Bias scoring & filter frames</p>
-            </div>
-            <button class="toggle-btn" id="btnTogglePrefs">▼</button>
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <span class="metric-label">Solar Output</span>
+            <span class="metric-val" id="metricSolar">920 W/m²</span>
           </div>
-          <div class="collapsible-content" id="prefCardContent" style="display: none;">
-            <div class="pref-form-grid">
-              <div class="pref-field">
-                <label for="prefMaxBudget">Max Budget (USD)</label>
-                <input type="number" id="prefMaxBudget" placeholder="No Limit" min="0">
-              </div>
-              <div class="pref-field">
-                <label for="prefBrand">Preferred Brand</label>
-                <select id="prefBrand">
-                  <option value="">Any Brand</option>
-                  <option value="Ray-Ban">Ray-Ban</option>
-                  <option value="Oakley">Oakley</option>
-                  <option value="Maui Jim">Maui Jim</option>
-                  <option value="Smith">Smith</option>
-                  <option value="Goodr">Goodr</option>
-                  <option value="Spy Optic">Spy Optic</option>
-                  <option value="Julbo">Julbo</option>
-                </select>
-              </div>
-              <div class="pref-field">
-                <label for="prefSensitivity">Light Sensitivity</label>
-                <select id="prefSensitivity">
-                  <option value="moderate">Moderate</option>
-                  <option value="high">🔥 High Sensitivity</option>
-                  <option value="low">❄️ Low Sensitivity</option>
-                </select>
-              </div>
-              <div class="pref-field checkbox-field">
-                <label for="prefRx">
-                  <input type="checkbox" id="prefRx"> Rx Lenses Required
-                 </label>
-              </div>
-            </div>
+          <div class="metric-item">
+            <span class="metric-label">Glare Factor</span>
+            <span class="metric-val text-warning" id="metricGlare">High</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Temperature</span>
+            <span class="metric-val" id="metricTemp">87°F</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Condition</span>
+            <span class="metric-val" id="metricCondition">Clear Sky</span>
           </div>
         </div>
+      </div>
 
-        <!-- Weather Stats & Gauge -->
-        <div class="glass-card stats-card">
-          <h2 class="card-title" id="statsCardTitle">Atmospheric Conditions</h2>
-          <div class="tailored-badge" id="tailoredBadge" style="display: none;">📍 Tailored for Your Location</div>
-          
-          <div class="uv-gauge-container">
-            <div class="uv-gauge">
-              <svg viewBox="0 0 100 100" class="gauge-svg">
-                <circle cx="50" cy="50" r="40" class="gauge-bg" />
-                <circle cx="50" cy="50" r="40" class="gauge-fill" id="uvGaugeFill" />
-              </svg>
-              <div class="uv-value-box">
-                <span class="uv-num" id="uvNumber">8</span>
-                <span class="uv-label">UV Index</span>
-              </div>
-            </div>
-            <div class="uv-rating" id="uvRatingText">Very High</div>
-          </div>
-
-          <div class="metrics-grid">
-            <div class="metric-item">
-              <span class="metric-label">Solar Output</span>
-              <span class="metric-val" id="metricSolar">920 W/m²</span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-label">Glare Factor</span>
-              <span class="metric-val text-warning" id="metricGlare">High</span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-label">Temperature</span>
-              <span class="metric-val" id="metricTemp">87°F</span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-label">Condition</span>
-              <span class="metric-val" id="metricCondition">Clear Sky</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Lens Expert Recommendation -->
-        <div class="glass-card recommendation-card">
-          <h2 class="card-title glow-text">Expert Lens Match</h2>
-          <div class="recommendation-badge" id="recCategory">Category 3: Dark Tint</div>
-          
-          <div class="rec-details">
-            <div class="rec-item">
-              <div class="rec-icon">🕶️</div>
-              <div>
-                <h3>Recommended Tint</h3>
-                <p id="recTint">Dark Grey or Green to maintain natural color perception.</p>
-              </div>
-            </div>
-            
-            <div class="rec-item">
-              <div class="rec-icon">⚡</div>
-              <div>
-                <h3>Polarization Needed</h3>
-                <p id="recPolarization">Essential. Intense road and water reflections expected.</p>
-              </div>
-            </div>
-
-            <div class="rec-item">
-              <div class="rec-icon">✨</div>
-              <div>
-                <h3>Lens Finish</h3>
-                <p id="recFinish">Silver Mirror Coating optional for extreme reflection block.</p>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Trust Explainer Breakdown -->
-          <div class="trust-explainer-list" id="trustExplainerList">
-            <div class="explainer-point" style="font-weight: 700;">
-              <span class="explainer-bullet" id="explainerMatchPct">95% Match</span>
-              <span id="explainerMatchLevel">Excellent Match</span>
-            </div>
-            <!-- Dynamic explainer bullets injected here -->
-          </div>
-        </div>
-
-        <!-- Recommended Sunglasses Affiliate Card Panel -->
-        <div class="glass-card products-recommendation-card" id="productsRecCard">
-          <h2 class="card-title glow-text">Recommended Sunglasses</h2>
-          <p class="card-desc">Top-suited frames based on environment and preferences</p>
-          <div class="products-grid-container" id="productsGridContainer">
-            <!-- Dynamic Affiliate cards injected here -->
-          </div>
-        </div>
-
-      </section>
-
-      <!-- Column 2: Lens Simulator (Center Stage) -->
-      <section class="simulator-col" aria-label="Lens Simulator">
-        <div class="glass-card simulator-card">
-          <div class="card-header-flex">
-            <div>
-              <h2 class="card-title">Interactive Lens Simulator</h2>
-              <p class="card-desc">Slide to compare naked eye view vs. sunglasses lens technology</p>
-            </div>
-            <div class="sim-badge" id="simVibeBadge">Polarized Active</div>
-          </div>
-
-          <!-- Simulator Workspace Grid -->
-          <div class="simulator-workspace-grid">
-            
-            <!-- Simulator Viewport -->
-            <div class="simulator-container" id="simContainer">
-              
-              <!-- Base Image (Road Glare) -->
-              <img src="assets/road.jpg" alt="High road glare reflection view before applying polarized sunglasses filter" class="sim-img-base" id="simImageBase">
-  
-              <!-- Glare Overlay (Representing raw UV/Reflection glare before glasses) -->
-              <div class="glare-overlay" id="glareOverlay"></div>
-  
-              <!-- Sunglasses View Area (Draggable split pane) -->
-              <div class="sunglasses-pane" id="sunglassesPane">
-                <!-- Re-render road under sunglasses filter -->
-                <img src="assets/road.jpg" alt="Sunny road reflection filtered through polarized sunglasses lens simulator showing anti-glare polarization" class="sim-img-filtered" id="simImageFilter">
-                
-                <!-- Tint Overlay (Applies colors, opacity, blend-modes dynamically) -->
-                <div class="tint-overlay" id="tintOverlay"></div>
-  
-                <!-- Refined Polarized Overlay (subtle highlight filter to simulate polarized clarity) -->
-                <div class="polarized-overlay" id="polarizedOverlay"></div>
-              </div>
-  
-              <!-- Slider Handle -->
-              <div class="slider-handle" id="sliderHandle">
-                <div class="handle-line"></div>
-                <div class="handle-button">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                    <path d="M14.59 7.41L18.17 11H6v2h12.17l-3.59 3.59L16 18l6-6-6-6-1.41 1.41z"/>
-                  </svg>
-                </div>
-              </div>
-  
-              <!-- Label tags -->
-              <span class="sim-label label-left">Naked Eye (Raw Glare)</span>
-              <span class="sim-label label-right">Through Lens Filter</span>
-            </div>
-  
-            <!-- Control Console -->
-            <div class="simulator-controls">
-              
-              <!-- Tint Picker -->
-              <div class="control-group">
-                <span class="control-label">Select Lens Vibe</span>
-                <div class="tint-selectors">
-                  <button class="tint-dot active" data-tint="grey" style="--tint-color: #2b2b2b;" title="Grey: True Color & Daily Use" id="btnTintGrey">
-                    <span class="dot-inner"></span>
-                  </button>
-                  <button class="tint-dot" data-tint="amber" style="--tint-color: #b05c1d;" title="Amber/Brown: Contrast & Detail" id="btnTintAmber">
-                    <span class="dot-inner"></span>
-                  </button>
-                  <button class="tint-dot" data-tint="green" style="--tint-color: #173d2a;" title="Green: All-Weather Balance" id="btnTintGreen">
-                    <span class="dot-inner"></span>
-                  </button>
-                  <button class="tint-dot" data-tint="blue" style="--tint-color: #0b6fb8;" title="Blue Mirrored: Water Glare Block" id="btnTintBlue">
-                    <span class="dot-inner"></span>
-                  </button>
-                  <button class="tint-dot" data-tint="rose" style="--tint-color: #9c27b0;" title="Rose: High Contrast sports" id="btnTintRose">
-                    <span class="dot-inner"></span>
-                  </button>
-                </div>
-                <div class="active-tint-description" id="tintDesc">Grey Lens: maintains true color perception and offers the best daily comfort.</div>
-              </div>
-  
-              <div class="slider-row">
-                <!-- Darkness Slider -->
-                <div class="control-group flex-1">
-                  <div class="slider-label-row">
-                    <span class="control-label">Darkness Intensity (VLT)</span>
-                    <span class="slider-val" id="darknessVal">85%</span>
-                  </div>
-                  <input type="range" min="10" max="95" value="85" class="app-range" id="darknessSlider" aria-label="Tint Darkness Intensity">
-                </div>
-  
-                <!-- Polarization Switch -->
-                <div class="control-group toggle-group">
-                  <span class="control-label">Polarized Filter</span>
-                  <label class="switch">
-                    <input type="checkbox" id="polarizationToggle" aria-label="Toggle Polarization" checked>
-                    <span class="slider round"></span>
-                  </label>
-                </div>
-              </div>
-  
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Column 3: TMZ Feed & Custom Match Quiz -->
-      <section class="side-col" aria-label="Trends and Quiz">
+      <!-- 7. Expert Lens Match Card -->
+      <div class="glass-card recommendation-card">
+        <h2 class="card-title glow-text">Expert Lens Match</h2>
+        <div class="recommendation-badge" id="recCategory">Category 3: Dark Tint</div>
         
-        <!-- Tab System Header -->
+        <div class="rec-details">
+          <div class="rec-item">
+            <div class="rec-icon">🕶️</div>
+            <div>
+              <h3>Recommended Tint</h3>
+              <p id="recTint">Dark Grey or Green to maintain natural color perception.</p>
+            </div>
+          </div>
+          
+          <div class="rec-item">
+            <div class="rec-icon">⚡</div>
+            <div>
+              <h3>Polarization Needed</h3>
+              <p id="recPolarization">Essential. Intense road and water reflections expected.</p>
+            </div>
+          </div>
+
+          <div class="rec-item">
+            <div class="rec-icon">✨</div>
+            <div>
+              <h3>Lens Finish</h3>
+              <p id="recFinish">Silver Mirror Coating optional for extreme reflection block.</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Trust Explainer Breakdown (Confidence Summary) -->
+        <div class="trust-explainer-list" id="trustExplainerList" style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.75rem;">
+          <div class="explainer-point" style="font-weight: 700;">
+            <span class="explainer-bullet" id="explainerMatchPct">95% Match</span>
+            <span id="explainerMatchLevel">Excellent Match</span>
+          </div>
+          <!-- Dynamic explainer bullets injected here -->
+        </div>
+      </div>
+
+      <!-- 8. Weather Presets (Quick Simulator Control) -->
+      <div class="glass-card presets-card">
+        <h2 class="card-title">Weather Presets</h2>
+        <p class="card-desc">Simulate different solar intensities</p>
+        <div class="presets-grid">
+          <button class="preset-btn active" data-preset="sunny" id="btnPresetSunny">
+            <span class="icon">☀️</span> Sunny Day
+          </button>
+          <button class="preset-btn" data-preset="glare" id="btnPresetGlare">
+            <span class="icon">❄️</span> Glare / Snow
+          </button>
+          <button class="preset-btn" data-preset="sunset" id="btnPresetSunset">
+            <span class="icon">🌅</span> Golden Hour
+          </button>
+          <button class="preset-btn" data-preset="overcast" id="btnPresetOvercast">
+            <span class="icon">☁️</span> Overcast
+          </button>
+        </div>
+      </div>
+
+      <!-- 9. Interactive Lens Simulator Card -->
+      <div class="glass-card simulator-card">
+        <div class="card-header-flex">
+          <div>
+            <h2 class="card-title">Interactive Lens Simulator</h2>
+            <p class="card-desc">Slide to compare views vs. sunglasses lens technology</p>
+          </div>
+          <div class="sim-badge" id="simVibeBadge">Polarized Active</div>
+        </div>
+
+        <!-- Simulator Workspace Grid -->
+        <div class="simulator-workspace-grid">
+          
+          <!-- Simulator Viewport -->
+          <div class="simulator-container" id="simContainer">
+            
+            <!-- Base Image (Road Glare) -->
+            <img src="assets/road.jpg" alt="High road glare reflection view before applying polarized sunglasses filter" class="sim-img-base" id="simImageBase">
+
+            <!-- Glare Overlay (Representing raw UV/Reflection glare before glasses) -->
+            <div class="glare-overlay" id="glareOverlay"></div>
+
+            <!-- Sunglasses View Area (Draggable split pane) -->
+            <div class="sunglasses-pane" id="sunglassesPane">
+              <!-- Re-render road under sunglasses filter -->
+              <img src="assets/road.jpg" alt="Sunny road reflection filtered through polarized sunglasses lens simulator showing anti-glare polarization" class="sim-img-filtered" id="simImageFilter">
+              
+              <!-- Tint Overlay (Applies colors, opacity, blend-modes dynamically) -->
+              <div class="tint-overlay" id="tintOverlay"></div>
+
+              <!-- Refined Polarized Overlay (subtle highlight filter to simulate polarized clarity) -->
+              <div class="polarized-overlay" id="polarizedOverlay"></div>
+            </div>
+
+            <!-- Split Pane Resize Handle Bar -->
+            <div class="split-handle" id="splitHandle">
+              <span class="handle-line"></span>
+              <span class="handle-arrows">↔</span>
+            </div>
+          </div>
+
+          <!-- Lens Technology Tint Control Bay -->
+          <div class="simulator-control-bay">
+
+            <!-- Lens Tints Configurator Swatches -->
+            <div class="control-group">
+              <span class="control-label">Available Filter Tints</span>
+              <div class="tint-selector-grid">
+                <button class="tint-dot active" data-tint="grey" style="--tint-color: #2b2b2b;" title="Grey: True Color Perception" id="btnTintGrey">
+                  <span class="dot-inner"></span>
+                </button>
+                <button class="tint-dot" data-tint="amber" style="--tint-color: #b05c1d;" title="Amber: Contrast & Depth Enhancement" id="btnTintAmber">
+                  <span class="dot-inner"></span>
+                </button>
+                <button class="tint-dot" data-tint="green" style="--tint-color: #173d2a;" title="Green: All-Weather Balance" id="btnTintGreen">
+                  <span class="dot-inner"></span>
+                </button>
+                <button class="tint-dot" data-tint="blue" style="--tint-color: #0b6fb8;" title="Blue Mirrored: Water Glare Block" id="btnTintBlue">
+                  <span class="dot-inner"></span>
+                </button>
+                <button class="tint-dot" data-tint="rose" style="--tint-color: #9c27b0;" title="Rose: High Contrast sports" id="btnTintRose">
+                  <span class="dot-inner"></span>
+                </button>
+              </div>
+              <div class="active-tint-description" id="tintDesc">Grey Lens: maintains true color perception and offers the best daily comfort.</div>
+            </div>
+
+            <div class="slider-row">
+              <!-- Darkness Slider -->
+              <div class="control-group flex-1">
+                <div class="slider-label-row">
+                  <span class="control-label">Darkness Intensity (VLT)</span>
+                  <span class="slider-val" id="darknessVal">85%</span>
+                </div>
+                <input type="range" min="10" max="95" value="85" class="app-range" id="darknessSlider" aria-label="Tint Darkness Intensity">
+              </div>
+
+              <!-- Polarization Switch -->
+              <div class="control-group toggle-group">
+                <span class="control-label">Polarized Filter</span>
+                <label class="switch">
+                  <input type="checkbox" id="polarizationToggle" aria-label="Toggle Polarization" checked>
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. Tabbed Quiz & Telemetry Card -->
+      <div class="glass-card side-tab-card" id="quizTelemetryCard">
         <div class="tab-header">
-          <button class="tab-btn active" id="tabBtnTmz" data-tab="tabTmz">🔥 Gear Radar</button>
-          <button class="tab-btn" id="tabBtnQuiz" data-tab="tabQuiz">🎯 Quiz</button>
+          <button class="tab-btn active" id="tabBtnQuiz" data-tab="tabQuiz">🎯 Quiz</button>
           <button class="tab-btn" id="tabBtnAdmin" data-tab="tabAdmin" style="display: none;">📊 Telemetry</button>
+          <!-- hidden legacy items to satisfy original app.js selectors -->
+          <button id="tabBtnTmz" data-tab="tabTmz" style="display: none;"></button>
+          <div id="tabTmz" style="display: none;"></div>
         </div>
 
-        <!-- Tab 1 Content: Shade TMZ Style Feed -->
-        <div class="tab-pane active" id="tabTmz">
-          <div class="tmz-dashboard-grid">
-            
-            <!-- Left Side: Featured Lens Selection Card -->
-            <div class="glass-card tmz-featured-card">
-              <div class="tmz-hero">
-                <img src="assets/celebrity.jpg" alt="Polarized driving sunglasses style and lens technology matching high-glare requirements" class="tmz-hero-img" id="tmzHeroImg">
-                <span class="badge-hot" id="tmzHeroBadge">TODAY'S HIGH-GLARE PICK</span>
-              </div>
-              <div class="tmz-featured-body">
-                <h3 id="tmzHeroTitle" class="tmz-featured-title">Why Polarized Grey Lenses Win for Driving</h3>
-                <p id="tmzHeroDesc" class="tmz-featured-desc">Grey base lenses maintain natural color balance, while polarization blocks blinding glare from roads and metallic surfaces.</p>
-              </div>
-            </div>
-
-            <!-- Right Side: Live Eyewear Intelligence Card -->
-            <div class="glass-card tmz-wire-card">
-              <div class="tmz-feed-header">
-                <span class="tmz-wire-title">Gear & Lens Intelligence</span>
-                <div class="tmz-live-indicator">
-                  <span class="live-pulse-dot"></span>
-                  <span class="tmz-live-text">Active Radar Feed</span>
-                </div>
-              </div>
-              
-              <div class="tmz-feed-list" id="tmzFeedList">
-                <div class="tmz-news-item">
-                  <div class="tmz-news-thumb">🚗</div>
-                  <div class="tmz-news-body">
-                    <h4>Best Lens for Road Reflection</h4>
-                    <p>Blinding glare bounces off asphalt. Polarized copper or amber lenses block horizontal light while boosting depth contrast.</p>
-                    <span class="news-time">Driving</span>
-                  </div>
-                </div>
-
-                <div class="tmz-news-item">
-                  <div class="tmz-news-thumb">🎣</div>
-                  <div class="tmz-news-body">
-                    <h4>Fishing Requires Polarization</h4>
-                    <p>Polarized filters eliminate surface reflection, revealing underwater weed beds, structures, and fish targets.</p>
-                    <span class="news-time">Fishing</span>
-                  </div>
-                </div>
-
-                <div class="tmz-news-item">
-                  <div class="tmz-news-thumb">🥏</div>
-                  <div class="tmz-news-body">
-                    <h4>Rose & Green Lenses for Disc Golf</h4>
-                    <p>Tonal rose and green tints filter foliage colors to make target baskets and disc flight lines stand out sharply.</p>
-                    <span class="news-time">Disc Golf</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
+        <!-- Hidden TMZ elements to satisfy JS weather update bindings safely -->
+        <div style="display: none;">
+          <img id="tmzHeroImg" src="">
+          <div id="tmzHeroBadge"></div>
+          <div id="tmzHeroTitle"></div>
+          <div id="tmzHeroDesc"></div>
         </div>
 
         <!-- Tab 2 Content: Shade Matcher Quiz -->
-        <div class="tab-pane" id="tabQuiz">
-          <div class="glass-card quiz-card">
+        <div class="tab-pane active" id="tabQuiz">
+          <div class="glass-card quiz-card" style="border: none; background: transparent; box-shadow: none; padding: 0;">
             <h2 class="card-title">Custom Lens Match Engine</h2>
             <p class="card-desc">Calculate your professional-grade optical eyewear diagnostic prescription</p>
 
@@ -888,7 +849,7 @@
         <div class="tab-pane" id="tabAdmin">
           
           <!-- Locked Admin Screen (Authentication Mask) -->
-          <div class="glass-card admin-auth-card" id="adminAuthCard">
+          <div class="glass-card admin-auth-card" id="adminAuthCard" style="border: none; background: transparent; box-shadow: none; padding: 0;">
             <div class="auth-icon-wrap">
               <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
@@ -896,7 +857,7 @@
               </svg>
             </div>
             <h2>RESTRICTED TELEMETRY ACCESS</h2>
-            <p>Authentication credentials required to view commercial lead values and regional logs.</p>
+            <p>Authentication credentials required to view commercial logs.</p>
             
             <div class="auth-input-group">
               <input type="password" id="adminPasswordInput" class="app-input" placeholder="Enter Password..." aria-label="Admin Password">
@@ -906,25 +867,25 @@
           </div>
 
           <!-- Unlocked SaaS Telemetry Dashboard Panel -->
-          <div class="glass-card admin-card" id="adminDashboardCard" style="display: none;">
+          <div class="glass-card admin-card" id="adminDashboardCard" style="display: none; border: none; background: transparent; box-shadow: none; padding: 0;">
             <div class="card-header-flex">
               <div>
                 <h2 class="card-title">Commercial Telemetry</h2>
-                <p class="card-desc">Real-time monetization metrics and retail demand analytics</p>
+                <p class="card-desc">Real-time metrics & analytics</p>
               </div>
               <button class="auth-lock-btn" id="btnLockAdmin" title="Lock Panel access">
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.15rem;">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                   <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                 </svg>
-                Lock Panel
+                Lock
               </button>
             </div>
 
             <!-- Financial Summary Readout -->
             <div class="admin-financials">
               <div class="financial-box">
-                <span class="fin-label">Est. Lead Value (USD)</span>
+                <span class="fin-label">Est. Lead Value</span>
                 <span class="fin-val text-success" id="adminLeadValue">$0.00</span>
                 <span class="fin-sub">High-Intent Referrals</span>
               </div>
@@ -935,7 +896,7 @@
               </div>
             </div>
 
-            <!-- Lens Popularity Chart Panel -->
+            <!-- Lens Ranks -->
             <div class="admin-section">
               <h3>Retail Tint Demand Index</h3>
               <div class="demand-chart">
@@ -984,8 +945,7 @@
             </div>
           </div>
         </div>
-
-      </section>
+      </div>
 
     </div>
 

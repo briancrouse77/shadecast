@@ -334,8 +334,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (tabBtnAdmin) tabBtnAdmin.style.display = 'none';
         
-        const tabBtnTmz = document.getElementById('tabBtnTmz');
-        if (tabBtnTmz) tabBtnTmz.click();
+        const tabBtnQuiz = document.getElementById('tabBtnQuiz');
+        if (tabBtnQuiz) tabBtnQuiz.click();
 
         logAdminEvent('sys', 'ADMIN CONSOLE SECURELY LOCKED AND CONCEALED');
       });
@@ -1975,10 +1975,10 @@ document.addEventListener('DOMContentLoaded', () => {
           darknessSlider.dispatchEvent(new Event('input'));
         }
 
-        // Switch active tab back to main Simulator view
-        const tabBtnTmz = document.getElementById('tabBtnTmz');
-        if (tabBtnTmz) {
-          tabBtnTmz.click();
+        // Switch active tab back to Quiz
+        const tabBtnQuiz = document.getElementById('tabBtnQuiz');
+        if (tabBtnQuiz) {
+          tabBtnQuiz.click();
         }
 
         // Smooth scroll to simulator
