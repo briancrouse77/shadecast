@@ -394,12 +394,36 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateLocationStatus(text, isGps = false) {
     const statusText = document.getElementById('locationStatusText');
     const indicatorDot = document.getElementById('locIndicatorDot');
+    const brandSubtitle = document.getElementById('brandSubtitle');
+    const tailoredBadge = document.getElementById('tailoredBadge');
+
     if (statusText) statusText.textContent = text;
+    
     if (indicatorDot) {
       if (isGps) {
         indicatorDot.classList.add('live-gps');
       } else {
         indicatorDot.classList.remove('live-gps');
+      }
+    }
+
+    // Dynamic branding and tailored dashboard badge updates
+    if (brandSubtitle && tailoredBadge) {
+      const isSystemStatus = text.includes('Locating') || text.includes('Detecting') || text.includes('Loading') || text.includes('Denied') || text.includes('error') || text.includes('Offline') || text.includes('Search');
+      const isSimulated = text.includes('Simulated:');
+
+      if (isSystemStatus) {
+        brandSubtitle.textContent = 'Sunglasses UV Advisor Built for Your Location';
+        tailoredBadge.style.display = 'none';
+      } else if (isSimulated) {
+        const label = text.replace('Simulated:', '').trim();
+        brandSubtitle.textContent = `Sunglasses Advisor: Simulated ${label}`;
+        tailoredBadge.textContent = `📍 Simulated: ${label}`;
+        tailoredBadge.style.display = 'inline-flex';
+      } else {
+        brandSubtitle.textContent = `Sunglasses Advisor Built for ${text}`;
+        tailoredBadge.textContent = `📍 Tailored for ${text}`;
+        tailoredBadge.style.display = 'inline-flex';
       }
     }
   }
@@ -598,32 +622,33 @@ document.addEventListener('DOMContentLoaded', () => {
           }
 
           // Map paparazzi TMZ gossip cards dynamically
+          const shortCity = locationName.split(',')[0].trim().replace(/\(Default\)/gi, '').trim();
           const isNight = !isDay;
           if (isNight) {
             dynamicPreset.tmzImg = 'assets/celebrity_cloudy.jpg';
             dynamicPreset.tmzBadge = 'SPOTTED AT MIDNIGHT';
             dynamicPreset.tmzTitle = 'Rihanna Rocks Clear Aviator Tints';
-            dynamicPreset.tmzDesc = 'Seen wearing light Category 0 clear frames at a midnight afterparty, blocking flashing cameras.';
+            dynamicPreset.tmzDesc = `Seen wearing light Category 0 clear frames at a midnight afterparty, matching the night-time conditions in ${shortCity}.`;
           } else if (tempPreset === 'glare') {
             dynamicPreset.tmzImg = 'assets/celebrity_snow.jpg';
             dynamicPreset.tmzBadge = 'SPOTTED IN ASPEN';
             dynamicPreset.tmzTitle = 'Gwyneth Paltrow in Mirrored Shields';
-            dynamicPreset.tmzDesc = 'Seen hitting the slopes in Aspen in oversized pink polarized ski goggles to filter snow reflection.';
+            dynamicPreset.tmzDesc = `Seen hitting the slopes in Aspen in polarized ski goggles, matching the extreme glare conditions in ${shortCity}.`;
           } else if (tempPreset === 'sunset') {
             dynamicPreset.tmzImg = 'assets/celebrity_sunset.jpg';
             dynamicPreset.tmzBadge = 'SPOTTED IN MALIBU';
             dynamicPreset.tmzTitle = 'Jensen Ackles in Retro Amber Aviators';
-            dynamicPreset.tmzDesc = 'Spotted walking the Malibu pier at golden hour wearing vintage tortoiseshell amber glasses.';
+            dynamicPreset.tmzDesc = `Spotted walking the Malibu pier in custom tortoiseshell amber aviators, matching the low golden sunset angle in ${shortCity}.`;
           } else if (tempPreset === 'overcast') {
             dynamicPreset.tmzImg = 'assets/celebrity_cloudy.jpg';
             dynamicPreset.tmzBadge = 'SPOTTED IN LONDON';
             dynamicPreset.tmzTitle = 'Lily Collins in Transitional Tints';
-            dynamicPreset.tmzDesc = 'Seen strolling London streets in overcast weather styling thin metal-frame wire glasses.';
+            dynamicPreset.tmzDesc = `Seen strolling London streets in overcast weather, matching the flat light cloud cover in ${shortCity}.`;
           } else {
             dynamicPreset.tmzImg = 'assets/celebrity.jpg';
             dynamicPreset.tmzBadge = 'SPOTTED IN BEVERLY HILLS';
             dynamicPreset.tmzTitle = 'Hailey Bieber Rocks Matte Acetate Shields';
-            dynamicPreset.tmzDesc = 'Matching the extreme California sun with blacked-out wrap-around shields.';
+            dynamicPreset.tmzDesc = `Matching the sunny, ${temp}°F UV conditions in ${shortCity} with blacked-out wrap-around shields.`;
           }
 
           // Update UI

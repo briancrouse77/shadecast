@@ -403,6 +403,24 @@ body {
   font-size: 1.15rem;
 }
 
+/* Tailored Location Badge */
+.tailored-badge {
+  background: rgba(14, 165, 233, 0.1);
+  border: 1px solid rgba(14, 165, 233, 0.15);
+  border-radius: 8px;
+  color: var(--accent-blue);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+  margin-bottom: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
 /* UV Gauge */
 .uv-gauge-container {
   display: flex;
