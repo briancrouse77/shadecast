@@ -1381,3 +1381,41 @@ select:focus-visible {
     grid-template-columns: 310px 1fr 340px;
   }
 }
+
+/* Expert Eyewear Diagnostic & Barcode elements */
+.app-btn-primary {
+  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+  border: none;
+  color: #fff;
+  padding: 0.6rem 1.25rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px; /* Touch target */
+}
+
+@media (hover: hover) {
+  .app-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(14, 165, 233, 0.45);
+  }
+}
+
+.app-btn-primary:active {
+  transform: scale(0.97);
+}
+
+.presc-barcode {
+  height: 28px;
+  background: repeating-linear-gradient(90deg, #fff, #fff 1px, transparent 1px, transparent 4px, #fff 4px, #fff 5px, transparent 5px, transparent 8px);
+  opacity: 0.35;
+  margin-top: 0.75rem;
+  width: 100%;
+}

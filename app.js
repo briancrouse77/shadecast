@@ -868,6 +868,57 @@ document.addEventListener('DOMContentLoaded', () => {
       quizAnswers.aesthetic = '';
       updateQuizStepUI();
     });
+
+    // Apply Diagnostic Prescription result back to Simulator view
+    const btnApplyQuizResult = document.getElementById('btnApplyQuizResult');
+    if (btnApplyQuizResult) {
+      btnApplyQuizResult.addEventListener('click', () => {
+        const resolvedTintStr = (resultTint.textContent || '').toLowerCase();
+        let tintKey = 'grey';
+        
+        if (resolvedTintStr.includes('amber')) tintKey = 'amber';
+        else if (resolvedTintStr.includes('green')) tintKey = 'green';
+        else if (resolvedTintStr.includes('blue')) tintKey = 'blue';
+        else if (resolvedTintStr.includes('rose')) tintKey = 'rose';
+
+        // Select the active color dot
+        const targetDot = document.querySelector(`.tint-dot[data-tint="${tintKey}"]`);
+        if (targetDot) {
+          targetDot.click();
+        }
+
+        // Set polarization
+        const resolvedPolarStr = (resultPolar.textContent || '').toLowerCase();
+        const polarizationToggle = document.getElementById('polarizationToggle');
+        if (polarizationToggle) {
+          const needsPolar = resolvedPolarStr.includes('yes') || resolvedPolarStr.includes('required') || resolvedPolarStr.includes('recommend');
+          polarizationToggle.checked = needsPolar;
+          polarizationToggle.dispatchEvent(new Event('change'));
+        }
+
+        // Set darkness value
+        const darknessSlider = document.getElementById('darknessSlider');
+        if (darknessSlider) {
+          let recDark = 80;
+          if (quizAnswers.sensitivity === 'high') recDark = 90;
+          else if (quizAnswers.sensitivity === 'low') recDark = 65;
+          darknessSlider.value = recDark;
+          darknessSlider.dispatchEvent(new Event('input'));
+        }
+
+        // Switch active tab back to main Simulator view
+        const tabBtnTmz = document.getElementById('tabBtnTmz');
+        if (tabBtnTmz) {
+          tabBtnTmz.click();
+        }
+
+        // Smooth scroll to simulator
+        const simContainer = document.getElementById('simContainer');
+        if (simContainer) {
+          simContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      });
+    }
   }
 
   function calculateQuizResult() {
@@ -875,13 +926,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let desc = 'Timeless slate frames featuring balanced grey lenses for comfort, style, and natural true-color vision.';
     let tint = 'Grey Tints';
     let polar = 'Recommended';
+    let category = 'Category 2: Medium Tint';
+    let material = 'CR-39 Premium Polymer';
+    let coatings = 'Anti-Reflective Backing, Scratch Shield';
 
     const act = quizAnswers.activity;
     const sens = quizAnswers.sensitivity;
     const aes = quizAnswers.aesthetic;
 
+    // 1. Calculate main attributes
     if (act === 'beach' || act === 'sports') {
       polar = 'Yes (Required)';
+      category = sens === 'high' ? 'Category 4: Glacier Dark' : 'Category 3: Dark Tint';
+      material = act === 'sports' ? 'Polycarbonate (Shatterproof)' : 'Mineral Glass (Marine Grade)';
+      coatings = act === 'sports' ? 'Hydrophobic & Anti-Fog' : 'Double-Mirror & Saltwater Resistant';
+      
       if (aes === 'bold') {
         name = 'The Ocean Navigator';
         desc = 'Futuristic high-wrap frames paired with double-gradient blue mirrored polarized lenses to combat heavy ocean glare.';
@@ -897,6 +956,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } else if (act === 'driving') {
       polar = 'Yes (Required)';
+      category = 'Category 3: Dark Tint';
+      material = 'Polycarbonate (Impact Shield)';
+      coatings = 'Anti-Reflective Backing, Polarization Filter';
+      
       if (sens === 'high') {
         name = 'The Autobahn Pilot';
         desc = 'Bold aviator frames styled with high-density polarized amber lenses designed to filter hazardous dashboard reflections.';
@@ -908,6 +971,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } else {
       polar = sens === 'high' ? 'Recommended' : 'Optional';
+      category = sens === 'high' ? 'Category 3: Dark Tint' : (sens === 'moderate' ? 'Category 2: Medium Tint' : 'Category 1: Light Tint');
+      material = 'CR-39 Optical Polymer';
+      coatings = 'Gradient Tint, Anti-Reflective Backing';
+      
       if (aes === 'bold') {
         name = 'The Beverly Runway';
         desc = 'Flat-top black acetate shields with category-3 solid grey lenses. Uncompromising paparazzi-shield style.';
@@ -923,10 +990,24 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // 2. Set DOM elements
+    const resultCategory = document.getElementById('resultCategory');
+    const resultMaterial = document.getElementById('resultMaterial');
+    const resultCoatings = document.getElementById('resultCoatings');
+    const resultTimestamp = document.getElementById('resultTimestamp');
+
     resultName.textContent = name;
     resultDesc.textContent = desc;
     resultTint.textContent = tint;
     resultPolar.textContent = polar;
+    
+    if (resultCategory) resultCategory.textContent = category;
+    if (resultMaterial) resultMaterial.textContent = material;
+    if (resultCoatings) resultCoatings.textContent = coatings;
+    if (resultTimestamp) {
+      const now = new Date();
+      resultTimestamp.textContent = `DATE: ${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+    }
   }
 
   // Fetch live TMZ stories, but FILTER them so they are strictly "getting shaded" (sunglasses/sun/beach/eyewear) related!

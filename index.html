@@ -378,8 +378,8 @@
         <!-- Tab 2 Content: Shade Matcher Quiz -->
         <div class="tab-pane" id="tabQuiz">
           <div class="glass-card quiz-card">
-            <h2 class="card-title">Find Your Perfect Shade</h2>
-            <p class="card-desc">Answer 3 simple questions to calculate your custom profile</p>
+            <h2 class="card-title">Custom Lens Match Engine</h2>
+            <p class="card-desc">Calculate your professional-grade optical eyewear diagnostic prescription</p>
 
             <div id="quizForm">
               <!-- Quiz Step 1 -->
@@ -413,30 +413,54 @@
                 </div>
               </div>
 
-              <!-- Quiz Results -->
+              <!-- Quiz Results (High-tech Prescription format) -->
               <div class="quiz-step" data-step="result" id="quizStepResult">
                 <div class="result-header">
-                  <span class="result-celebration">🎉</span>
-                  <h3>Your Shade Match Found!</h3>
+                  <span class="result-celebration">🔬</span>
+                  <h3>Eyewear Diagnostic Prescription</h3>
                 </div>
                 
-                <div class="result-details-card">
-                  <div class="result-name" id="resultName">The Retro Navigator</div>
-                  <p class="result-desc" id="resultDesc">Timeless tortoiseshell frames paired with highly contrast-enhancing polarized amber lenses.</p>
+                <div class="result-details-card" style="font-family: monospace; letter-spacing: -0.02em;">
+                  <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.15); padding-bottom: 0.35rem; margin-bottom: 0.5rem; font-size: 0.65rem; color: var(--accent-blue);">
+                    <span>RX ID: SH-884-26</span>
+                    <span id="resultTimestamp">DATE: 2026.07.12</span>
+                  </div>
                   
-                  <div class="result-stats">
+                  <div class="result-name" id="resultName" style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; color: #fff; font-weight: 800; margin-bottom: 0.25rem;">The Retro Navigator</div>
+                  <p class="result-desc" id="resultDesc" style="font-size: 0.7rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 0.65rem;">Timeless tortoiseshell frames paired with highly contrast-enhancing polarized amber lenses.</p>
+                  
+                  <div class="result-stats" style="grid-template-columns: repeat(2, 1fr); gap: 0.5rem; border-top: 1px dashed rgba(255, 255, 255, 0.15); padding-top: 0.5rem;">
                     <div class="r-stat">
                       <span class="r-val" id="resultTint">Amber Tints</span>
-                      <span class="r-lbl">Best Lens Color</span>
+                      <span class="r-lbl">LENS COLOR</span>
                     </div>
                     <div class="r-stat">
                       <span class="r-val" id="resultPolar">Yes (Required)</span>
-                      <span class="r-lbl">Polarized?</span>
+                      <span class="r-lbl">POLARIZATION</span>
+                    </div>
+                    <div class="r-stat">
+                      <span class="r-val" id="resultCategory">Category 3</span>
+                      <span class="r-lbl">LENS RATING</span>
+                    </div>
+                    <div class="r-stat">
+                      <span class="r-val" id="resultMaterial">Polycarbonate</span>
+                      <span class="r-lbl">MATERIAL SPEC</span>
                     </div>
                   </div>
+
+                  <div style="border-top: 1px dashed rgba(255, 255, 255, 0.15); padding-top: 0.5rem; margin-top: 0.25rem; font-size: 0.65rem;">
+                    <span style="color: var(--text-secondary); font-size: 0.55rem; display: block; margin-bottom: 0.1rem;">RECOMMENDED COATINGS</span>
+                    <span id="resultCoatings" style="color: var(--accent-purple); font-weight: 700;">Anti-Reflective Backing, Double Mirroring</span>
+                  </div>
+
+                  <!-- CSS Barcode graphic for expert aesthetic -->
+                  <div class="presc-barcode"></div>
                 </div>
 
-                <button class="app-btn-outline" id="btnRestartQuiz">Retake Quiz</button>
+                <div style="display: flex; gap: 0.5rem; width: 100%; flex-wrap: wrap;">
+                  <button class="app-btn-primary" id="btnApplyQuizResult" style="flex: 1; min-width: 150px;">Apply to Simulator</button>
+                  <button class="app-btn-outline" id="btnRestartQuiz" style="flex: 0.5; min-width: 100px;">Retake</button>
+                </div>
               </div>
             </div>
 
