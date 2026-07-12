@@ -698,7 +698,7 @@ document.addEventListener('DOMContentLoaded', () => {
       premiumPick = null;
     }
 
-    renderProductCards(bestMatch, budgetPick, premiumPick, preferences);
+    renderProductCards(bestMatch, budgetPick, premiumPick, preferences, weather, selectedActivity);
     renderExplainerBullets(bestMatch, weather, selectedActivity);
 
     const hasAnyMatch = (bestMatch !== null || budgetPick !== null || premiumPick !== null);
@@ -721,34 +721,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function renderExplainerBullets(bestMatch, weather, activity) {
-    const trustExplainerList = document.getElementById('trustExplainerList');
-    if (!trustExplainerList) return;
-
+  function generateExplanationBullets(bestMatch, weather, activity) {
+    if (!bestMatch) return [];
     const weatherIncomplete = (weather.uv === undefined || weather.uv === null);
-
-    if (!bestMatch) {
-      let warningHtml = '';
-      if (weatherIncomplete) {
-        warningHtml = `
-          <div style="background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2); border-radius: 6px; padding: 0.5rem; margin-bottom: 0.75rem; font-size: 0.7rem; color: #ef4444; display: flex; align-items: center; gap: 0.4rem;">
-            <span>⚠️ Weather data is incomplete. Recommendation confidence has been reduced.</span>
-          </div>
-        `;
-      }
-      trustExplainerList.innerHTML = `
-        ${warningHtml}
-        <div class="explainer-point"><span class="explainer-bullet">⚠️</span> No confident match found for these settings. Try changing the budget, activity, or prescription requirements.</div>
-      `;
-      return;
-    }
-
-    const levelLabel = document.getElementById('explainerMatchLevel');
-    let matchLevel = 'Limited Match';
-    if (bestMatch.finalScore >= 90) matchLevel = 'Excellent Match';
-    else if (bestMatch.finalScore >= 80) matchLevel = 'Strong Match';
-    else if (bestMatch.finalScore >= 65) matchLevel = 'Good Match';
-
     const bullets = [];
     
     if (weatherIncomplete) {
@@ -777,6 +752,37 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (bestMatch.subScores.activity >= 0.7) {
       bullets.push(`${actUpper} selected — Sport-specific frame and lens tagging alignment.`);
     }
+    return bullets;
+  }
+
+  function renderExplainerBullets(bestMatch, weather, activity) {
+    const trustExplainerList = document.getElementById('trustExplainerList');
+    if (!trustExplainerList) return;
+
+    const weatherIncomplete = (weather.uv === undefined || weather.uv === null);
+
+    if (!bestMatch) {
+      let warningHtml = '';
+      if (weatherIncomplete) {
+        warningHtml = `
+          <div style="background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2); border-radius: 6px; padding: 0.5rem; margin-bottom: 0.75rem; font-size: 0.7rem; color: #ef4444; display: flex; align-items: center; gap: 0.4rem;">
+            <span>⚠️ Weather data is incomplete. Recommendation confidence has been reduced.</span>
+          </div>
+        `;
+      }
+      trustExplainerList.innerHTML = `
+        ${warningHtml}
+        <div class="explainer-point"><span class="explainer-bullet">⚠️</span> No confident match found for these settings. Try changing the budget, activity, or prescription requirements.</div>
+      `;
+      return;
+    }
+
+    const bullets = generateExplanationBullets(bestMatch, weather, activity);
+
+    let matchLevel = 'Limited Match';
+    if (bestMatch.finalScore >= 90) matchLevel = 'Excellent Match';
+    else if (bestMatch.finalScore >= 80) matchLevel = 'Strong Match';
+    else if (bestMatch.finalScore >= 65) matchLevel = 'Good Match';
 
     let html = '';
     if (weatherIncomplete) {
@@ -806,97 +812,212 @@ document.addEventListener('DOMContentLoaded', () => {
     trustExplainerList.innerHTML = html;
   }
 
-  function renderProductCards(bestMatch, budgetPick, premiumPick, preferences) {
+  function renderProductCards(bestMatch, budgetPick, premiumPick, preferences, weather, activity) {
     const container = document.getElementById('productsGridContainer');
     if (!container) return;
 
+    // 1. Render empty state if no bestMatch
     if (!bestMatch) {
       container.innerHTML = `
-        <div class="product-glass-card" style="border-left: 2px solid #ef4444; padding: 1.25rem; text-align: center;">
-          <div style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; color: #ef4444;">⚠️ No confident match found</div>
-          <p style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.45; max-width: 280px; margin: 0 auto;">
-            No sunglasses in our catalog confidently match these settings. Try changing the budget, activity, or prescription requirements.
-          </p>
+        <div class="no-match-card glass-card">
+          <div class="no-match-header">
+            <span class="no-match-icon">⚠️</span>
+            <h3>No verified product confidently matches these settings</h3>
+          </div>
+          <div class="no-match-body">
+            <p>No sunglasses in our catalog met the confidence thresholds for this configuration. Try making the following adjustments:</p>
+            <ul class="suggested-fixes">
+              <li>💰 <strong>Increase budget</strong> to unlock premium polarized lens variants</li>
+              <li>👓 <strong>Loosen prescription requirement</strong> if you wear contact lenses</li>
+              <li>🎯 <strong>Choose a broader activity</strong> (like Hiking or Beach Use) for more frame options</li>
+              <li>☀️ <strong>Try a different light sensitivity level</strong> to match standard VLT lenses</li>
+            </ul>
+          </div>
         </div>
       `;
       return;
     }
 
     let html = '';
-    const cards = [
-      { data: bestMatch, tier: 'Best Match', highlight: true },
-      { data: budgetPick, tier: 'Budget Pick', highlight: false },
-      { data: premiumPick, tier: 'Premium Pick', highlight: false, isPremiumUpgrade: true }
-    ];
 
-    cards.forEach(card => {
-      const match = card.data;
-      if (!match) return;
+    // 2. Render Best Match (Hero Recommendation)
+    const bestProd = bestMatch.product;
+    const isBestOverBudget = preferences.maxBudget > 0 && bestProd.price > preferences.maxBudget;
+    const bestSavings = bestProd.msrp - bestProd.price;
+    const bestSavingsHtml = bestSavings > 0 ? `<span class="product-msrp-saving">Save $${bestSavings.toFixed(2)}</span>` : '';
+    const bestMockIndicator = '<span class="mock-badge">Mock Record</span>';
 
-      const prod = match.product;
-      
-      trackEvent('product_card_viewed', {
-        productId: prod.id,
-        tier: card.tier,
-        score: match.finalScore,
-        price: prod.price
-      });
-      const isOverBudget = preferences.maxBudget > 0 && prod.price > preferences.maxBudget;
+    // Generate chips for Best Match
+    const bestChips = [];
+    if (bestProd.polarization) bestChips.push("Polarized");
+    if (bestProd.rxCompatibility) bestChips.push("Rx Ready");
+    else bestChips.push("Non-Rx");
+    if (bestProd.weight) bestChips.push(`${bestProd.weight}g`);
+    if (bestProd.vlt) bestChips.push(`VLT ${bestProd.vlt}%`);
+    const bestChipsHtml = bestChips.map(c => `<span class="product-chip">${c}</span>`).join('');
 
-      let badgeLabel = card.tier;
-      if (card.isPremiumUpgrade && isOverBudget) {
-        badgeLabel = 'Premium Upgrade (Budget Exceeded)';
-      }
+    // Generate explanation details bullets
+    const bullets = generateExplanationBullets(bestMatch, weather, activity);
+    const bulletsHtml = bullets.map(b => `<div class="explainer-point"><span class="explainer-bullet">•</span> <span>${b}</span></div>`).join('');
 
-      const savings = prod.msrp - prod.price;
-      const savingsHtml = savings > 0 ? `<span class="product-msrp-saving">Save $${savings.toFixed(2)}</span>` : '';
-      const mockIndicator = '<span class="mock-badge">Mock Record</span>';
+    let bestLevel = 'Limited Match';
+    if (bestMatch.finalScore >= 90) bestLevel = 'Excellent Match';
+    else if (bestMatch.finalScore >= 80) bestLevel = 'Strong Match';
+    else if (bestMatch.finalScore >= 65) bestLevel = 'Good Match';
 
-      html += `
-        <div class="product-glass-card ${card.highlight ? 'best-match-highlight' : ''}" data-product-id="${prod.id}">
-          <div class="product-tier-badge">${badgeLabel}</div>
-          
-          <div class="product-main-info">
-            <div class="product-image-container">
-              <img src="${(window.isSubpage && !prod.image.startsWith('http') && !prod.image.startsWith('../')) ? '../' + prod.image : prod.image}" alt="${prod.brand} ${prod.model}" class="product-img">
-            </div>
-            <div class="product-text-details">
-              <span class="product-brand">${prod.brand}</span>
-              <span class="product-model">${prod.model}</span>
-              <span class="product-variant">${prod.variant}</span>
-              ${mockIndicator}
-            </div>
+    const actUpper = activity.charAt(0).toUpperCase() + activity.slice(1);
+
+    trackEvent('product_card_viewed', {
+      productId: bestProd.id,
+      tier: 'Best Match',
+      score: bestMatch.finalScore,
+      price: bestProd.price
+    });
+
+    html += `
+      <div class="hero-recommendation-card" data-product-id="${bestProd.id}">
+        <div class="hero-header">
+          <span class="hero-activity-badge">🚗 Best for ${actUpper}</span>
+          <span class="hero-match-badge">${bestMatch.finalScore}% Match (${bestLevel})</span>
+        </div>
+        <div class="hero-body">
+          <div class="hero-img-container">
+            <img src="${(window.isSubpage && !bestProd.image.startsWith('http') && !bestProd.image.startsWith('../')) ? '../' + bestProd.image : bestProd.image}" alt="${bestProd.brand} ${bestProd.model} sunglasses with ${bestProd.lens} lens variant" class="hero-img">
           </div>
-          
-          <div class="product-meta-row">
-            <div class="product-price-box">
-              <span class="product-price">$${prod.price.toFixed(2)}</span>
-              ${savingsHtml}
+          <div class="hero-content">
+            <span class="hero-brand">${bestProd.brand}</span>
+            <h3 class="hero-model" style="font-size: 1.3rem; margin: 0.1rem 0; font-family: 'Outfit', sans-serif;">${bestProd.model}</h3>
+            <div class="hero-variant" style="margin-bottom: 0.5rem;">${bestProd.variant} ${bestMockIndicator}</div>
+            
+            <div class="hero-price-row">
+              <span class="hero-price" style="font-size: 1.15rem; font-weight: 800; color: #fff;">$${bestProd.price.toFixed(2)}</span>
+              ${bestSavingsHtml}
             </div>
-            <div class="product-match-box">
-              <div class="product-match-label">Match Rating</div>
-              <div class="product-match-pct">${match.finalScore}%</div>
+            
+            <div class="hero-reason-chips">
+              ${bestChipsHtml}
             </div>
-          </div>
-
-          <div class="product-confidence-wrapper">
-            <div class="confidence-bar-bg">
-              <div class="confidence-bar-fill" style="width: ${match.finalScore}%"></div>
+            
+            <p class="hero-short-reason">${bestProd.shortDescription}</p>
+            
+            <details class="why-match-details">
+              <summary>Why this match? (Click to expand)</summary>
+              <div class="why-match-content">
+                ${bulletsHtml}
+              </div>
+            </details>
+            
+            <div class="hero-actions">
+              <a href="${bestProd.retailers[0].url}" target="_blank" class="product-outlink-btn app-btn-primary" style="text-decoration: none; width: 100%; text-align: center; display: inline-block;" data-product-id="${bestProd.id}" data-price="${bestProd.price}" data-brand="${bestProd.brand}">
+                Check Availability (Sourced from ${bestProd.retailers[0].name})
+              </a>
             </div>
-          </div>
-
-          <div class="product-justification">
-            ${prod.shortDescription}
-          </div>
-
-          <div class="product-actions">
-            <a href="${prod.retailers[0].url}" target="_blank" class="product-outlink-btn" data-product-id="${prod.id}" data-price="${prod.price}" data-brand="${prod.brand}">
-              Demo Link: Sourced from ${prod.retailers[0].name}
-            </a>
           </div>
         </div>
-      `;
-    });
+      </div>
+    `;
+
+    // 3. Render Alternatives Grid (Budget Pick & Premium Pick)
+    const hasAlternatives = (budgetPick !== null || premiumPick !== null);
+    if (hasAlternatives) {
+      html += `<h3 class="alternatives-heading">Alternative Selections</h3>`;
+      html += `<div class="alternatives-grid">`;
+
+      const alts = [
+        { data: budgetPick, tier: 'Budget Pick', isPremiumUpgrade: false },
+        { data: premiumPick, tier: 'Premium Pick', isPremiumUpgrade: true }
+      ];
+
+      alts.forEach(card => {
+        const match = card.data;
+        if (!match) return;
+
+        const prod = match.product;
+        const isOverBudget = preferences.maxBudget > 0 && prod.price > preferences.maxBudget;
+
+        let badgeLabel = card.tier;
+        if (card.isPremiumUpgrade && isOverBudget) {
+          badgeLabel = 'Premium Upgrade (Budget Exceeded)';
+        }
+
+        const savings = prod.msrp - prod.price;
+        const savingsHtml = savings > 0 ? `<span class="product-msrp-saving">Save $${savings.toFixed(2)}</span>` : '';
+        const mockIndicator = '<span class="mock-badge">Mock Record</span>';
+
+        const chips = [];
+        if (prod.polarization) chips.push("Polarized");
+        if (prod.rxCompatibility) chips.push("Rx Ready");
+        else chips.push("Non-Rx");
+        if (prod.weight) chips.push(`${prod.weight}g`);
+        if (prod.vlt) chips.push(`VLT ${prod.vlt}%`);
+        const chipsHtml = chips.map(c => `<span class="product-chip">${c}</span>`).join('');
+
+        let altLevel = 'Limited';
+        if (match.finalScore >= 90) altLevel = 'Excellent';
+        else if (match.finalScore >= 80) altLevel = 'Strong';
+        else if (match.finalScore >= 65) altLevel = 'Good';
+
+        trackEvent('product_card_viewed', {
+          productId: prod.id,
+          tier: card.tier,
+          score: match.finalScore,
+          price: prod.price
+        });
+
+        html += `
+          <div class="product-glass-card" data-product-id="${prod.id}">
+            <div class="product-tier-badge">${badgeLabel}</div>
+            
+            <div class="product-main-info">
+              <div class="product-image-container">
+                <img src="${(window.isSubpage && !prod.image.startsWith('http') && !prod.image.startsWith('../')) ? '../' + prod.image : prod.image}" alt="${prod.brand} ${prod.model} sunglasses with ${prod.lens} lens variant" class="product-img">
+              </div>
+              <div class="product-text-details">
+                <span class="product-brand">${prod.brand}</span>
+                <span class="product-model" style="font-family: 'Outfit', sans-serif;">${prod.model}</span>
+                <span class="product-variant">${prod.variant} ${mockIndicator}</span>
+              </div>
+            </div>
+            
+            <div class="product-meta-row">
+              <div class="product-price-box">
+                <span class="product-price">$${prod.price.toFixed(2)}</span>
+                ${savingsHtml}
+              </div>
+              <div class="product-match-box">
+                <div class="product-match-label">${altLevel} Match</div>
+                <div class="product-match-pct">${match.finalScore}%</div>
+              </div>
+            </div>
+
+            <div class="product-confidence-wrapper">
+              <div class="confidence-bar-bg">
+                <div class="confidence-bar-fill" style="width: ${match.finalScore}%"></div>
+              </div>
+            </div>
+
+            <div class="product-chips" style="margin-top: 0.5rem;">
+              ${chipsHtml}
+            </div>
+
+            <div class="product-justification">
+              ${prod.shortDescription}
+            </div>
+
+            <div class="product-actions">
+              <a href="${prod.retailers[0].url}" target="_blank" class="product-outlink-btn" data-product-id="${prod.id}" data-price="${prod.price}" data-brand="${prod.brand}">
+                Check Availability (Sourced from ${prod.retailers[0].name})
+              </a>
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>`; // Close alternatives-grid
+    }
+
+    // Append the subtle demo approval footnote
+    html += `<div class="demo-affiliate-note">* Retail links are in demo mode until affiliate approval.</div>`;
 
     container.innerHTML = html;
 
