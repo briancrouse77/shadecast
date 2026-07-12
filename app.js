@@ -257,6 +257,69 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Restricted Admin Telemetry Gate Authentication logic
+  function setupAdminAuth() {
+    const adminAuthCard = document.getElementById('adminAuthCard');
+    const adminDashboardCard = document.getElementById('adminDashboardCard');
+    const adminPasswordInput = document.getElementById('adminPasswordInput');
+    const btnAdminAuthenticate = document.getElementById('btnAdminAuthenticate');
+    const authErrorMsg = document.getElementById('authErrorMsg');
+    const btnLockAdmin = document.getElementById('btnLockAdmin');
+
+    function checkAdminSession() {
+      const isAuthenticated = sessionStorage.getItem('isAdminAuthenticated') === 'true';
+      if (isAuthenticated) {
+        if (adminAuthCard) adminAuthCard.style.display = 'none';
+        if (adminDashboardCard) adminDashboardCard.style.display = 'block';
+      } else {
+        if (adminAuthCard) adminAuthCard.style.display = 'flex';
+        if (adminDashboardCard) adminDashboardCard.style.display = 'none';
+      }
+    }
+
+    // Check state on startup
+    checkAdminSession();
+
+    function performUnlock() {
+      if (!adminPasswordInput || !authErrorMsg) return;
+      const enteredPass = adminPasswordInput.value.trim();
+      
+      // Passkey is set to 'shadecast'
+      if (enteredPass === 'shadecast') {
+        sessionStorage.setItem('isAdminAuthenticated', 'true');
+        authErrorMsg.textContent = '';
+        adminPasswordInput.value = '';
+        checkAdminSession();
+        logAdminEvent('sys', 'ADMIN CONSOLE SECURITY ACCESS AUTHORIZED');
+      } else {
+        authErrorMsg.textContent = 'ACCESS DENIED - INVALID PASSKEY';
+        logAdminEvent('sys', 'SECURITY WARNING: UNAUTHORIZED ACCESS ATTEMPT DETECTED');
+        adminPasswordInput.value = '';
+        adminPasswordInput.focus();
+      }
+    }
+
+    if (btnAdminAuthenticate && adminPasswordInput) {
+      btnAdminAuthenticate.addEventListener('click', () => {
+        performUnlock();
+      });
+      
+      adminPasswordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          performUnlock();
+        }
+      });
+    }
+
+    if (btnLockAdmin) {
+      btnLockAdmin.addEventListener('click', () => {
+        sessionStorage.removeItem('isAdminAuthenticated');
+        checkAdminSession();
+        logAdminEvent('sys', 'ADMIN CONSOLE SECURELY LOCKED');
+      });
+    }
+  }
+
   // Draggable Simulator Split View
   let isDragging = false;
 
@@ -1294,6 +1357,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupWeatherPresets();
     setupTintControls();
     setupQuiz();
+    setupAdminAuth();
 
     // 1. Immediately load the static 'sunny' preset for Miami so the UI is fully populated & functional instantly
     logAdminEvent('sys', 'Initialized ShadeCast core UI controllers');

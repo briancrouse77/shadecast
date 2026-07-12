@@ -496,9 +496,40 @@
 
         <!-- Tab 3 Content: Admin Analytics Telemetry -->
         <div class="tab-pane" id="tabAdmin">
-          <div class="glass-card admin-card">
-            <h2 class="card-title">Commercial Telemetry</h2>
-            <p class="card-desc">Real-time monetization metrics and retail demand analytics</p>
+          
+          <!-- Locked Admin Screen (Authentication Mask) -->
+          <div class="glass-card admin-auth-card" id="adminAuthCard">
+            <div class="auth-icon-wrap">
+              <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+            <h2>RESTRICTED TELEMETRY ACCESS</h2>
+            <p>Authentication credentials required to view commercial lead values and regional logs.</p>
+            
+            <div class="auth-input-group">
+              <input type="password" id="adminPasswordInput" class="app-input" placeholder="Enter Password..." aria-label="Admin Password">
+              <button class="app-btn-primary" id="btnAdminAuthenticate">Unlock Panel</button>
+            </div>
+            <div class="auth-error-msg" id="authErrorMsg"></div>
+          </div>
+
+          <!-- Unlocked SaaS Telemetry Dashboard Panel -->
+          <div class="glass-card admin-card" id="adminDashboardCard" style="display: none;">
+            <div class="card-header-flex">
+              <div>
+                <h2 class="card-title">Commercial Telemetry</h2>
+                <p class="card-desc">Real-time monetization metrics and retail demand analytics</p>
+              </div>
+              <button class="auth-lock-btn" id="btnLockAdmin" title="Lock Panel access">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.15rem;">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                Lock Panel
+              </button>
+            </div>
 
             <!-- Financial Summary Readout -->
             <div class="admin-financials">
