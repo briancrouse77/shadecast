@@ -2380,3 +2380,10 @@ select:focus-visible {
   color: var(--accent-blue);
   font-weight: bold;
 }
+
+h1#seo-heading {
+  font-size: 1.25rem;
+  margin: 0.75rem 0;
+  text-align: center;
+  color: var(--text-primary);
+}

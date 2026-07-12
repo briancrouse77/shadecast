@@ -831,7 +831,7 @@ document.addEventListener('DOMContentLoaded', () => {
           
           <div class="product-main-info">
             <div class="product-image-container">
-              <img src="${prod.image}" alt="${prod.brand} ${prod.model}" class="product-img">
+              <img src="${(window.isSubpage && !prod.image.startsWith('http') && !prod.image.startsWith('../')) ? '../' + prod.image : prod.image}" alt="${prod.brand} ${prod.model}" class="product-img">
             </div>
             <div class="product-text-details">
               <span class="product-brand">${prod.brand}</span>
@@ -946,7 +946,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const activitySelect = document.getElementById('activitySelect');
     if (activitySelect) {
-      const savedActivity = localStorage.getItem('pref_activity');
+      const savedActivity = window.initialActivity || localStorage.getItem('pref_activity');
       if (savedActivity) {
         activitySelect.value = savedActivity;
       }
@@ -1581,7 +1581,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update TMZ Hero dynamically
     if (tmzHeroImg && preset.tmzImg) {
-      tmzHeroImg.src = preset.tmzImg;
+      tmzHeroImg.src = (window.isSubpage && !preset.tmzImg.startsWith('http') && !preset.tmzImg.startsWith('../')) ? '../' + preset.tmzImg : preset.tmzImg;
     }
     if (tmzHeroBadge && preset.tmzBadge) {
       tmzHeroBadge.textContent = preset.tmzBadge;
