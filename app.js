@@ -929,10 +929,35 @@ document.addEventListener('DOMContentLoaded', () => {
     resultPolar.textContent = polar;
   }
 
-  // Fetch actual live TMZ celebrity news via RSS-to-JSON
+  // Fetch live TMZ stories, but FILTER them so they are strictly "getting shaded" (sunglasses/sun/beach/eyewear) related!
   function fetchLiveTmzFeed() {
     const tmzFeedList = document.getElementById('tmzFeedList');
     if (!tmzFeedList) return;
+
+    // Curated high-fashion sunglasses fallback stories
+    const fallbackStories = [
+      {
+        title: "Austin Butler's Vintage Golden Hour Aviators",
+        description: "Seen wearing warm amber tints in Malibu to soften the late afternoon solar glare.",
+        link: "https://www.tmz.com",
+        pubDate: new Date(),
+        emoji: '🍿'
+      },
+      {
+        title: "Trend Alert: Polarized Green is Dominating Aspen",
+        description: "Snow glare levels hitting peak factor. Celebs are choosing polarized sport wraps to combat whiteout light.",
+        link: "https://www.tmz.com",
+        pubDate: new Date(Date.now() - 3 * 3600000),
+        emoji: '📈'
+      },
+      {
+        title: "Zendaya's Custom Rose Tints Trend",
+        description: "Styled at the London premier. Rose lenses boost contrast and style points alike under overcast skies.",
+        link: "https://www.tmz.com",
+        pubDate: new Date(Date.now() - 24 * 3600000),
+        emoji: '🌟'
+      }
+    ];
 
     const rssUrl = 'https://www.tmz.com/rss.xml';
     const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
@@ -941,19 +966,51 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(res => res.json())
       .then(data => {
         if (data && data.status === 'ok' && data.items && data.items.length > 0) {
-          tmzFeedList.innerHTML = ''; // clear initial fallback stories
-          
-          // Map first 4 stories
-          const stories = data.items.slice(0, 4);
-          stories.forEach((item, index) => {
-            const emojis = ['🍿', '🔥', '📸', '🌟'];
-            const emoji = emojis[index % emojis.length];
+          // Keywords that indicate "getting shaded" / sunglasses / sun / beach / eyewear
+          const keywords = [
+            'sunglass', 'shades', 'glasses', 'eyewear', 'frames', 
+            'specs', 'lens', 'polarized', 'tint', 'beach', 
+            'summer', 'sun', 'bikini', 'pool', 'shade', 'glare'
+          ];
 
-            // Calculate human-friendly relative time
+          // Filter live stories matching the keywords
+          const matchedStories = data.items.filter(item => {
+            const title = (item.title || '').toLowerCase();
+            const desc = (item.description || '').toLowerCase();
+            return keywords.some(kw => title.includes(kw) || desc.includes(kw));
+          });
+
+          // Build final list (prefer matched live stories, pad with fallbacks if needed)
+          const finalStories = [];
+          
+          matchedStories.forEach(item => {
+            finalStories.push({
+              title: item.title,
+              description: item.description,
+              link: item.link,
+              pubDate: new Date(item.pubDate),
+              emoji: '📸' // indicator for live parsed news
+            });
+          });
+
+          // If we have less than 3 relevant live stories, pad with our highly curated sunglasses fallbacks
+          if (finalStories.length < 3) {
+            fallbackStories.forEach(fb => {
+              if (!finalStories.some(fs => fs.title.toLowerCase() === fb.title.toLowerCase())) {
+                finalStories.push(fb);
+              }
+            });
+          }
+
+          // Limit to top 3 strictly relevant stories
+          const displayStories = finalStories.slice(0, 3);
+          
+          tmzFeedList.innerHTML = '';
+          displayStories.forEach(item => {
+            // Relative time calculation
             let timeLabel = 'Recently';
             try {
-              const pubDate = new Date(item.pubDate);
-              const diffMs = new Date() - pubDate;
+              const diffMs = new Date() - item.pubDate;
               const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
               
               if (diffHrs < 1) {
@@ -969,7 +1026,7 @@ document.addEventListener('DOMContentLoaded', () => {
               console.warn(e);
             }
 
-            // Clean description formatting
+            // Clean description text
             let cleanDesc = item.description || '';
             cleanDesc = cleanDesc.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
             if (cleanDesc.length > 125) {
@@ -979,7 +1036,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const newsItem = document.createElement('div');
             newsItem.className = 'tmz-news-item';
             newsItem.innerHTML = `
-              <div class="tmz-news-thumb">${emoji}</div>
+              <div class="tmz-news-thumb">${item.emoji}</div>
               <div class="tmz-news-body">
                 <h4><a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a></h4>
                 <p>${cleanDesc}</p>
@@ -992,7 +1049,25 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .catch(err => {
         console.warn('Could not retrieve live TMZ RSS feed, keeping static fallbacks:', err);
+        renderFallbackFeed();
       });
+
+    function renderFallbackFeed() {
+      tmzFeedList.innerHTML = '';
+      fallbackStories.forEach(item => {
+        const newsItem = document.createElement('div');
+        newsItem.className = 'tmz-news-item';
+        newsItem.innerHTML = `
+          <div class="tmz-news-thumb">${item.emoji}</div>
+          <div class="tmz-news-body">
+            <h4><a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a></h4>
+            <p>${item.description}</p>
+            <span class="news-time">Yesterday</span>
+          </div>
+        `;
+        tmzFeedList.appendChild(newsItem);
+      });
+    }
   }
 
   // ==========================================
