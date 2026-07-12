@@ -1485,3 +1485,140 @@ select:focus-visible {
   margin-top: 0.75rem;
   width: 100%;
 }
+
+/* TMZ Dashboard Grid Layout */
+.tmz-dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .tmz-dashboard-grid {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+}
+
+/* Featured Spotting Card */
+.tmz-featured-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+}
+
+.tmz-featured-card .tmz-hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.tmz-featured-card .tmz-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.tmz-featured-card:hover .tmz-hero-img {
+  transform: scale(1.03);
+}
+
+.tmz-featured-card .badge-hot {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  background: var(--accent-purple);
+  color: #fff;
+  font-size: 0.55rem;
+  font-weight: 800;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 10px rgba(217, 70, 239, 0.4);
+  z-index: 10;
+}
+
+.tmz-featured-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tmz-featured-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: #fff;
+  margin: 0;
+}
+
+.tmz-featured-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Live Wire Card */
+.tmz-wire-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  background: rgba(15, 23, 42, 0.25);
+}
+
+.tmz-wire-card .tmz-feed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid var(--card-border);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.tmz-wire-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-blue);
+}
+
+.tmz-live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.tmz-live-indicator .live-pulse-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent-purple);
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 8px var(--accent-purple);
+  animation: livePulse 1.5s infinite alternate;
+}
+
+.tmz-live-text {
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.tmz-wire-card .tmz-feed-list {
+  padding: 0.85rem;
+  overflow-y: auto;
+  max-height: 380px; /* scrollable dashboard */
+}

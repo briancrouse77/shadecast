@@ -331,56 +331,60 @@
 
         <!-- Tab 1 Content: Shade TMZ Style Feed -->
         <div class="tab-pane active" id="tabTmz">
-          <div class="glass-card tmz-card">
+          <div class="tmz-dashboard-grid">
             
-            <div class="tmz-hero">
-              <img src="assets/celebrity.jpg" alt="Celebrity spotted wearing premium designer sunglasses style trends matching UV advisor ratings" class="tmz-hero-img" id="tmzHeroImg">
-              <div class="tmz-hero-overlay">
+            <!-- Left Side: Featured Paparazzi Spotting Card -->
+            <div class="glass-card tmz-featured-card">
+              <div class="tmz-hero">
+                <img src="assets/celebrity.jpg" alt="Celebrity spotted wearing premium designer sunglasses style trends matching UV advisor ratings" class="tmz-hero-img" id="tmzHeroImg">
                 <span class="badge-hot" id="tmzHeroBadge">SPOTTED IN BEVERLY HILLS</span>
-                <h3 id="tmzHeroTitle">Hailey Bieber Rocks Oversized Acetate Shields</h3>
-                <p id="tmzHeroDesc">Matching the extreme 95°F California heatwave with Category 3 blacked-out lenses.</p>
+              </div>
+              <div class="tmz-featured-body">
+                <h3 id="tmzHeroTitle" class="tmz-featured-title">Hailey Bieber Rocks Oversized Acetate Shields</h3>
+                <p id="tmzHeroDesc" class="tmz-featured-desc">Matching the extreme 95°F California heatwave with Category 3 blacked-out lenses.</p>
               </div>
             </div>
 
-            <!-- Live Eyewear Feed Header -->
-            <div class="tmz-feed-header" style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem 0 1rem; border-top: 1px solid var(--card-border); margin-top: 0.75rem;">
-              <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-blue);">Eyewear News Wire</span>
-              <div style="display: flex; align-items: center; gap: 0.4rem;">
-                <span class="live-pulse-dot" style="width: 6px; height: 6px; background-color: var(--accent-purple); border-radius: 50%; display: inline-block; box-shadow: 0 0 8px var(--accent-purple); animation: livePulse 1.5s infinite alternate;"></span>
-                <span style="font-size: 0.6rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.02em;">Live Tracker Active</span>
+            <!-- Right Side: Live Eyewear News Wire Dashboard Card -->
+            <div class="glass-card tmz-wire-card">
+              <div class="tmz-feed-header">
+                <span class="tmz-wire-title">Eyewear News Wire</span>
+                <div class="tmz-live-indicator">
+                  <span class="live-pulse-dot"></span>
+                  <span class="tmz-live-text">Live Tracker Active</span>
+                </div>
               </div>
-            </div>
-
-            <div class="tmz-feed-list" id="tmzFeedList">
               
-              <div class="tmz-news-item">
-                <div class="tmz-news-thumb">🍿</div>
-                <div class="tmz-news-body">
-                  <h4>Austin Butler's Vintage Golden Hour Aviators</h4>
-                  <p>Seen wearing warm amber tints in Malibu to soften the late afternoon solar glare.</p>
-                  <span class="news-time">2 hours ago</span>
+              <div class="tmz-feed-list" id="tmzFeedList">
+                <div class="tmz-news-item">
+                  <div class="tmz-news-thumb">🍿</div>
+                  <div class="tmz-news-body">
+                    <h4>Austin Butler's Vintage Golden Hour Aviators</h4>
+                    <p>Seen wearing warm amber tints in Malibu to soften the late afternoon solar glare.</p>
+                    <span class="news-time">2 hours ago</span>
+                  </div>
+                </div>
+
+                <div class="tmz-news-item">
+                  <div class="tmz-news-thumb">📈</div>
+                  <div class="tmz-news-body">
+                    <h4>Trend Alert: Polarized Green is Dominating Aspen</h4>
+                    <p>Snow glare levels hitting peak factor. Celebs are choosing polarized sport wraps.</p>
+                    <span class="news-time">5 hours ago</span>
+                  </div>
+                </div>
+
+                <div class="tmz-news-item">
+                  <div class="tmz-news-thumb">🌟</div>
+                  <div class="tmz-news-body">
+                    <h4>Zendaya's Custom Rose Tints Trend</h4>
+                    <p>Styled at the London premier. Rose lenses boost contrast and style points alike.</p>
+                    <span class="news-time">Yesterday</span>
+                  </div>
                 </div>
               </div>
-
-              <div class="tmz-news-item">
-                <div class="tmz-news-thumb">📈</div>
-                <div class="tmz-news-body">
-                  <h4>Trend Alert: Polarized Green is Dominating Aspen</h4>
-                  <p>Snow glare levels hitting peak factor. Celebs are choosing polarized sport wraps.</p>
-                  <span class="news-time">5 hours ago</span>
-                </div>
-              </div>
-
-              <div class="tmz-news-item">
-                <div class="tmz-news-thumb">🌟</div>
-                <div class="tmz-news-body">
-                  <h4>Zendaya's Custom Rose Tints Trend</h4>
-                  <p>Styled at the London premier. Rose lenses boost contrast and style points alike.</p>
-                  <span class="news-time">Yesterday</span>
-                </div>
-              </div>
-
             </div>
+
           </div>
         </div>
 
