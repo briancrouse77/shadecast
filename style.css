@@ -1567,58 +1567,31 @@ select:focus-visible {
   }
 }
 
-/* Two-Column Mid-Size Desktop (900px to 1199px) */
-@media (min-width: 900px) and (max-width: 1199px) {
+/* Desktop Stabilization Pass (>= 900px) - Centered focused cockpit layout */
+@media (min-width: 900px) {
+  .app-layout {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem;
+  }
+  
   .layout-grid {
-    display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 1.5rem;
-    align-items: start;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
   }
-  
-  /* Left Rail Items (Column 1) */
-  .activity-card { grid-column: 1; }
-  #prefCard { grid-column: 1; }
-  #gearRadarCard { grid-column: 1; }
-  .nav-guides-card { grid-column: 1; }
-  #quizTelemetryCard { grid-column: 1; }
-  
-  /* Right Rail Items (Column 2) */
-  #productsRecCard { grid-column: 2; }
-  .stats-card { grid-column: 2; }
-  .recommendation-card { grid-column: 2; }
-  .presets-card { grid-column: 2; }
-  .simulator-card { grid-column: 2; }
-  
-  .slider-row {
-    flex-direction: row;
-  }
-}
 
-/* Three-Zone Premium Cockpit Desktop (1200px and up) */
-@media (min-width: 1200px) {
-  .layout-grid {
-    display: grid;
-    grid-template-columns: 310px 1fr 340px;
-    gap: 1.5rem;
-    align-items: start;
-  }
-  
-  /* Zone 1: Left Decision Rail */
-  .activity-card { grid-column: 1; }
-  #prefCard { grid-column: 1; }
-  #gearRadarCard { grid-column: 1; }
-  .nav-guides-card { grid-column: 1; }
-  
-  /* Zone 2: Center Cockpit */
-  #productsRecCard { grid-column: 2; }
-  
-  /* Zone 3: Right Conditions Panel */
-  .stats-card { grid-column: 3; }
-  .recommendation-card { grid-column: 3; }
-  .presets-card { grid-column: 3; }
-  .simulator-card { grid-column: 3; }
-  #quizTelemetryCard { grid-column: 3; }
+  /* Priority Stacking Order */
+  .activity-card { order: 1; }
+  #prefCard { order: 2; }
+  .recommendation-card { order: 3; }       /* Expert Lens Match */
+  #productsRecCard { order: 4; }           /* Recommended Sunglasses / Best Match */
+  .stats-card { order: 5; }                /* Conditions stats */
+  .presets-card { order: 6; }              /* Weather Presets */
+  .simulator-card { order: 7; }            /* Simulator */
+  #gearRadarCard { order: 8; }             /* Gear Radar */
+  #quizTelemetryCard { order: 9; }         /* Tabbed Quiz & Telemetry */
+  .nav-guides-card { order: 10; }          /* Popular activity guides */
   
   .slider-row {
     flex-direction: row;

@@ -1043,6 +1043,54 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function setupQuizDrawer() {
+    const quizCard = document.getElementById('quizTelemetryCard');
+    const quizCardHeader = document.getElementById('quizCardHeader');
+    const quizCardContent = document.getElementById('quizCardContent');
+    const btnToggleQuiz = document.getElementById('btnToggleQuiz');
+
+    if (quizCardHeader && quizCardContent) {
+      quizCardHeader.addEventListener('click', () => {
+        const isCollapsed = quizCard.classList.contains('collapsed') || quizCardContent.style.display === 'none';
+        if (isCollapsed) {
+          quizCard.classList.remove('collapsed');
+          quizCard.classList.add('expanded');
+          quizCardContent.style.display = 'block';
+          if (btnToggleQuiz) btnToggleQuiz.textContent = '▲';
+        } else {
+          quizCard.classList.remove('expanded');
+          quizCard.classList.add('collapsed');
+          quizCardContent.style.display = 'none';
+          if (btnToggleQuiz) btnToggleQuiz.textContent = '▼';
+        }
+      });
+    }
+  }
+
+  function setupSimulatorDrawer() {
+    const simCard = document.getElementById('simCard');
+    const simCardHeader = document.getElementById('simCardHeader');
+    const simCardContent = document.getElementById('simCardContent');
+    const btnToggleSim = document.getElementById('btnToggleSim');
+
+    if (simCardHeader && simCardContent) {
+      simCardHeader.addEventListener('click', () => {
+        const isCollapsed = simCard.classList.contains('collapsed') || simCardContent.style.display === 'none';
+        if (isCollapsed) {
+          simCard.classList.remove('collapsed');
+          simCard.classList.add('expanded');
+          simCardContent.style.display = 'block';
+          if (btnToggleSim) btnToggleSim.textContent = '▲';
+        } else {
+          simCard.classList.remove('expanded');
+          simCard.classList.add('collapsed');
+          simCardContent.style.display = 'none';
+          if (btnToggleSim) btnToggleSim.textContent = '▼';
+        }
+      });
+    }
+  }
+
   function setupPreferencesDrawer() {
     const prefCard = document.getElementById('prefCard');
     const prefCardHeader = document.getElementById('prefCardHeader');
@@ -1965,6 +2013,19 @@ document.addEventListener('DOMContentLoaded', () => {
           polarizationToggle.dispatchEvent(new Event('change'));
         }
 
+        // Expand the simulator card if collapsed
+        const simCard = document.getElementById('simCard');
+        const simCardContent = document.getElementById('simCardContent');
+        const btnToggleSim = document.getElementById('btnToggleSim');
+        if (simCardContent && simCardContent.style.display === 'none') {
+          if (simCard) {
+            simCard.classList.remove('collapsed');
+            simCard.classList.add('expanded');
+          }
+          simCardContent.style.display = 'block';
+          if (btnToggleSim) btnToggleSim.textContent = '▲';
+        }
+
         // Set darkness value
         const darknessSlider = document.getElementById('darknessSlider');
         if (darknessSlider) {
@@ -2045,8 +2106,8 @@ document.addEventListener('DOMContentLoaded', () => {
       coatings = 'Gradient Tint, Anti-Reflective Backing';
       
       if (aes === 'bold') {
-        name = 'The Beverly Runway';
-        desc = 'Flat-top black acetate shields with category-3 solid grey lenses. Uncompromising paparazzi-shield style.';
+        name = 'The Horizon Shield';
+        desc = 'Flat-top black acetate shields with category-3 solid grey lenses. Uncompromising active-shield style.';
         tint = 'Solid Grey Tints';
       } else if (aes === 'minimal') {
         name = 'The Soho Aviator';
@@ -2238,6 +2299,8 @@ document.addEventListener('DOMContentLoaded', () => {
     setupQuiz();
     setupAdminAuth();
     setupPreferencesDrawer();
+    setupQuizDrawer();
+    setupSimulatorDrawer();
     runDeterministicTests();
 
     // 1. Immediately load the static 'sunny' preset for Miami so the UI is fully populated & functional instantly

@@ -51,7 +51,7 @@
     </script>
   
   
-  <meta name="keywords" content="sunglasses, UV index, polarized lens simulator, weather advisor, sunglasses style, lens tint simulator, celebrity sunglasses, UV protection, polarized glasses, sunglasses tracker">
+  <meta name="keywords" content="sunglasses, UV index, polarized lens simulator, weather advisor, sunglasses style, lens tint simulator, buying guides, UV protection, polarized glasses, sunglasses tracker">
   <meta name="author" content="Brian Crouse">
   <meta name="robots" content="index, follow">
   
@@ -510,113 +510,126 @@
       </div>
 
       <!-- 9. Interactive Lens Simulator Card -->
-      <div class="glass-card simulator-card">
-        <div class="card-header-flex">
+      <div class="glass-card simulator-card collapsed" id="simCard">
+        <div class="card-header-flex" id="simCardHeader" style="cursor: pointer;">
           <div>
             <h2 class="card-title">Interactive Lens Simulator</h2>
             <p class="card-desc">Slide to compare views vs. sunglasses lens technology</p>
           </div>
-          <div class="sim-badge" id="simVibeBadge">Polarized Active</div>
+          <button class="toggle-btn" id="btnToggleSim">▼</button>
         </div>
 
-        <!-- Simulator Workspace Grid -->
-        <div class="simulator-workspace-grid">
+        <div class="collapsible-content" id="simCardContent" style="display: none; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 0.5rem;">
+          <div class="sim-badge" id="simVibeBadge" style="margin-bottom: 1rem; display: inline-block;">Polarized Active</div>
           
-          <!-- Simulator Viewport -->
-          <div class="simulator-container" id="simContainer">
+          <!-- Simulator Workspace Grid -->
+          <div class="simulator-workspace-grid">
             
-            <!-- Base Image (Road Glare) -->
-            <img src="assets/road.jpg" alt="High road glare reflection view before applying polarized sunglasses filter" class="sim-img-base" id="simImageBase">
-
-            <!-- Glare Overlay (Representing raw UV/Reflection glare before glasses) -->
-            <div class="glare-overlay" id="glareOverlay"></div>
-
-            <!-- Sunglasses View Area (Draggable split pane) -->
-            <div class="sunglasses-pane" id="sunglassesPane">
-              <!-- Re-render road under sunglasses filter -->
-              <img src="assets/road.jpg" alt="Sunny road reflection filtered through polarized sunglasses lens simulator showing anti-glare polarization" class="sim-img-filtered" id="simImageFilter">
+            <!-- Simulator Viewport -->
+            <div class="simulator-container" id="simContainer">
               
-              <!-- Tint Overlay (Applies colors, opacity, blend-modes dynamically) -->
-              <div class="tint-overlay" id="tintOverlay"></div>
+              <!-- Base Image (Road Glare) -->
+              <img src="assets/road.jpg" alt="High road glare reflection view before applying polarized sunglasses filter" class="sim-img-base" id="simImageBase">
 
-              <!-- Refined Polarized Overlay (subtle highlight filter to simulate polarized clarity) -->
-              <div class="polarized-overlay" id="polarizedOverlay"></div>
-            </div>
+              <!-- Glare Overlay (Representing raw UV/Reflection glare before glasses) -->
+              <div class="glare-overlay" id="glareOverlay"></div>
 
-            <!-- Split Pane Resize Handle Bar -->
-            <div class="split-handle" id="splitHandle">
-              <span class="handle-line"></span>
-              <span class="handle-arrows">↔</span>
-            </div>
-          </div>
+              <!-- Sunglasses View Area (Draggable split pane) -->
+              <div class="sunglasses-pane" id="sunglassesPane">
+                <!-- Re-render road under sunglasses filter -->
+                <img src="assets/road.jpg" alt="Sunny road reflection filtered through polarized sunglasses lens simulator showing anti-glare polarization" class="sim-img-filtered" id="simImageFilter">
+                
+                <!-- Tint Overlay (Applies colors, opacity, blend-modes dynamically) -->
+                <div class="tint-overlay" id="tintOverlay"></div>
 
-          <!-- Lens Technology Tint Control Bay -->
-          <div class="simulator-control-bay">
-
-            <!-- Lens Tints Configurator Swatches -->
-            <div class="control-group">
-              <span class="control-label">Available Filter Tints</span>
-              <div class="tint-selector-grid">
-                <button class="tint-dot active" data-tint="grey" style="--tint-color: #2b2b2b;" title="Grey: True Color Perception" id="btnTintGrey">
-                  <span class="dot-inner"></span>
-                </button>
-                <button class="tint-dot" data-tint="amber" style="--tint-color: #b05c1d;" title="Amber: Contrast & Depth Enhancement" id="btnTintAmber">
-                  <span class="dot-inner"></span>
-                </button>
-                <button class="tint-dot" data-tint="green" style="--tint-color: #173d2a;" title="Green: All-Weather Balance" id="btnTintGreen">
-                  <span class="dot-inner"></span>
-                </button>
-                <button class="tint-dot" data-tint="blue" style="--tint-color: #0b6fb8;" title="Blue Mirrored: Water Glare Block" id="btnTintBlue">
-                  <span class="dot-inner"></span>
-                </button>
-                <button class="tint-dot" data-tint="rose" style="--tint-color: #9c27b0;" title="Rose: High Contrast sports" id="btnTintRose">
-                  <span class="dot-inner"></span>
-                </button>
+                <!-- Refined Polarized Overlay (subtle highlight filter to simulate polarized clarity) -->
+                <div class="polarized-overlay" id="polarizedOverlay"></div>
               </div>
-              <div class="active-tint-description" id="tintDesc">Grey Lens: maintains true color perception and offers the best daily comfort.</div>
+
+              <!-- Split Pane Resize Handle Bar -->
+              <div class="split-handle" id="splitHandle">
+                <span class="handle-line"></span>
+                <span class="handle-arrows">↔</span>
+              </div>
             </div>
 
-            <div class="slider-row">
-              <!-- Darkness Slider -->
-              <div class="control-group flex-1">
-                <div class="slider-label-row">
-                  <span class="control-label">Darkness Intensity (VLT)</span>
-                  <span class="slider-val" id="darknessVal">85%</span>
+            <!-- Lens Technology Tint Control Bay -->
+            <div class="simulator-control-bay">
+
+              <!-- Lens Tints Configurator Swatches -->
+              <div class="control-group">
+                <span class="control-label">Available Filter Tints</span>
+                <div class="tint-selector-grid">
+                  <button class="tint-dot active" data-tint="grey" style="--tint-color: #2b2b2b;" title="Grey: True Color Perception" id="btnTintGrey">
+                    <span class="dot-inner"></span>
+                  </button>
+                  <button class="tint-dot" data-tint="amber" style="--tint-color: #b05c1d;" title="Amber: Contrast & Depth Enhancement" id="btnTintAmber">
+                    <span class="dot-inner"></span>
+                  </button>
+                  <button class="tint-dot" data-tint="green" style="--tint-color: #173d2a;" title="Green: All-Weather Balance" id="btnTintGreen">
+                    <span class="dot-inner"></span>
+                  </button>
+                  <button class="tint-dot" data-tint="blue" style="--tint-color: #0b6fb8;" title="Blue Mirrored: Water Glare Block" id="btnTintBlue">
+                    <span class="dot-inner"></span>
+                  </button>
+                  <button class="tint-dot" data-tint="rose" style="--tint-color: #9c27b0;" title="Rose: High Contrast sports" id="btnTintRose">
+                    <span class="dot-inner"></span>
+                  </button>
                 </div>
-                <input type="range" min="10" max="95" value="85" class="app-range" id="darknessSlider" aria-label="Tint Darkness Intensity">
+                <div class="active-tint-description" id="tintDesc">Grey Lens: maintains true color perception and offers the best daily comfort.</div>
               </div>
 
-              <!-- Polarization Switch -->
-              <div class="control-group toggle-group">
-                <span class="control-label">Polarized Filter</span>
-                <label class="switch">
-                  <input type="checkbox" id="polarizationToggle" aria-label="Toggle Polarization" checked>
-                  <span class="slider round"></span>
-                </label>
+              <div class="slider-row">
+                <!-- Darkness Slider -->
+                <div class="control-group flex-1">
+                  <div class="slider-label-row">
+                    <span class="control-label">Darkness Intensity (VLT)</span>
+                    <span class="slider-val" id="darknessVal">85%</span>
+                  </div>
+                  <input type="range" min="10" max="95" value="85" class="app-range" id="darknessSlider" aria-label="Tint Darkness Intensity">
+                </div>
+
+                <!-- Polarization Switch -->
+                <div class="control-group toggle-group">
+                  <span class="control-label">Polarized Filter</span>
+                  <label class="switch">
+                    <input type="checkbox" id="polarizationToggle" aria-label="Toggle Polarization" checked>
+                    <span class="slider round"></span>
+                  </label>
+                </div>
               </div>
+
             </div>
-
           </div>
         </div>
       </div>
 
       <!-- 10. Tabbed Quiz & Telemetry Card -->
-      <div class="glass-card side-tab-card" id="quizTelemetryCard">
-        <div class="tab-header">
-          <button class="tab-btn active" id="tabBtnQuiz" data-tab="tabQuiz">🎯 Quiz</button>
-          <button class="tab-btn" id="tabBtnAdmin" data-tab="tabAdmin" style="display: none;">📊 Telemetry</button>
-          <!-- hidden legacy items to satisfy original app.js selectors -->
-          <button id="tabBtnTmz" data-tab="tabTmz" style="display: none;"></button>
-          <div id="tabTmz" style="display: none;"></div>
+      <div class="glass-card side-tab-card collapsed" id="quizTelemetryCard">
+        <div class="card-header-flex" id="quizCardHeader" style="cursor: pointer;">
+          <div>
+            <h2 class="card-title">Diagnostic Quiz &amp; Telemetry</h2>
+            <p class="card-desc">Interactive advisor &amp; admin controls</p>
+          </div>
+          <button class="toggle-btn" id="btnToggleQuiz">▼</button>
         </div>
 
-        <!-- Hidden TMZ elements to satisfy JS weather update bindings safely -->
-        <div style="display: none;">
-          <img id="tmzHeroImg" src="">
-          <div id="tmzHeroBadge"></div>
-          <div id="tmzHeroTitle"></div>
-          <div id="tmzHeroDesc"></div>
-        </div>
+        <div class="collapsible-content" id="quizCardContent" style="display: none; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 0.5rem;">
+          <div class="tab-header">
+            <button class="tab-btn active" id="tabBtnQuiz" data-tab="tabQuiz">🎯 Quiz</button>
+            <button class="tab-btn" id="tabBtnAdmin" data-tab="tabAdmin" style="display: none;">📊 Telemetry</button>
+            <!-- hidden legacy items to satisfy original app.js selectors -->
+            <button id="tabBtnTmz" data-tab="tabTmz" style="display: none;"></button>
+            <div id="tabTmz" style="display: none;"></div>
+          </div>
+
+          <!-- Hidden TMZ elements to satisfy JS weather update bindings safely -->
+          <div style="display: none;">
+            <img id="tmzHeroImg" src="">
+            <div id="tmzHeroBadge"></div>
+            <div id="tmzHeroTitle"></div>
+            <div id="tmzHeroDesc"></div>
+          </div>
 
         <!-- Tab 2 Content: Shade Matcher Quiz -->
         <div class="tab-pane active" id="tabQuiz">
@@ -818,7 +831,8 @@
             </div>
           </div>
         </div>
-      </div>
+        </div> <!-- End of quizCardContent -->
+      </div> <!-- End of quizTelemetryCard -->
 
     </div>
 
