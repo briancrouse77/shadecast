@@ -200,6 +200,11 @@ body {
   padding: 0.15rem 0.15rem 0.15rem 0.65rem;
   flex: 1;
   min-height: 44px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-input-box:focus-within {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.15);
 }
 
 .search-input-box input {
@@ -2394,4 +2399,13 @@ h1#seo-heading {
 .guide-link:hover {
   color: #60a5fa !important;
   text-decoration: underline !important;
+}
+
+/* Accessibility Focus Outline Helper */
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px dashed var(--accent-blue) !important;
+  outline-offset: 2px !important;
 }
