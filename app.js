@@ -1851,10 +1851,9 @@ document.addEventListener('DOMContentLoaded', () => {
     currentTint = tintName;
     tintDesc.textContent = tint.description;
     
-    // Apply background color of tint overlay
     const rawRgbaParts = tint.color.match(/[\d.]+/g);
     if (rawRgbaParts && rawRgbaParts.length >= 3) {
-      const alpha = (darknessValue / 100).toFixed(2);
+      const alpha = ((darknessValue / 100) * 0.45).toFixed(2);
       tintOverlay.style.backgroundColor = `rgba(${rawRgbaParts[0]}, ${rawRgbaParts[1]}, ${rawRgbaParts[2]}, ${alpha})`;
     }
   }
@@ -1888,8 +1887,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function updatePolarizationSimulator() {
     const filteredImg = document.getElementById('simImageFilter');
     if (isPolarized) {
-      // Standard polarized lens block matching new sun coordinates (63% 5%)
-      polarizedOverlay.style.background = 'radial-gradient(circle 350px at 63% 5%, rgba(255,255,255,0) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.25) 75%)';
+      // Standard polarized lens block matching new sun coordinates (55% 1%)
+      polarizedOverlay.style.background = 'radial-gradient(circle 350px at 55% 1%, rgba(255,255,255,0) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.25) 75%)';
       polarizedOverlay.style.mixBlendMode = 'multiply';
       if (filteredImg && !isNightActive) {
         filteredImg.style.filter = 'contrast(1.25) saturate(1.3) brightness(0.95)';
@@ -1901,7 +1900,7 @@ document.addEventListener('DOMContentLoaded', () => {
       simVibeBadge.style.background = 'rgba(168, 85, 247, 0.1)';
     } else {
       // Glare leaks through completely even through lens
-      polarizedOverlay.style.background = 'radial-gradient(circle 350px at 63% 5%, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.15) 45%, transparent 70%)';
+      polarizedOverlay.style.background = 'radial-gradient(circle 350px at 55% 1%, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.15) 45%, transparent 70%)';
       polarizedOverlay.style.mixBlendMode = 'overlay';
       if (filteredImg && !isNightActive) {
         filteredImg.style.filter = 'contrast(1.1) saturate(1.0)';
